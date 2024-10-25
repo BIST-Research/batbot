@@ -1,6 +1,6 @@
 # batbot 7
 
-Welcome to the batbot7 repository!
+Welcome to the batbot repository!
 
 This repository contains the sources for the following packages:
 
