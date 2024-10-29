@@ -33,8 +33,6 @@ Lastly, the motor shield must be supplied a +6V power source. Seperate power ter
 
 ## Running the Application
 
-
-
 The tendon control application is designed to receive motor commands from a base computer. The tendon controller is capable of communicating with the host computer through the following serial interfaces:
 
 - SPI
