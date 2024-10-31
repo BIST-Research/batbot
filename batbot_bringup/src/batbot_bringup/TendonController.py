@@ -3,7 +3,11 @@ from enum import Enum
 import ctypes
 import os
 
-dllURI_base_folder = os.path.join(os.path.expanduser('~'), 'batbot7', 'batbot7_bringup', 'c_lib', 'build', 'src')
+import time
+
+# TODO: Refactor so it uses the TendonHardware class generated using pybind
+
+dllURI_base_folder = os.path.join(os.path.expanduser('~'), 'batbot', 'batbot7_bringup', 'c_lib', 'build', 'src')
 dllURI = dllURI_base_folder + '/libserial.so'
 
 lib = ctypes.cdll.LoadLibrary(dllURI)
@@ -80,8 +84,15 @@ class TendonController:
 if __name__ == "__main__":
     tc = TendonController(port_name="/dev/ttyACM0")
 
-    tc.writeAngle(0, 90)
-    # tc.readAngle(0)
+    while True:
+        tc.writeAngle(0, 120)
+        time.sleep(0.05)
+        tc.writeAngle(0, 0)
+        time.sleep(0.05)
+        # tc.readAngle(0)
+
+    tc.writeAngle(0, 0)
+
 
 """
 BUG: For some reason sending these messages first causes a freeze

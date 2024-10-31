@@ -3,7 +3,7 @@ import numpy as np
 import ctypes
 import os
 
-dllURI_base_folder = os.path.join(os.path.expanduser('~'), 'batbot7', 'batbot7_bringup', 'c_lib', 'build', 'src')
+dllURI_base_folder = os.path.join(os.path.expanduser('~'), 'batbot', 'batbot7_bringup', 'c_lib', 'build', 'src')
 dllURI = dllURI_base_folder + '/libserial.so'
 
 lib = ctypes.cdll.LoadLibrary(dllURI)

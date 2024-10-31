@@ -3,9 +3,9 @@ project(CBatLib)
 
 set(BUILD_SHARED_LIBS true)
 
-find_package(Python3 COMPONENTS Interpreter Development)
+find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
 
-include_directories((include))
+include_directories((include) ${pybind11_INCLUDE_DIRS})
 
 add_executable(main main.cpp)
 

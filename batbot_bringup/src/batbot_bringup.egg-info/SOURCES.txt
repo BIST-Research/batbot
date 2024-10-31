@@ -1,7 +1,9 @@
 README.md
 setup.py
 src/batbot7_bringup/PinnaeController.py
+src/batbot7_bringup/TendonController.py
 src/batbot7_bringup/TendonControllerSPI-working.py
+src/batbot7_bringup/TendonHardware.cpp
 src/batbot7_bringup/__init__.py
 src/batbot7_bringup/bb_data.py
 src/batbot7_bringup/bb_gps.py
@@ -20,6 +22,8 @@ src/batbot7_bringup/gui/MotorWidget.py
 src/batbot7_bringup/gui/__init__.py
 src/batbot7_bringup/serial/__init__.py
 src/batbot7_bringup/serial/bb_serial.py
+src/batbot7_bringup/serial/bb_serial_read_angles.py
+src/batbot7_bringup/serial/bb_serial_stress_test.py
 src/batbot7_bringup/serial/bb_serial_test.py
 src/batbot7_bringup/serial/fake_spidev.py
 src/batbot7_bringup/serial/hwdefs.py

@@ -1,8 +1,8 @@
+#include "iostream"
+
 #include "tendon_hardware_interface.hpp"
 #include "serial_object_uart_linux.hpp"
 #include "serial_object_uart_win.hpp"
-
-#include "iostream"
 
 #define COMM_BAUD 115200
 
@@ -102,31 +102,10 @@ void TendonHardwareInterface::SendTxRx()
 void TendonHardwareInterface::SendTx()
 {
     std::size_t total_packet_len = tx.data_packet_u.data_packet_s.len + 3;
-    for (int i = 0; i < total_packet_len; ++i)
-    {
-        std::cout << std::hex << int(tx.data_packet_u.data_packet[i]) << " ";
-    }
-    std::cout << "\n";
+    // for (int i = 0; i < total_packet_len; ++i)
+    // {
+    //     std::cout << std::hex << int(tx.data_packet_u.data_packet[i]) << " ";
+    // }
+    // std::cout << "\n";
     ser->writeBytes(tx.data_packet_u.data_packet, total_packet_len - 1);
-}
-
-extern "C"
-{
-
-    TendonHardwareInterface* TendonHardwareInterface_new(const char *p) { return new TendonHardwareInterface(std::string(p)); }
-
-    void BuildPacket(TendonHardwareInterface* self, uint8_t id, uint8_t opcode, uint8_t* params, std::size_t num_params) 
-    {
-        self->BuildPacket(id, opcode, params, num_params);
-    }
-
-    void SendTxRx(TendonHardwareInterface* self)
-    {
-        self->SendTxRx();
-    }
-
-    void SendTx(TendonHardwareInterface* self)
-    {
-        self->SendTx();
-    }
 }
