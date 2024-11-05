@@ -8,13 +8,13 @@
  */
 
 #include <string>
-#include <termios.h>
 
+// #include <windows.h> 
 #include "serial_object.hpp"
 
 #define BB_SERIAL_BAUD B115200
 
-class SerialObject_UART_Win : public SerialObject {
+class SerialObject_UART_Win {
 
 public:
   /**
@@ -80,7 +80,7 @@ public:
   /**
    * @brief Closes the serial port
    */
-  void closePort() override;
+  void closePort();
 
 private:
   /**
@@ -88,11 +88,15 @@ private:
    */
   std::string _portName;
 
+  // HANDLE port; 
+
   /**
    * @brief The file descriptor of the tty
    * 
    */
   int _fd;
 };
+
+
 
 #endif
