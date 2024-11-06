@@ -8,7 +8,6 @@
  */
 
 #include <string>
-#include <termios.h>
 
 #include "serial_object.hpp"
 

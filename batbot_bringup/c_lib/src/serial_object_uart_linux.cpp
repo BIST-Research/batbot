@@ -1,14 +1,16 @@
-#include <errno.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <termios.h>
-#include <unistd.h>
-
 #include <cstring>
 #include <string.h>
 #include <iostream>
 
 #include "serial_object_uart_linux.hpp"
+
+#ifdef __linux__
+
+#include <errno.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <termios.h>
+#include <unistd.h>
 
 SerialObject_UART_Linux::SerialObject_UART_Linux(std::string portName)
 {
@@ -90,3 +92,5 @@ void SerialObject_UART_Linux::closePort()
   close(_fd);
   std::cout << "Closed port " << _portName << "\n";
 }
+
+#endif

@@ -1,14 +1,16 @@
-#include <errno.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <termios.h>
-#include <unistd.h>
-
 #include <cstring>
 #include <string.h>
 #include <iostream>
 
 #include "serial_object_uart_win.hpp"
+
+#ifdef _WIN32
+
+#include <errno.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <termios.h>
+#include <unistd.h>
 
 SerialObject_UART_Win::SerialObject_UART_Win(std::string portName)
 {
@@ -37,3 +39,5 @@ int SerialObject_UART_Win::readBytes(uint8_t * buff, int numBytes) {
 void SerialObject_UART_Win::closePort() {
 
 }
+
+#endif
