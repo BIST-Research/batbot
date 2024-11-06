@@ -1,10 +1,14 @@
 #include "iostream"
 
+#include <pybind11/pybind11.h>
+
 #include "tendon_hardware_interface.hpp"
 #include "serial_object_uart_linux.hpp"
 #include "serial_object_uart_win.hpp"
 
 #define COMM_BAUD 115200
+
+namespace py = pybind11;
 
 TendonHardwareInterface::TendonHardwareInterface(std::string portName) {
     #ifdef __linux__
@@ -108,4 +112,13 @@ void TendonHardwareInterface::SendTx()
     // }
     // std::cout << "\n";
     ser->writeBytes(tx.data_packet_u.data_packet, total_packet_len - 1);
+}
+
+
+PYBIND11_MODULE(tendonhardware, m) {
+    py::class_<TendonHardwareInterface>(m, "TendonHardwareInterface")
+        .def(py::init<std::string>())
+        .def("BuildPacket", &TendonHardwareInterface::BuildPacket)
+        .def("SendTxRx", &TendonHardwareInterface::SendTxRx)
+        .def("SendTx", &TendonHardwareInterface::SendTx);
 }

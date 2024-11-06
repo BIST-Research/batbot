@@ -7,8 +7,8 @@
 namespace py = pybind11;
 
 
-PYBIND11_MODULE(TendonHardware, m) {
-    py::class_<TendonHardwareInterface>(m, "TendonHardwareInterface")
+PYBIND11_MODULE(handle, m) {
+    py::class_<TendonHardwareInterface>(m, "TendonHardware")
         .def(py::init<std::string>())
         .def("BuildPacket", &TendonHardwareInterface::BuildPacket)
         .def("SendTxRx", &TendonHardwareInterface::SendTxRx)

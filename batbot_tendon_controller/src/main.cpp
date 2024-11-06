@@ -553,8 +553,8 @@ void EIC_1_Handler(void)
 }
 
 // M7:
-//  *      encb: D35 --> PA18 --> EXTINT[2]
 //  *      enca: A11 --> PC02 --> EXTINT[8]
+//  *      encb: D35 --> PA18 --> EXTINT[2]
 
 void EIC_2_Handler(void)
 {

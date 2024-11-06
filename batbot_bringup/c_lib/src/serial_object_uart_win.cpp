@@ -8,7 +8,7 @@
 #include <string.h>
 #include <iostream>
 
-#include "serial_object_uart_linux.hpp"
+#include "serial_object_uart_win.hpp"
 
 SerialObject_UART_Win::SerialObject_UART_Win(std::string portName)
 {
