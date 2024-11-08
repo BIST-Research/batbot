@@ -69,8 +69,7 @@ if __name__ == "__main__":
     tc = TendonController(port_name="/dev/ttyACM0")
 
     while True:
-        tc.writeAngle(0, 120)
+        tc.writeMotorAngle(0, 120)
         time.sleep(0.05)
-        tc.writeAngle(0, 0)
+        tc.writeMotorAngle(0, 0)
         time.sleep(0.05)
-        # tc.readAngle(0)
