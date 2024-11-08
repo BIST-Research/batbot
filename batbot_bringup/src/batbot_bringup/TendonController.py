@@ -21,11 +21,12 @@ class TendonController:
         self.th = TendonHardwareInterface(port_name)
             
 
-    def connectDev(self, com:COM_TYPE, port_name):
+    def connectToDev(self, com:COM_TYPE, port_name):
         print()
 
-    def writeAngle(self, id, angle):
-        print("Hello")
+        raise NotImplementedError
+
+    def writeMotorAngle(self, id, angle):
         # angle_h = (angle >> 8) & 0xFF
         # angle_l = angle & 0xFF
 
@@ -37,8 +38,9 @@ class TendonController:
         # lib.BuildPacket(self.TendonInterface, id, OPCODE.WRITE_ANGLE.value, arr, len(params))
         # lib.SendTx(self.TendonInterface)
 
-    def readAngle(self, id):
-        print("Hello")
+        raise NotImplementedError
+
+    def readMotorAngle(self, id):
         # params = []
 
         # seq = ctypes.c_uint8 * len(params)
@@ -47,26 +49,28 @@ class TendonController:
         # lib.BuildPacket(self.TendonInterface, id, OPCODE.READ_ANGLE.value, arr, len(params))
         # lib.SendTxRx(self.TendonInterface)
 
+        raise NotImplementedError
+
     def moveMotorToMin(self):
-        print()
+        raise NotImplementedError
 
     def moveMotorToMax(self):
-        print()
+        raise NotImplementedError
 
     def moveMotorToZero(self):
-        print()
+        raise NotImplementedError
 
     def setNewZero(self):
-        print()
+        raise NotImplementedError
 
 if __name__ == "__main__":
+    import time
+
     tc = TendonController(port_name="/dev/ttyACM0")
 
-    # while True:
-    #     tc.writeAngle(0, 120)
-    #     time.sleep(0.05)
-    #     tc.writeAngle(0, 0)
-    #     time.sleep(0.05)
-    #     # tc.readAngle(0)
-
-    # tc.writeAngle(0, 0)
+    while True:
+        tc.writeAngle(0, 120)
+        time.sleep(0.05)
+        tc.writeAngle(0, 0)
+        time.sleep(0.05)
+        # tc.readAngle(0)
