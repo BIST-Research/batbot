@@ -1,3 +1,4 @@
+import serial
 from serial import Serial
 from enum import Enum
 
@@ -68,7 +69,7 @@ class TendonHardwareInterface:
 
         self.ser = None
         if port_name != 'test':
-            self.ser = Serial(port_name, baudrate=115200)
+            self.ser = Serial(port_name, baudrate=115200, parity=serial.PARITY_NONE, stopbits=1)
             self.test_mode = False
 
         self.packet = []
@@ -77,7 +78,7 @@ class TendonHardwareInterface:
         data = [0xFF, 0x00]
 
         length = len(params) + 4
-        data.append(length)
+        data.append(5)
         data.append(id)
         data.append(opcode)
         data = data + params
@@ -86,21 +87,35 @@ class TendonHardwareInterface:
 
         self.packet = data
 
-    def SendTxRx(self):
-        self.SendTx()
+    def ReadRx(self):
+        data = list(self.ser.read(2))
 
-        if not self.test_mode:
-            data = self.ser.read(100)
-        else:
-            data = self.packet
+        if data == [0xff, 0x00]:
+            len = int.from_bytes(self.ser.read(1), byteorder='big')
+            data.append(len)
+            for i in range(0, len):
+                byte = int.from_bytes(self.ser.read(), byteorder='big')
+                data.append(byte)
+
+        self.ser.flush()
 
         crc = data[-2:]
         data = data[0:-2]
 
         new_crc = crc16(data)
+
         if crc != new_crc:
             print('CRC ERROR!')
-            # return
+
+        return data
+
+    def SendTxRx(self):
+        self.SendTx()
+
+        if not self.test_mode:
+            data = self.ReadRx()
+        else:
+            data = self.packet
 
         return {
             "id": data[3],
@@ -111,6 +126,6 @@ class TendonHardwareInterface:
 
     def SendTx(self):
         if not self.test_mode:
-            self.ser.write(self.packet)
+            self.ser.write(bytes(self.packet))
         else:
             print(self.packet)

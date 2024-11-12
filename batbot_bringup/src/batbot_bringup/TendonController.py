@@ -1,5 +1,5 @@
 # from tendonhardware import TendonHardwareInterface
-from batbot_bringup.TendonHardware import TendonHardwareInterface
+from TendonHardware import TendonHardwareInterface
 
 from enum import Enum
 
@@ -51,7 +51,6 @@ class TendonController:
             
 
     def connectToDev(self, com:COM_TYPE, port_name):
-        print()
 
         raise NotImplementedError
 
@@ -75,8 +74,11 @@ class TendonController:
         '''
 
         self.th.BuildPacket(id, OPCODE.READ_ANGLE.value, [])
-        self.th.SendTxRx()
-        # print(ret)
+        ret = self.th.SendTxRx()
+
+        angle = (ret["params"][0] << 8) | (ret["params"][1] & 0xFF)
+
+        return angle
 
     def moveMotorToMin(self, id):
         '''
@@ -106,9 +108,11 @@ if __name__ == "__main__":
 
     import time
 
-    tc = TendonController(port_name="test")
+    tc = TendonController(port_name="/dev/ttyACM0")
 
     while True:
-        tc.writeMotorAngle(0, 120)
+        tc.writeMotorAngle(0, 0)
+        print("Writing angle...")
         time.sleep(1)
-        tc.readMotorAngle(0)
+        angle = tc.readMotorAngle(0)
+        print("Received angle", angle)
