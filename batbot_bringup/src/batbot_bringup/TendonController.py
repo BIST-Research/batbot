@@ -1,4 +1,5 @@
-from tendonhardware import TendonHardwareInterface
+# from tendonhardware import TendonHardwareInterface
+from batbot_bringup.TendonHardware import TendonHardwareInterface
 
 from enum import Enum
 
@@ -60,33 +61,22 @@ class TendonController:
         The angle should be a signed integer between -360 to 360.
         '''
     
-        # angle_h = (angle >> 8) & 0xFF
-        # angle_l = angle & 0xFF
+        angle_h = (angle >> 8) & 0xFF
+        angle_l = angle & 0xFF
 
-        # params = [angle_h, angle_l]
+        params = [angle_h, angle_l]
 
-        # seq = ctypes.c_uint8 * len(params)
-        # arr = seq(*params)
-
-        # lib.BuildPacket(self.TendonInterface, id, OPCODE.WRITE_ANGLE.value, arr, len(params))
-        # lib.SendTx(self.TendonInterface)
-
-        raise NotImplementedError
+        self.th.BuildPacket(id, OPCODE.WRITE_ANGLE.value, params)
+        self.th.SendTx()
 
     def readMotorAngle(self, id):
         '''
         This function returns the angle of the motor specified by id.
         '''
 
-        # params = []
-
-        # seq = ctypes.c_uint8 * len(params)
-        # arr = seq(*params)
-
-        # lib.BuildPacket(self.TendonInterface, id, OPCODE.READ_ANGLE.value, arr, len(params))
-        # lib.SendTxRx(self.TendonInterface)
-
-        raise NotImplementedError
+        self.th.BuildPacket(id, OPCODE.READ_ANGLE.value, [])
+        self.th.SendTxRx()
+        # print(ret)
 
     def moveMotorToMin(self, id):
         '''
@@ -116,10 +106,9 @@ if __name__ == "__main__":
 
     import time
 
-    tc = TendonController(port_name="/dev/ttyACM0")
+    tc = TendonController(port_name="test")
 
     while True:
         tc.writeMotorAngle(0, 120)
-        time.sleep(0.05)
-        tc.writeMotorAngle(0, 0)
-        time.sleep(0.05)
+        time.sleep(1)
+        tc.readMotorAngle(0)
