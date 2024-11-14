@@ -1,3 +1,5 @@
+import time
+
 import serial
 from serial import Serial
 from enum import Enum
@@ -69,7 +71,7 @@ class TendonHardwareInterface:
 
         self.ser = None
         if port_name != 'test':
-            self.ser = Serial(port_name, baudrate=115200, parity=serial.PARITY_NONE, stopbits=1)
+            self.ser = Serial(port_name, baudrate=115200, parity=serial.PARITY_NONE, stopbits=1, timeout=0.5)
             self.test_mode = False
 
         self.packet = []
@@ -90,12 +92,25 @@ class TendonHardwareInterface:
     def ReadRx(self):
         data = list(self.ser.read(2))
 
-        if data == [0xff, 0x00]:
-            len = int.from_bytes(self.ser.read(1), byteorder='big')
-            data.append(len)
-            for i in range(0, len):
-                byte = int.from_bytes(self.ser.read(), byteorder='big')
-                data.append(byte)
+        timeout = 500
+        start = time.time()
+
+        while data != [0xff, 0x00]:
+            end = time.time()
+
+            if 1000*(end - start) > timeout:
+                self.ser.flush()
+                print("Timeout error")
+                return -1
+
+            data[0] = data[1]
+            data[1] = int.from_bytes(self.ser.read(1), byteorder='big')
+
+        len = int.from_bytes(self.ser.read(1), byteorder='big')
+        data.append(len)
+        for i in range(0, len):
+            byte = int.from_bytes(self.ser.read(), byteorder='big')
+            data.append(byte)
 
         self.ser.flush()
 
@@ -106,6 +121,7 @@ class TendonHardwareInterface:
 
         if crc != new_crc:
             print('CRC ERROR!')
+            return -1
 
         return data
 
@@ -117,12 +133,15 @@ class TendonHardwareInterface:
         else:
             data = self.packet
 
-        return {
-            "id": data[3],
-            "opcode": data[4],
-            "status": data[5],
-            "params": data[6:]
-        }
+        if data != -1:
+            return {
+                "id": data[3],
+                "opcode": data[4],
+                "status": data[5],
+                "params": data[6:]
+            }
+        else:
+            return -1
 
     def SendTx(self):
         if not self.test_mode:

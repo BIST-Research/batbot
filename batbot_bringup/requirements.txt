@@ -16,3 +16,4 @@ PyQt6
 qdarkstyle
 pyqtgraph
 pybind11
+setuptools

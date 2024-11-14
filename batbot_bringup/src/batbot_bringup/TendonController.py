@@ -76,9 +76,9 @@ class TendonController:
         self.th.BuildPacket(id, OPCODE.READ_ANGLE.value, [])
         ret = self.th.SendTxRx()
 
-        angle = (ret["params"][0] << 8) | (ret["params"][1] & 0xFF)
-
-        return angle
+        if ret != -1:
+            angle = (ret["params"][0] << 8) | (ret["params"][1] & 0xFF)
+            return angle
 
     def moveMotorToMin(self, id):
         '''
@@ -114,5 +114,6 @@ if __name__ == "__main__":
         tc.writeMotorAngle(0, 0)
         print("Writing angle...")
         time.sleep(1)
+        print("Reading angle...")
         angle = tc.readMotorAngle(0)
         print("Received angle", angle)
