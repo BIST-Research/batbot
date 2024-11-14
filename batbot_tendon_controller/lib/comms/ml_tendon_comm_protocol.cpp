@@ -176,6 +176,12 @@ void executeWritePID(TendonControl_packet_handler_t* pkt_handler, TendonControll
 void execute(TendonControl_packet_handler_t* pkt_handler, TendonController* tendons, int16_t *target_angles,uint8_t num_tendons)
 {
   TendonControl_data_packet_s *rx_packet = pkt_handler->rx_packet;
+
+  if (pkt_handler->comm_result != COMM_SUCCESS)
+  {
+    pkt_handler->pkt_params[0] = pkt_handler->comm_result;
+    buildPacket(pkt_handler, READ_STATUS, pkt_handler->rx_packet->data_packet_u.data_packet_s.motorId, 1);
+  }
    
   switch (rx_packet->data_packet_u.data_packet_s.opcode)
   {
@@ -208,6 +214,8 @@ void execute(TendonControl_packet_handler_t* pkt_handler, TendonController* tend
       break;
     default:
       pkt_handler->comm_result = COMM_INSTRUCTION_ERROR;
+      pkt_handler->pkt_params[0] = pkt_handler->comm_result;
+      buildPacket(pkt_handler, READ_STATUS, pkt_handler->rx_packet->data_packet_u.data_packet_s.motorId, 1);
       break;
   }
   return;

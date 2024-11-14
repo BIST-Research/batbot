@@ -53,6 +53,11 @@ class TendonController:
     def connectToDev(self, com:COM_TYPE, port_name):
 
         raise NotImplementedError
+    
+    def testComm():
+        '''
+        This function tests the echo functionality
+        '''
 
     def writeMotorAngle(self, id, angle):
         '''
@@ -66,7 +71,9 @@ class TendonController:
         params = [angle_h, angle_l]
 
         self.th.BuildPacket(id, OPCODE.WRITE_ANGLE.value, params)
-        self.th.SendTx()
+        ret = self.th.SendTxRx()
+
+        assert(ret["status"] == 0)
 
     def readMotorAngle(self, id):
         '''
@@ -77,6 +84,8 @@ class TendonController:
         ret = self.th.SendTxRx()
 
         if ret != -1:
+            assert(ret["status"] == 0)
+
             angle = (ret["params"][0] << 8) | (ret["params"][1] & 0xFF)
             return angle
 
@@ -111,9 +120,9 @@ if __name__ == "__main__":
     tc = TendonController(port_name="/dev/ttyACM0")
 
     while True:
-        tc.writeMotorAngle(0, 0)
         print("Writing angle...")
-        time.sleep(1)
+        tc.writeMotorAngle(0, 0)
+        time.sleep(0.5)
         print("Reading angle...")
         angle = tc.readMotorAngle(0)
         print("Received angle", angle)

@@ -80,7 +80,7 @@ class TendonHardwareInterface:
         data = [0xFF, 0x00]
 
         length = len(params) + 4
-        data.append(5)
+        data.append(length)
         data.append(id)
         data.append(opcode)
         data = data + params
@@ -92,7 +92,7 @@ class TendonHardwareInterface:
     def ReadRx(self):
         data = list(self.ser.read(2))
 
-        timeout = 500
+        timeout = 5000
         start = time.time()
 
         while data != [0xff, 0x00]:
@@ -112,7 +112,7 @@ class TendonHardwareInterface:
             byte = int.from_bytes(self.ser.read(), byteorder='big')
             data.append(byte)
 
-        self.ser.flush()
+        self.ser.reset_input_buffer()
 
         crc = data[-2:]
         data = data[0:-2]
@@ -145,6 +145,7 @@ class TendonHardwareInterface:
 
     def SendTx(self):
         if not self.test_mode:
+            self.ser.reset_output_buffer()
             self.ser.write(bytes(self.packet))
         else:
             print(self.packet)
