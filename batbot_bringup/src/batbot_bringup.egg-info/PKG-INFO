@@ -1,8 +1,10 @@
 Metadata-Version: 2.1
-Name: batbot7-bringup
+Name: batbot-bringup
 Version: 7.0.0
 Summary: Batbot7 gui bringup application
 Home-page: UNKNOWN
+Author: Jayson De La Vega, Ben Westcott, Mason Lopez
+Author-email: jaysond21@vt.edu
 License: UNKNOWN
 Platform: UNKNOWN
 Requires-Python: >=3.8

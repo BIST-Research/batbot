@@ -1,4 +1,5 @@
-from tendonhardware import TendonHardwareInterface
+# from tendonhardware import TendonHardwareInterface
+from TendonHardware import TendonHardwareInterface
 
 from enum import Enum
 
@@ -50,7 +51,6 @@ class TendonController:
             
 
     def connectToDev(self, com:COM_TYPE, port_name):
-        print()
 
         raise NotImplementedError
 
@@ -60,33 +60,25 @@ class TendonController:
         The angle should be a signed integer between -360 to 360.
         '''
     
-        # angle_h = (angle >> 8) & 0xFF
-        # angle_l = angle & 0xFF
+        angle_h = (angle >> 8) & 0xFF
+        angle_l = angle & 0xFF
 
-        # params = [angle_h, angle_l]
+        params = [angle_h, angle_l]
 
-        # seq = ctypes.c_uint8 * len(params)
-        # arr = seq(*params)
-
-        # lib.BuildPacket(self.TendonInterface, id, OPCODE.WRITE_ANGLE.value, arr, len(params))
-        # lib.SendTx(self.TendonInterface)
-
-        raise NotImplementedError
+        self.th.BuildPacket(id, OPCODE.WRITE_ANGLE.value, params)
+        self.th.SendTx()
 
     def readMotorAngle(self, id):
         '''
         This function returns the angle of the motor specified by id.
         '''
 
-        # params = []
+        self.th.BuildPacket(id, OPCODE.READ_ANGLE.value, [])
+        ret = self.th.SendTxRx()
 
-        # seq = ctypes.c_uint8 * len(params)
-        # arr = seq(*params)
+        angle = (ret["params"][0] << 8) | (ret["params"][1] & 0xFF)
 
-        # lib.BuildPacket(self.TendonInterface, id, OPCODE.READ_ANGLE.value, arr, len(params))
-        # lib.SendTxRx(self.TendonInterface)
-
-        raise NotImplementedError
+        return angle
 
     def moveMotorToMin(self, id):
         '''
@@ -119,7 +111,8 @@ if __name__ == "__main__":
     tc = TendonController(port_name="/dev/ttyACM0")
 
     while True:
-        tc.writeMotorAngle(0, 120)
-        time.sleep(0.05)
         tc.writeMotorAngle(0, 0)
-        time.sleep(0.05)
+        print("Writing angle...")
+        time.sleep(1)
+        angle = tc.readMotorAngle(0)
+        print("Received angle", angle)
