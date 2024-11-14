@@ -1,28 +1,12 @@
-# batbot 7
+# batbot 
 
 Welcome to the batbot repository!
 
 This repository contains the sources for the following packages:
 
-- `batbot7_bringup` - GUI applications for interfacing with sonar and motor boards
-- `batbot7_tendon_controller` - PlatformIO application for controlling tendons
-- `batbot7_sonar` - PlatformIO application for the sonar board(s)
-
-*This page is is still under construction!*
-
-## Quickstart
-
-Install all dependencies. On linux you can simply run the following commands:
-```
-sudo apt update \
-    && sudo apt install `cat pkg-list.txt` \
-    && pip3 install -r batbot7_bringup/requirements.txt
-```
-Build the python GUI application by navigating to the batbot7_bringup directory and running the following:
-```
-python3 setup.py build
-pip install .
-```
+- `batbot_bringup` - Applications for interfacing with sonar and motor boards from a host PC
+- `batbot_tendon_controller` - PlatformIO application for controlling tendons
+- `batbot_sonar` - PlatformIO application for the sonar board(s)
 
 ### Tendon Control
 
