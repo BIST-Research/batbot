@@ -255,6 +255,7 @@ void execute(TendonControl_packet_handler_t* pkt_handler, TendonController* tend
           buildPacket(pkt_handler, READ_STATUS, pkt_handler->rx_packet->data_packet_u.data_packet_s.motorId, 1);
         }
       }
+      break;
 
     case SET_MAX_ANGLE:
       {
@@ -267,6 +268,7 @@ void execute(TendonControl_packet_handler_t* pkt_handler, TendonController* tend
           buildPacket(pkt_handler, READ_STATUS, pkt_handler->rx_packet->data_packet_u.data_packet_s.motorId, 1);
         }
       }
+      break;
     default:
       pkt_handler->comm_result = COMM_INSTRUCTION_ERROR;
       pkt_handler->pkt_params[0] = pkt_handler->comm_result;
