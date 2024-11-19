@@ -14,6 +14,6 @@ Install all dependencies:
 ```
 Build the python GUI application by navigating to the `batbot_bringup` directory and running:
 ```
-python3 setup.py build
+python setup.py build
 pip install .
 ```

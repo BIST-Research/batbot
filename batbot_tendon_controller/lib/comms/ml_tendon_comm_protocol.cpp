@@ -127,23 +127,22 @@ void executeReadAngle(TendonControl_packet_handler_t* pkt_handler, TendonControl
   buildPacket(pkt_handler, READ_STATUS, pkt_handler->rx_packet->data_packet_u.data_packet_s.motorId, 3);
 }
 
-void executeWriteAngle(TendonControl_packet_handler_t* pkt_handler, TendonController tendon, int16_t* target_angles)
+void executeWriteAngle(TendonControl_packet_handler_t* pkt_handler, TendonController tendon)
 {
   uint8_t len = pkt_handler->rx_packet->data_packet_u.data_packet_s.len - 4;
 
-  if (len != 2) {
+  if (len != 1) {
     pkt_handler->comm_result = COMM_PARAM_ERROR;
     return;
   }
 
-  int16_t angle = (int16_t)TENDON_CONTROL_MAKE_16B_WORD(
-    pkt_handler->rx_packet->data_packet_u.data_packet_s.pkt_params[0],
-    pkt_handler->rx_packet->data_packet_u.data_packet_s.pkt_params[1]
-  );
+  int16_t angle_percent = (int16_t)pkt_handler->rx_packet->data_packet_u.data_packet_s.pkt_params[0];
+
+  float angle = tendon.Get_Max_Angle() * (angle_percent / 100);
 
   pkt_handler->pkt_params[0] = COMM_SUCCESS;
   buildPacket(pkt_handler, READ_STATUS, pkt_handler->rx_packet->data_packet_u.data_packet_s.motorId, 1);
-  target_angles[pkt_handler->tx_packet->data_packet_u.data_packet_s.motorId] = angle;
+  tendon.Set_Goal_Angle(angle);
 }
 
 void executeWritePID(TendonControl_packet_handler_t* pkt_handler, TendonController tendon)
@@ -172,10 +171,48 @@ void executeWritePID(TendonControl_packet_handler_t* pkt_handler, TendonControll
   // }
 }
 
+void executeSetZeroAngle(TendonControl_packet_handler_t* pkt_handler, TendonController tendon) {
+  uint8_t len = pkt_handler->rx_packet->data_packet_u.data_packet_s.len - 4;
+
+  if (len != 0) {
+    pkt_handler->comm_result = COMM_PARAM_ERROR;
+    return;
+  }
+
+  pkt_handler->pkt_params[0] = COMM_SUCCESS;
+  buildPacket(pkt_handler, READ_STATUS, pkt_handler->rx_packet->data_packet_u.data_packet_s.motorId, 1);
+  tendon.Reset_Encoder_Zero();
+}
+
+void executeSetMaxAngle(TendonControl_packet_handler_t* pkt_handler, TendonController tendon)
+{
+  uint8_t len = pkt_handler->rx_packet->data_packet_u.data_packet_s.len - 4;
+
+  if (len != 2) {
+    pkt_handler->comm_result = COMM_PARAM_ERROR;
+    return;
+  }
+
+  int16_t angle = (int16_t)TENDON_CONTROL_MAKE_16B_WORD(
+    pkt_handler->rx_packet->data_packet_u.data_packet_s.pkt_params[0],
+    pkt_handler->rx_packet->data_packet_u.data_packet_s.pkt_params[1]
+  );
+
+  pkt_handler->pkt_params[0] = COMM_SUCCESS;
+  buildPacket(pkt_handler, READ_STATUS, pkt_handler->rx_packet->data_packet_u.data_packet_s.motorId, 1);
+  tendon.Set_Max_Angle(angle);
+}
+
 
 void execute(TendonControl_packet_handler_t* pkt_handler, TendonController* tendons, int16_t *target_angles,uint8_t num_tendons)
 {
   TendonControl_data_packet_s *rx_packet = pkt_handler->rx_packet;
+
+  if (pkt_handler->comm_result != COMM_SUCCESS)
+  {
+    pkt_handler->pkt_params[0] = pkt_handler->comm_result;
+    buildPacket(pkt_handler, READ_STATUS, pkt_handler->rx_packet->data_packet_u.data_packet_s.motorId, 1);
+  }
    
   switch (rx_packet->data_packet_u.data_packet_s.opcode)
   {
@@ -201,13 +238,32 @@ void execute(TendonControl_packet_handler_t* pkt_handler, TendonController* tend
       
         uint8_t id = rx_packet->data_packet_u.data_packet_s.motorId;
 
-        executeWriteAngle(pkt_handler, tendons[id], target_angles);
+        executeWriteAngle(pkt_handler, tendons[id]);
       }
       break;
     case WRITE_PID:
       break;
+
+    case SET_ZERO_ANGLE:
+      {
+        uint8_t id = rx_packet->data_packet_u.data_packet_s.motorId;
+
+        if (id <= num_tendons)
+          executeSetZeroAngle(pkt_handler, tendons[id]);
+        else {
+          pkt_handler->pkt_params[0] = COMM_PARAM_ERROR;
+          buildPacket(pkt_handler, READ_STATUS, pkt_handler->rx_packet->data_packet_u.data_packet_s.motorId, 1);
+        }
+      }
+
+    case SET_MAX_ANGLE:
+      {
+        
+      }
     default:
       pkt_handler->comm_result = COMM_INSTRUCTION_ERROR;
+      pkt_handler->pkt_params[0] = pkt_handler->comm_result;
+      buildPacket(pkt_handler, READ_STATUS, pkt_handler->rx_packet->data_packet_u.data_packet_s.motorId, 1);
       break;
   }
   return;
