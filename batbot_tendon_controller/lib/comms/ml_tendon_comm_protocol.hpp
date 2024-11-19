@@ -109,10 +109,25 @@ typedef enum {
   READ_ANGLE,
   WRITE_ANGLE,
   WRITE_PID,
+  SET_ZERO_ANGLE,
+  SET_MAX_ANGLE
 } tendon_opcode_t;
 
 /**
- * @brief Enum defining comm results for tendon control
+ * @brief Enum defining communication results for tendon control
+ * 
+ * COMM_SUCCESS: Message received and instruction executed successfully
+ * 
+ * COMM_FAIL: A general flag indicating that the message could not be received due to some communication error
+ * 
+ * COMM_INSTRUCTION_ERROR: This flag indicates that the given opcode is not valid or does not exist.
+ * 
+ * COMM_CRC_ERROR: This flag indicates a mismatch between the calculated and received crc. Usually indicates poor,
+ *                 or corrupted communication betwee board and host.
+ * 
+ * COMM_ID_ERROR: Indicates that the specified motor id refers to a motor that does not exist.
+ * 
+ * COMM_PARAM_ERROR: Indicates that the wrong number of parameters were given for the specified instruction.
  * 
  */
 typedef enum {
@@ -165,6 +180,10 @@ typedef struct
   } data_packet_u;
 } TendonControl_data_packet_s;
 
+/**
+ * @brief This struct defines a packet handler to help store packets, parameters, and comm results.
+ * 
+ */
 typedef struct
 {
   TendonControl_data_packet_s *rx_packet;
@@ -173,8 +192,15 @@ typedef struct
   uint8_t pkt_params[TENDON_CONTROL_PKT_MAX_NUM_PARAM_BYTES];
 
   tendon_comm_result_t comm_result;
+  int num_params;
 
 } TendonControl_packet_handler_t;
+
+/**
+ * @brief Defines the standard format of tendon instruction handlers
+ * 
+ */
+typedef void (TendonInstructionHandler)(TendonControl_packet_handler_t*, TendonController*);
 
 /**
  * @brief Function used to obtain 16-bit CRC
@@ -201,7 +227,14 @@ void parsePacket(TendonControl_packet_handler_t* pkt_handler, const char* buff);
  */
 void buildPacket(TendonControl_packet_handler_t pkt_handler, ...);
 
-// function to execute packet
+/**
+ * @brief This function executes the task specified by the rx_packet of the packet handler
+ * 
+ * @param pkt_handler The current session's packet handler
+ * @param tendons The tendon array
+ * @param target_angles The array of target angles
+ * @param num_tendons The number of tendons to control
+ */
 void execute(TendonControl_packet_handler_t* pkt_handler, TendonController* tendons, int16_t *target_angles, uint8_t num_tendons);
 
 #endif

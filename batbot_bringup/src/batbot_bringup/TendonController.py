@@ -15,6 +15,8 @@ class OPCODE(Enum):
     READ_ANGLE = 2
     WRITE_ANGLE = 3
     WRITE_PID = 4
+    SET_ZERO_ANGLE = 5
+    SET_MAX_ANGLE = 6
 
 
 class TendonController:
@@ -30,7 +32,8 @@ class TendonController:
 
     `tendonController = TendonController(port_name="/dev/ttyACM0")`
 
-    You can then call any function to control a motor. Example:
+    You can then call any function to control a motor. For example,
+    to write motor 0 to 120 degrees call:
 
     `tendonController.writeMotorAngle(0, 120)`
     
@@ -53,22 +56,20 @@ class TendonController:
     def connectToDev(self, com:COM_TYPE, port_name):
 
         raise NotImplementedError
-    
-    def testComm():
-        '''
-        This function tests the echo functionality
-        '''
 
-    def writeMotorAngle(self, id, angle):
+    def writeMotorAnglePercentMax(self, id, percent):
         '''
-        This function sets the motor specified by id to move to angle.
-        The angle should be a signed integer between -360 to 360.
-        '''
-    
-        angle_h = (angle >> 8) & 0xFF
-        angle_l = angle & 0xFF
+        This function sets the motor specified by id to move to the angle
+        that is percent of the maximum angle.
 
-        params = [angle_h, angle_l]
+        The percent argument is an integer from 0-100 that indicates
+        a percentage of the maximum angle, previously set by setMotorMaxAngle,
+        to move the motor to.
+        '''
+        
+        percent = 0xFF (percent)
+
+        params = [percent]
 
         self.th.BuildPacket(id, OPCODE.WRITE_ANGLE.value, params)
         ret = self.th.SendTxRx()
@@ -93,35 +94,48 @@ class TendonController:
         '''
         This function moves the motor specified by id to its minimum angle
         '''
-        raise NotImplementedError
+        self.writeMotorAnglePercentMax(id, 0)
 
     def moveMotorToMax(self, id):
         '''
         This function moves the motor specified by id to its maximum angle
         '''
-        raise NotImplementedError
-
-    def moveMotorToZero(self, id):
-        '''
-        This function moves the motor specified by id to 0
-        '''
-        raise NotImplementedError
+        self.writeMotorAnglePercentMax(id, 100)
 
     def setNewZero(self, id):
         '''
         For the motor specified by id, sets its current angle to the zero angle
         '''
-        raise NotImplementedError
+        params = []
+        
+        self.th.BuildPacket(id, OPCODE.SET_ZERO_ANGLE.value, params)
+        ret = self.th.SendTxRx()
 
-if __name__ == "__main__":
+        assert(ret["status"] == 0)
+    
+    def setMotorMaxAngle(self, id, angle):
+        angle_h = (angle >> 8) & 0xFF
+        angle_l = angle & 0xFF
+
+        params = [angle_h, angle_l]
+
+        self.th.BuildPacket(id, OPCODE.SET_MAX_ANGLE.value, params)
+        ret = self.th.SendTxRx()
+
+        assert(ret["status"] == 0)
+
+
+if __name__ == "__main__":  
 
     import time
 
     tc = TendonController(port_name="/dev/ttyACM0")
 
+    tc.setMotorMaxAngle(0, 180)
+
     while True:
         print("Writing angle...")
-        tc.writeMotorAngle(0, 0)
+        tc.writeMotorAnglePercentMax(0, 100)
         time.sleep(0.5)
         print("Reading angle...")
         angle = tc.readMotorAngle(0)

@@ -412,14 +412,23 @@ void loop()
   uart_controlled();
 
   // set the target angle
-  tendons[0].Set_Angle(target_motor_angles[0]);
-  tendons[1].Set_Angle(target_motor_angles[1]);
-  tendons[2].Set_Angle(target_motor_angles[2]);
-  tendons[3].Set_Angle(target_motor_angles[3]);
-  tendons[4].Set_Angle(target_motor_angles[4]);
-  tendons[5].Set_Angle(target_motor_angles[5]);
-  tendons[6].Set_Angle(target_motor_angles[6]);
-  tendons[7].Set_Angle(target_motor_angles[7]);
+  // tendons[0].Set_Angle(target_motor_angles[0]);
+  // tendons[1].Set_Angle(target_motor_angles[1]);
+  // tendons[2].Set_Angle(target_motor_angles[2]);
+  // tendons[3].Set_Angle(target_motor_angles[3]);
+  // tendons[4].Set_Angle(target_motor_angles[4]);
+  // tendons[5].Set_Angle(target_motor_angles[5]);
+  // tendons[6].Set_Angle(target_motor_angles[6]);
+  // tendons[7].Set_Angle(target_motor_angles[7]);
+
+  tendons[0].UpdatePID();
+  tendons[1].UpdatePID();
+  tendons[2].UpdatePID();
+  tendons[3].UpdatePID();
+  tendons[4].UpdatePID();
+  tendons[5].UpdatePID();
+  tendons[6].UpdatePID();
+  tendons[7].UpdatePID();
 }
 
 //-----------------------------------------------------------------

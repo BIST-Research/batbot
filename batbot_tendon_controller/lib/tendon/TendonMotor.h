@@ -31,8 +31,8 @@ public:
     // TendonController(uint8_t ccChan, ml_pin phasePin, ml_pin pwmPi, ml_pin encA, ml_pin encB, String name);
     TendonController(String name);
 
-    void Attach_Drive_Pin(ml_port_group portGroup, ml_pin pin, ml_port_function, uint8_t cc_chan);
 
+    void Attach_Drive_Pin(ml_port_group portGroup, ml_pin pin, ml_port_function, uint8_t cc_chan);
     void Attach_Direction_Pin(ml_port_group portGroup, ml_pin pin, ml_port_function);
     void Attach_EncA_Pin(ml_port_group portGroup, ml_pin pin, ml_port_function);
     void Attach_EncB_Pin(ml_port_group portGroup, ml_pin pin, ml_port_function);
@@ -57,7 +57,7 @@ public:
     void Toggle_Direction();
 
     // move tendon to angle
-    void Set_Angle(float destAngle, float MAX_PWM = 6000);
+    void Set_Goal_Angle(float destAngle);
 
     // angles of tendon
     void Set_Start_Angle_Limit(float angle);
@@ -79,11 +79,17 @@ public:
 
     void Move_To_End(bool cw);
 
+    void UpdatePID(float MAX_PWM = 6000);
+
     void Set_EncA_Flag();
 
     void Set_EncB_Flag();
 
     void Set_PID_Param(float p, float i, float d);
+
+    void Set_Max_Angle(float angle);
+
+    float Get_Max_Angle();
 
     uint32_t m_encA_ticks = 0;
     uint32_t m_encB_ticks = 0;
@@ -137,6 +143,10 @@ private:
 
     // frequency of tcc channel
     uint32_t m_tcc_freq = 6000;
+
+    // angle stuff
+    float goal_angle;
+    float max_angle;
 };
 
 #endif

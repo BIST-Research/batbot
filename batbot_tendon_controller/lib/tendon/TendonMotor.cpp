@@ -341,8 +341,9 @@ void TendonController::CalibrateLimits(){
     Set_Direction(OFF);
 
     unsigned long starttime = millis();
+    Set_Goal_Angle(center_angle);
     while(millis() - starttime < 500){
-        Set_Angle(center_angle,freq_pwm);
+        UpdatePID(freq_pwm);
     }
     Reset_Encoder_Zero();
     Serial.println("Calibration complete");
@@ -351,15 +352,28 @@ void TendonController::CalibrateLimits(){
 /**
  * Set target angle
  */
-void TendonController::Set_Angle(float destAngle,float MAX_PWM)
+void TendonController::Set_Goal_Angle(float destAngle)
 {
+    goal_angle = destAngle;
+
+    if (goal_angle > max_angle)
+    {
+        goal_angle = max_angle;
+    }
+    if (goal_angle < (-1 * max_angle))
+    {
+        goal_angle = -1 * max_angle;
+    }
+}
+
+void TendonController::UpdatePID(float MAX_PWM) {
     // grab current time
     float curTime = micros();
     float deltaTime = curTime - m_prevPIDTime;
     deltaTime /= 1.0e6;
 
     // get number of encoders ticks needed to get to angle
-    m_target_ticks = (destAngle * m_cycles_per_rev * m_gear_ratio) / 360.0;
+    m_target_ticks = (goal_angle * m_cycles_per_rev * m_gear_ratio) / 360.0;
 
     // calculate the error
     int32_t error = m_target_ticks - m_currentTicks;
@@ -415,4 +429,12 @@ void TendonController::Set_Angle(float destAngle,float MAX_PWM)
     // store previous data
     m_prevPIDTime = curTime;
     m_error_prev = error;
+}
+
+void TendonController::Set_Max_Angle(float angle) {
+    max_angle = angle;
+}
+
+float TendonController::Get_Max_Angle() {
+    return max_angle;
 }
