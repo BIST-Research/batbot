@@ -228,7 +228,7 @@ void execute(TendonControl_packet_handler_t* pkt_handler, TendonController* tend
         if (id <= num_tendons)
           executeReadAngle(pkt_handler, tendons[id]);
         else {
-          pkt_handler->pkt_params[0] = COMM_PARAM_ERROR;
+          pkt_handler->pkt_params[0] = COMM_ID_ERROR;
           buildPacket(pkt_handler, READ_STATUS, pkt_handler->rx_packet->data_packet_u.data_packet_s.motorId, 1);
         }
       }
@@ -251,14 +251,21 @@ void execute(TendonControl_packet_handler_t* pkt_handler, TendonController* tend
         if (id <= num_tendons)
           executeSetZeroAngle(pkt_handler, tendons[id]);
         else {
-          pkt_handler->pkt_params[0] = COMM_PARAM_ERROR;
+          pkt_handler->pkt_params[0] = COMM_ID_ERROR;
           buildPacket(pkt_handler, READ_STATUS, pkt_handler->rx_packet->data_packet_u.data_packet_s.motorId, 1);
         }
       }
 
     case SET_MAX_ANGLE:
       {
-        
+        uint8_t id = rx_packet->data_packet_u.data_packet_s.motorId;
+
+        if (id <= num_tendons)
+          executeSetMaxAngle(pkt_handler, tendons[id]);
+        else {
+          pkt_handler->pkt_params[0] = COMM_ID_ERROR;
+          buildPacket(pkt_handler, READ_STATUS, pkt_handler->rx_packet->data_packet_u.data_packet_s.motorId, 1);
+        }
       }
     default:
       pkt_handler->comm_result = COMM_INSTRUCTION_ERROR;
