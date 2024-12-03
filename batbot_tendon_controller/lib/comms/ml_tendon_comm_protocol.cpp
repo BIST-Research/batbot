@@ -138,7 +138,7 @@ void executeWriteAngle(TendonControl_packet_handler_t* pkt_handler, TendonContro
 
   int16_t angle_percent = (int16_t)pkt_handler->rx_packet->data_packet_u.data_packet_s.pkt_params[0];
 
-  float angle = tendon.Get_Max_Angle() * (angle_percent / 100);
+  float angle = tendon.Get_Max_Angle() * (angle_percent / 100.0);
 
   pkt_handler->pkt_params[0] = COMM_SUCCESS;
   buildPacket(pkt_handler, READ_STATUS, pkt_handler->rx_packet->data_packet_u.data_packet_s.motorId, 1);
@@ -200,7 +200,7 @@ void executeSetMaxAngle(TendonControl_packet_handler_t* pkt_handler, TendonContr
 
   pkt_handler->pkt_params[0] = COMM_SUCCESS;
   buildPacket(pkt_handler, READ_STATUS, pkt_handler->rx_packet->data_packet_u.data_packet_s.motorId, 1);
-  tendon.Set_Max_Angle(angle);
+  tendon.Set_Max_Angle((float)angle);
 }
 
 

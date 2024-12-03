@@ -67,7 +67,7 @@ class TendonController:
         to move the motor to.
         '''
         
-        percent = 0xFF (percent)
+        percent = 0xFF & (percent)
 
         params = [percent]
 
