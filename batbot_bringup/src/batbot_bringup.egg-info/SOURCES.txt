@@ -12,6 +12,7 @@ src/batbot_bringup/bb_repl.py
 src/batbot_bringup/bb_utils.py
 src/batbot_bringup/emit.py
 src/batbot_bringup/simple_sonar.py
+src/batbot_bringup/tendon_calibration.py
 src/batbot_bringup.egg-info/PKG-INFO
 src/batbot_bringup.egg-info/SOURCES.txt
 src/batbot_bringup.egg-info/dependency_links.txt

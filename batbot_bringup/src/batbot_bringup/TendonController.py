@@ -67,7 +67,7 @@ class TendonController:
         to move the motor to.
         '''
         
-        percent = 0xFF (percent)
+        percent = 0xFF & (percent)
 
         params = [percent]
 
@@ -83,6 +83,9 @@ class TendonController:
 
         self.th.BuildPacket(id, OPCODE.READ_ANGLE.value, [])
         ret = self.th.SendTxRx()
+
+        if (self.th.test_mode):
+            return 0
 
         if ret != -1:
             assert(ret["status"] == 0)

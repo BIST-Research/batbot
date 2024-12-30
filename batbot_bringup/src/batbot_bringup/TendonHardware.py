@@ -70,10 +70,10 @@ class TendonHardwareInterface:
         self.test_mode = True
 
         self.ser = None
-        if port_name != 'test':
-            self.ser = Serial(port_name, baudrate=115200, parity=serial.PARITY_NONE, stopbits=1, timeout=0.5)
+        if port_name:
+            self.ser = Serial(port_name, baudrate=115200, parity=serial.PARITY_NONE, stopbits=1)
             self.test_mode = False
-
+        
         self.packet = []
 
     def BuildPacket(self, id, opcode, params):
@@ -132,6 +132,7 @@ class TendonHardwareInterface:
             data = self.ReadRx()
         else:
             data = self.packet
+            data[5] = 0
 
         if data != -1:
             return {
@@ -148,4 +149,5 @@ class TendonHardwareInterface:
             self.ser.reset_output_buffer()
             self.ser.write(bytes(self.packet))
         else:
-            print(self.packet)
+            # print(self.packet)
+            pass
