@@ -57,7 +57,7 @@ if __name__ == "__main__":
 
                 key = screen.getch()
 
-            # tc.setNewZero(i)
+            tc.setNewZero(i)
             
                 
     except Exception as e:
