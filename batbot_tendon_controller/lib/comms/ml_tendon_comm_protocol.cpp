@@ -54,6 +54,7 @@ uint16_t updateCRC(uint16_t crc_accum, uint8_t *data, uint16_t data_blk_size)
 
 void parsePacket(TendonControl_packet_handler_t* pkt_handler, const char* buff)
 {
+  free(pkt_handler->rx_packet);
   pkt_handler->rx_packet = (TendonControl_data_packet_s *)buff;
 
   uint16_t total_packet_length = TENDON_CONTROL_PKT_NUM_HEADER_BYTES + \
