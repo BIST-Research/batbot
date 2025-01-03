@@ -151,3 +151,6 @@ class TendonHardwareInterface:
         else:
             # print(self.packet)
             pass
+
+    def Close(self):
+        self.ser.close()

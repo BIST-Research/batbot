@@ -127,6 +127,9 @@ class TendonController:
 
         assert(ret["status"] == 0)
 
+    def close(self):
+        self.th.Close()
+
 
 if __name__ == "__main__":  
 
