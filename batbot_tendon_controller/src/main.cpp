@@ -66,8 +66,6 @@ ml_spi_s spi_s = sercom1_spi_dmac_slave_prototype;
 const uint8_t rx_dmac_chnum = spi_s.rx_dmac_s.ex_chnum;
 const uint8_t tx_dmac_chnum = spi_s.tx_dmac_s.ex_chnum;
 
-TendonControl_packet_handler_t pkt_handler;
-
 void dstack_a_init(void)
 {
   ML_SET_GCLK7_PCHCTRL(TCC0_GCLK_ID);
@@ -175,55 +173,6 @@ void attach_tendons()
   tendons[7].Attach_Direction_Pin(PORT_GRP_B, 18, PF_B);
   tendons[7].Attach_EncA_Pin(PORT_GRP_A, 18, PF_A);
   tendons[7].Attach_EncB_Pin(PORT_GRP_B, 8, PF_A);
-
-  // RIGHT
-  // MOTORS 9-16
-  // motor 1
-  // tendons[0].Attach_Drive_Pin(PORT_GRP_C, 20, PF_F, 4);
-  // tendons[0].Attach_Direction_Pin(PORT_GRP_B, 16, PF_B);
-  // tendons[0].Attach_EncA_Pin(PORT_GRP_C, 13, PF_A);
-  // tendons[0].Attach_EncB_Pin(PORT_GRP_C, 12, PF_A);
-
-  // // motor 2
-  // tendons[1].Attach_Drive_Pin(PORT_GRP_C, 21, PF_F, 5);
-  // tendons[1].Attach_Direction_Pin(PORT_GRP_B, 17, PF_B);
-  // tendons[1].Attach_EncB_Pin(PORT_GRP_C, 15, PF_A);
-  // tendons[1].Attach_EncA_Pin(PORT_GRP_C, 14, PF_A);
-  // tendons[1].m_gear_ratio = ML_HPCB_LV_100P1;
-
-  // // motor 3
-  // tendons[2].Attach_Drive_Pin(PORT_GRP_C, 16, PF_F, 0);
-  // tendons[2].Attach_Direction_Pin(PORT_GRP_B, 20, PF_B);
-  // tendons[2].Attach_EncA_Pin(PORT_GRP_C, 11, PF_A);
-  // tendons[2].Attach_EncB_Pin(PORT_GRP_C, 10, PF_A);
-  // tendons[2].m_gear_ratio = ML_HPCB_LV_100P1;
-
-  // // motor 4
-  // tendons[3].Attach_Drive_Pin(PORT_GRP_C, 17, PF_F, 1);
-  // tendons[3].Attach_Direction_Pin(PORT_GRP_B, 21, PF_B);
-  // tendons[3].Attach_EncB_Pin(PORT_GRP_C, 7, PF_A);
-  // tendons[3].Attach_EncA_Pin(PORT_GRP_C, 6, PF_A);
-  // // tendons[3].m_gear_ratio = ML_HPCB_LV_100P1;
-
-  // // motor 5
-  // tendons[4].Attach_Drive_Pin(PORT_GRP_C, 19, PF_F, 3);
-  // tendons[4].Attach_Direction_Pin(PORT_GRP_C, 22, PF_B);
-  // tendons[4].Attach_EncB_Pin(PORT_GRP_C, 4, PF_A);
-  // tendons[4].Attach_EncA_Pin(PORT_GRP_C, 5, PF_A);
-  // tendons[4].m_gear_ratio = ML_HPCB_LV_100P1;
-
-  // // motor 6
-  // tendons[5].Attach_Drive_Pin(PORT_GRP_C, 18, PF_F, 2);
-  // tendons[5].Attach_Direction_Pin(PORT_GRP_C, 23, PF_B);
-  // tendons[5].Attach_EncB_Pin(PORT_GRP_A, 23, PF_A);
-  // tendons[5].Attach_EncA_Pin(PORT_GRP_D, 8, PF_A);
-  // tendons[5].m_gear_ratio = ML_HPCB_LV_100P1;
-
-  // // motor 7
-  // tendons[6].Attach_Drive_Pin(PORT_GRP_A, 12, PF_F, 6);
-  // tendons[6].Attach_Direction_Pin(PORT_GRP_B, 24, PF_B);
-  // tendons[6].Attach_EncA_Pin(PORT_GRP_C, 0, PF_A);
-  // tendons[6].Attach_EncB_Pin(PORT_GRP_C, 1, PF_A);
 }
 
 void uart_controlled()

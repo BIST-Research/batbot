@@ -180,27 +180,6 @@ typedef struct
   } data_packet_u;
 } TendonControl_data_packet_s;
 
-/**
- * @brief This struct defines a packet handler to help store packets, parameters, and comm results.
- * 
- */
-typedef struct
-{
-  TendonControl_data_packet_s *rx_packet;
-  TendonControl_data_packet_s *tx_packet;
-
-  uint8_t pkt_params[TENDON_CONTROL_PKT_MAX_NUM_PARAM_BYTES];
-
-  tendon_comm_result_t comm_result;
-  int num_params;
-
-} TendonControl_packet_handler_t;
-
-/**
- * @brief Defines the standard format of tendon instruction handlers
- * 
- */
-typedef void (TendonInstructionHandler)(TendonControl_packet_handler_t*, TendonController*);
 
 /**
  * @brief Function used to obtain 16-bit CRC
@@ -213,10 +192,9 @@ typedef void (TendonInstructionHandler)(TendonControl_packet_handler_t*, TendonC
 uint16_t updateCRC(uint16_t crc_accum, uint8_t *data, uint16_t data_blk_size);
 
 /**
- * @brief This function validates an rx packet from a stream of bytes and validates CRC
+ * @brief This function validates an rx packet from a stream of bytes
  *
- * @param pkt_handler the packet handler
- * @param buff the buffer stream to process
+ * @param pkt the buffer stream to process
  */
 tendon_comm_result_t validatePacket(TendonControl_data_packet_s* pkt);
 
@@ -225,20 +203,18 @@ struct CommandReturn_t; // command return forward declaration
 /**
  * @brief This function builds a tx packet including CRC
  * 
- * @param pkt_handler the packet handler
+ * @param response the parameters to include in the response
+ * @param pkt_handler the numerical code for the communication result
  */
 TendonControl_data_packet_s buildResponsePacket(CommandReturn_t response, tendon_comm_result_t comm_result);
 
 /**
- * @brief This function executes the task specified by the rx_packet of the packet handler
+ * @brief This function handles an incoming data packet
  * 
- * @param pkt_handler The current session's packet handler
- * @param tendons The tendon array
- * @param target_angles The array of target angles
- * @param num_tendons The number of tendons to control
+ * @param buff a byte array containing the data packet to be validated/executed
+ * @param tendons a reference to the tendon controllers used in the application
+ * @return TendonControl_data_packet_s 
  */
-void execute(TendonControl_packet_handler_t* pkt_handler, TendonController* tendons, int16_t *target_angles, uint8_t num_tendons);
-
 TendonControl_data_packet_s handlePacket(const char* buff, TendonController* tendons);
 
 #endif

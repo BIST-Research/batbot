@@ -109,7 +109,7 @@ TendonControl_data_packet_s handlePacket(const char* buff, TendonController* ten
     ML_TendonCommandBase* cmd = NULL;
     comm_result = CommandFactory_CreateCommand(cmd, pkt, tendons);
 
-    if (comm_result == COMM_SUCCESS)
+    if (comm_result == COMM_SUCCESS && cmd != NULL)
     {
       ret = cmd->fn(cmd);
     }
