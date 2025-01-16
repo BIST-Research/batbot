@@ -14,11 +14,7 @@ TendonController::TendonController(String name)
     m_pwm_channel = TCC0;
 
     // set PID to default
-    m_kp = 1;
-    m_kd = 0;
-    m_ki = 0;
-    m_error_integral = 0;
-    m_error_prev = 0;
+    pid.Set_Params(1, 0, 0, 6000);
 
     // name of this tendon
     m_name = name;
@@ -116,7 +112,7 @@ void TendonController::init_peripheral()
     logical_set(&m_phase);
 }
 // set motor duty cycle
-void TendonController::Set_Duty_Cyle(uint16_t dutyCycle)
+void TendonController::Set_Duty_Cycle(uint16_t dutyCycle)
 {
     // map pwm to freq range
     dutyCycle > m_tcc_freq ? dutyCycle = 100 : 0;
@@ -139,11 +135,9 @@ void TendonController::set_PWM_Freq(uint16_t pwmValue)
 }
 
 // set PID parameters
-void TendonController::Set_PID_Param(float kp, float ki, float kd)
+void TendonController::Set_PID_Param(float kp, float ki, float kd, float max)
 {
-    m_kp = kp;
-    m_ki = ki;
-    m_kd = kd;
+    pid.Set_Params(kp, ki, kd, max);
 }
 
 // set the direction motor turns
@@ -328,8 +322,6 @@ void TendonController::CalibrateLimits(){
 
     max_limit = curAngle;
 
-
-
     int16_t center = abs(max_limit)-abs(min_limit);
 
     float min_angle = ConvertAngle(min_limit);
@@ -343,7 +335,8 @@ void TendonController::CalibrateLimits(){
     unsigned long starttime = millis();
     Set_Goal_Angle(center_angle);
     while(millis() - starttime < 500){
-        UpdatePID(freq_pwm);
+        // UpdateMotorControl(freq_pwm);
+        UpdateMotorControl();
     }
     Reset_Encoder_Zero();
     Serial.println("Calibration complete");
@@ -366,38 +359,13 @@ void TendonController::Set_Goal_Angle(float destAngle)
     }
 }
 
-void TendonController::UpdatePID(float MAX_PWM) {
+void TendonController::UpdateMotorControl() {
     // grab current time
     float curTime = micros();
-    float deltaTime = curTime - m_prevPIDTime;
-    deltaTime /= 1.0e6;
+    float deltaTimeUs = curTime - m_prevPIDTime;
 
-    // get number of encoders ticks needed to get to angle
-    m_target_ticks = (goal_angle * m_cycles_per_rev * m_gear_ratio) / 360.0;
+    float sig = pid.Compute_Signal(m_currentTicks, m_target_ticks, deltaTimeUs);
 
-    // calculate the error
-    int32_t error = m_target_ticks - m_currentTicks;
-
-    if (abs(error) < 2)
-    {
-        Set_Direction(OFF);
-        m_prevPIDTime = curTime;
-        m_error_integral = 0;
-        m_settled = true;
-        return;
-    }
-    m_settled = false;
-
-    // derivative
-    float derivative = (error - m_error_prev) / deltaTime;
-
-    // integral
-    m_error_integral = m_error_integral + (error * deltaTime);
-
-    // calc control signal
-    float sig = (m_kp * error) + (m_kd * derivative) + (m_ki * m_error_integral);
-
-    // set new pwm signal
     m_cur_pwm = (uint16_t)fabs(sig);
 
     // set direction
@@ -409,12 +377,12 @@ void TendonController::UpdatePID(float MAX_PWM) {
 
     if (!m_calibrated)  // not calibrated
     {
-        m_cur_pwm = mapf(m_cur_pwm, 0, 6000, 1000, MAX_PWM);
+        m_cur_pwm = mapf(m_cur_pwm, 0, 6000, 1000, 6000);
     }
     else    // each motor is calibrated
     {
         uint16_t min = sig < 0 ? m_min_CCW_PWM : m_min_CW_PWM;
-        m_cur_pwm = mapf(m_cur_pwm, 0, 6000, min, MAX_PWM);
+        m_cur_pwm = mapf(m_cur_pwm, 0, 6000, min, 6000);
     }
 
     if (m_cur_pwm > m_tcc_freq)
@@ -428,7 +396,6 @@ void TendonController::UpdatePID(float MAX_PWM) {
 
     // store previous data
     m_prevPIDTime = curTime;
-    m_error_prev = error;
 }
 
 void TendonController::Set_Max_Angle(float angle) {

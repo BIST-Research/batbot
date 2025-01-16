@@ -47,7 +47,7 @@ public:
     String Get_Name();
 
     // set motor duty cycle
-    void Set_Duty_Cyle(uint16_t dutyCycle);
+    void Set_Duty_Cycle(uint16_t dutyCycle);
 
     void set_PWM_Freq(uint16_t pwmValue);
 
@@ -79,13 +79,13 @@ public:
 
     void Move_To_End(bool cw);
 
-    void UpdatePID(float MAX_PWM = 6000);
+    void UpdateMotorControl();
 
     void Set_EncA_Flag();
 
     void Set_EncB_Flag();
 
-    void Set_PID_Param(float p, float i, float d);
+    void Set_PID_Param(float p, float i, float d, float max);
 
     void Set_Max_Angle(float angle);
 
@@ -112,13 +112,13 @@ private:
     int32_t m_lastTicks = 0;
     float m_angle = 0;
     int32_t m_target_ticks = 0;
-    bool m_settled = false;
 
     // pid stuff
-    float m_kp, m_kd, m_ki, m_umax;
-    float m_error_prev, m_error_integral;
+    // float m_kp, m_kd, m_ki, m_umax;
+    // float m_error_prev, m_error_integral;
+
     float m_prevPIDTime = 0;
-    uint32_t m_chillBand = 0;
+    ML_PID pid;
 
     // current pwm speed
     uint16_t m_cur_pwm = 0;
@@ -129,7 +129,6 @@ private:
     uint16_t m_min_CW_PWM = 0;
     uint16_t m_min_CCW_PWM = 0;
     bool m_calibrated = false;
-
 
     // limits
     float m_start_angle = -180;

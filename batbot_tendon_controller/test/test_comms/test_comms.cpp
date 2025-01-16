@@ -1,4 +1,4 @@
-#include "ml_tendon_commands.hpp"
+// #include "ml_tendon_commands.hpp"
 #include "unity.h"
 
 void setUp(void) {
@@ -12,6 +12,11 @@ void tearDown(void) {
 void test_tests(void)
 {
     TEST_ASSERT_EQUAL(0, 0);
+}
+
+void test_command_factory(void)
+{
+
 }
 
 int main(void) {

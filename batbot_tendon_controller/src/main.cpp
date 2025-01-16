@@ -228,7 +228,7 @@ void setup()
   {
     tendons[i].init_peripheral();
     tendons[i].Set_Direction(OFF);
-    tendons[i].Set_PID_Param(900, 0, 10);
+    tendons[i].Set_PID_Param(900, 0, 10, 6000);
     // tendons[i].CalibrateLimits();
   }
 
@@ -358,14 +358,14 @@ void loop()
   // to test
   uart_controlled();
 
-  tendons[0].UpdatePID();
-  tendons[1].UpdatePID();
-  tendons[2].UpdatePID();
-  tendons[3].UpdatePID();
-  tendons[4].UpdatePID();
-  tendons[5].UpdatePID();
-  tendons[6].UpdatePID();
-  tendons[7].UpdatePID();
+  tendons[0].UpdateMotorControl();
+  tendons[1].UpdateMotorControl();
+  tendons[2].UpdateMotorControl();
+  tendons[3].UpdateMotorControl();
+  tendons[4].UpdateMotorControl();
+  tendons[5].UpdateMotorControl();
+  tendons[6].UpdateMotorControl();
+  tendons[7].UpdateMotorControl();
 }
 
 //-----------------------------------------------------------------
