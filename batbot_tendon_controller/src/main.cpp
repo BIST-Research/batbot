@@ -242,11 +242,9 @@ void uart_controlled()
     if (i > 0)
     {
 
-      parsePacket(&pkt_handler, buff);
+      TendonControl_data_packet_s responsePkt = handlePacket(buff, tendons);
 
-      execute(&pkt_handler, tendons, target_motor_angles, NUM_TENDONS);
-
-      Serial.write(pkt_handler.tx_packet->data_packet_u.data_packet, pkt_handler.tx_packet->data_packet_u.data_packet_s.len + 3);
+      Serial.write(responsePkt.data_packet_u.data_packet, responsePkt.data_packet_u.data_packet_s.len + 4);
     }
   }
 }
@@ -410,16 +408,6 @@ void loop()
 {
   // to test
   uart_controlled();
-
-  // set the target angle
-  // tendons[0].Set_Angle(target_motor_angles[0]);
-  // tendons[1].Set_Angle(target_motor_angles[1]);
-  // tendons[2].Set_Angle(target_motor_angles[2]);
-  // tendons[3].Set_Angle(target_motor_angles[3]);
-  // tendons[4].Set_Angle(target_motor_angles[4]);
-  // tendons[5].Set_Angle(target_motor_angles[5]);
-  // tendons[6].Set_Angle(target_motor_angles[6]);
-  // tendons[7].Set_Angle(target_motor_angles[7]);
 
   tendons[0].UpdatePID();
   tendons[1].UpdatePID();

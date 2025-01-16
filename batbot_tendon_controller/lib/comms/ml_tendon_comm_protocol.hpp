@@ -49,8 +49,8 @@
                                                     TENDON_CONTROL_PKT_NUM_LEN_BYTES
 
 #define TENDON_CONTROL_MAKE_16B_WORD(a, b) ((uint16_t)a << 8) | ((uint16_t)b)
-#define TENDON_CONTROL_GET_UPPER_16B(a) (uint8_t)(((uint16_t)a >> 8) & 0xFF)
-#define TENDON_CONTROL_GET_LOWER_16B(a) (uint8_t)((uint16_t)a & 0xFF)
+#define TENDON_CONTROL_GET_UPPER_8B(a) (uint8_t)(((uint16_t)a >> 8) & 0xFF)
+#define TENDON_CONTROL_GET_LOWER_8B(a) (uint8_t)((uint16_t)a & 0xFF)
 
 /**
  * @brief Enum defining opcodes for motor tendon control
@@ -213,19 +213,21 @@ typedef void (TendonInstructionHandler)(TendonControl_packet_handler_t*, TendonC
 uint16_t updateCRC(uint16_t crc_accum, uint8_t *data, uint16_t data_blk_size);
 
 /**
- * @brief This function parses an rx packet from a stream of bytes and validates CRC
+ * @brief This function validates an rx packet from a stream of bytes and validates CRC
  *
  * @param pkt_handler the packet handler
  * @param buff the buffer stream to process
  */
-void parsePacket(TendonControl_packet_handler_t* pkt_handler, const char* buff);
+tendon_comm_result_t validatePacket(TendonControl_data_packet_s* pkt);
 
+
+struct CommandReturn_t; // command return forward declaration
 /**
  * @brief This function builds a tx packet including CRC
  * 
  * @param pkt_handler the packet handler
  */
-void buildPacket(TendonControl_packet_handler_t pkt_handler, ...);
+TendonControl_data_packet_s buildResponsePacket(CommandReturn_t response, tendon_comm_result_t comm_result);
 
 /**
  * @brief This function executes the task specified by the rx_packet of the packet handler
@@ -236,5 +238,7 @@ void buildPacket(TendonControl_packet_handler_t pkt_handler, ...);
  * @param num_tendons The number of tendons to control
  */
 void execute(TendonControl_packet_handler_t* pkt_handler, TendonController* tendons, int16_t *target_angles, uint8_t num_tendons);
+
+TendonControl_data_packet_s handlePacket(const char* buff, TendonController* tendons);
 
 #endif
