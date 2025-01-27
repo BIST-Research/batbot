@@ -76,6 +76,10 @@ class TendonHardwareInterface:
         
         self.packet = []
 
+    def __del__(self):
+        self.ser.close()
+        print("Terminated serial connection")
+
     def BuildPacket(self, id, opcode, params):
         data = [0xFF, 0x00]
 
@@ -86,6 +90,8 @@ class TendonHardwareInterface:
         data = data + params
         crc = crc16(data)
         data = data + crc
+        
+        print('Sent Data: ', data)
 
         self.packet = data
 
@@ -113,15 +119,19 @@ class TendonHardwareInterface:
             data.append(byte)
 
         self.ser.reset_input_buffer()
+        print('Received Data: ', data)
 
         crc = data[-2:]
         data = data[0:-2]
 
         new_crc = crc16(data)
 
+        # print('Received CRC: ', crc)
+        # print('Calculated CRC: ', new_crc)
+
         if crc != new_crc:
             print('CRC ERROR!')
-            return -1
+            return data
 
         return data
 

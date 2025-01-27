@@ -46,7 +46,7 @@ uint16_t updateCRC(uint16_t crc_accum, uint8_t *data, uint16_t data_blk_size)
 
   for (j = 0; j < data_blk_size; j++)
   {
-    i = ((uint16_t)(crc_accum >> 8) ^ *data++) & 0xFF;
+    i = ((uint16_t)(crc_accum >> 8) ^ data[j]) & 0xFF;
     crc_accum = (crc_accum << 8) ^ crc_table[i];
   }
 
@@ -74,26 +74,29 @@ tendon_comm_result_t validatePacket(TendonControl_data_packet_s* pkt)
     }
 }
 
-TendonControl_data_packet_s buildResponsePacket(CommandReturn_t response, tendon_comm_result_t comm_result)
+TendonControl_data_packet_s buildResponsePacket(CommandReturn_t* response, tendon_comm_result_t comm_result)
 {
   TendonControl_data_packet_s return_pkt;
 
   return_pkt.data_packet_u.data_packet_s.header[0] = 0xFF;
   return_pkt.data_packet_u.data_packet_s.header[1] = 0x00;
-  return_pkt.data_packet_u.data_packet_s.len = response.numParams + 4 + 1;
+  return_pkt.data_packet_u.data_packet_s.len = response->numParams + 4 + 1;
   return_pkt.data_packet_u.data_packet_s.motorId = 0;
   return_pkt.data_packet_u.data_packet_s.opcode = READ_STATUS;
   return_pkt.data_packet_u.data_packet_s.pkt_params[0] = comm_result;
 
   size_t i = 0;
-  for (; i < response.numParams; ++i)
+  for (; i < response->numParams; ++i)
   {
-    return_pkt.data_packet_u.data_packet_s.pkt_params[1 + i] = response.params[i];
+    return_pkt.data_packet_u.data_packet_s.pkt_params[1 + i] = response->params[i];
   }
 
-  uint16_t rx_crc = updateCRC(0, return_pkt.data_packet_u.data_packet, response.numParams + 4 + 1);
-  return_pkt.data_packet_u.data_packet_s.pkt_params[i] = TENDON_CONTROL_GET_UPPER_8B(rx_crc);
-  return_pkt.data_packet_u.data_packet_s.pkt_params[i + 1] = TENDON_CONTROL_GET_LOWER_8B(rx_crc);
+  uint16_t rx_crc = updateCRC(0, return_pkt.data_packet_u.data_packet, response->numParams + 4 + 1 + 3 - 2);
+  return_pkt.data_packet_u.data_packet_s.pkt_params[i + 1] = TENDON_CONTROL_GET_UPPER_8B(rx_crc);
+  return_pkt.data_packet_u.data_packet_s.pkt_params[i + 2] = TENDON_CONTROL_GET_LOWER_8B(rx_crc);
+
+  if (response->params != NULL)
+    free(response->params);
 
   return return_pkt;
 }
@@ -107,7 +110,7 @@ TendonControl_data_packet_s handlePacket(const char* buff, TendonController* ten
   if (comm_result == COMM_SUCCESS)
   {
     ML_TendonCommandBase* cmd = NULL;
-    comm_result = CommandFactory_CreateCommand(cmd, pkt, tendons);
+    comm_result = CommandFactory_CreateCommand(&cmd, pkt, tendons);
 
     if (comm_result == COMM_SUCCESS && cmd != NULL)
     {
@@ -117,7 +120,5 @@ TendonControl_data_packet_s handlePacket(const char* buff, TendonController* ten
     free(cmd);
   }
 
-  free(pkt);
-
-  return buildResponsePacket(ret, comm_result);
+  return buildResponsePacket(&ret, comm_result);
 }

@@ -90,6 +90,9 @@ public:
     void Set_Max_Angle(float angle);
 
     float Get_Max_Angle();
+    float Get_Goal_Angle();
+
+    float Set_Angle(float angle);
 
     uint32_t m_encA_ticks = 0;
     uint32_t m_encB_ticks = 0;
@@ -144,8 +147,8 @@ private:
     uint32_t m_tcc_freq = 6000;
 
     // angle stuff
-    float goal_angle;
     float max_angle;
+    float goal_angle;
 };
 
 #endif

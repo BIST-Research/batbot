@@ -6,6 +6,16 @@ float mapf(float x, float in_min, float in_max, float out_min, float out_max)
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
+
+float ConvertTicksToAngle(int16_t ticks){
+    return ((360.0 * ticks) / (ML_ENC_CPR * ML_HPCB_LV_75P1));
+}
+
+float ConvertAngleToTicks(int16_t deg){
+    return ((deg * ML_ENC_CPR * ML_HPCB_LV_75P1) / 360.0);
+}
+
+
 // create tendon controller
 // TendonController::TendonController(uint8_t ccChan, ml_pin phasePin, ml_pin pwmPin, ml_pin encA, ml_pin encB, String name)
 TendonController::TendonController(String name)
@@ -91,6 +101,7 @@ void TendonController::Reset_Encoder_Zero()
 {
     m_currentTicks = 0;
     m_lastTicks = 0;
+    Set_Goal_Angle(0);
 }
 
 void TendonController::Set_EncA_Flag()
@@ -257,17 +268,12 @@ void TendonController::Calibrate_Min_PWM()
  */
 float TendonController::Get_Angle()
 {
-    return ((360.0 * m_currentTicks) / (m_cycles_per_rev * m_gear_ratio));
+    return ConvertTicksToAngle(m_currentTicks);
 }
 
 int32_t TendonController::Get_Ticks()
 {
     return m_currentTicks;
-}
-
-
-float ConvertAngle(int16_t ticks){
-    return ((360.0 * ticks) / (ML_ENC_CPR * ML_HPCB_LV_75P1));
 }
 
 void TendonController::Move_To_End(bool cw){
@@ -302,10 +308,10 @@ void TendonController::CalibrateLimits(){
     int16_t curAngle = 10;
     while (curAngle != m_currentTicks){
         curAngle = m_currentTicks;
-        Serial.printf("Finding min: %.3f\n",ConvertAngle(curAngle));
+        Serial.printf("Finding min: %.3f\n",ConvertTicksToAngle(curAngle));
         delay(200);
     }
-    Serial.printf("Found min: %.3f\n",ConvertAngle(curAngle));
+    Serial.printf("Found min: %.3f\n",ConvertTicksToAngle(curAngle));
     min_limit = curAngle;
     Reset_Encoder_Zero();
 
@@ -315,17 +321,17 @@ void TendonController::CalibrateLimits(){
     curAngle = 10;
     while (curAngle != m_currentTicks){
         curAngle = m_currentTicks;
-        Serial.printf("Finding max: %.3f\n",ConvertAngle(curAngle));
+        Serial.printf("Finding max: %.3f\n",ConvertTicksToAngle(curAngle));
         delay(200);
     }
-    Serial.printf("Found max: %.3f\n",ConvertAngle(curAngle));
+    Serial.printf("Found max: %.3f\n",ConvertTicksToAngle(curAngle));
 
     max_limit = curAngle;
 
     int16_t center = abs(max_limit)-abs(min_limit);
 
-    float min_angle = ConvertAngle(min_limit);
-    float max_angle = ConvertAngle(max_limit);
+    float min_angle = ConvertTicksToAngle(min_limit);
+    float max_angle = ConvertTicksToAngle(max_limit);
     float center_angle = max_angle/2;
 
 
@@ -347,16 +353,9 @@ void TendonController::CalibrateLimits(){
  */
 void TendonController::Set_Goal_Angle(float destAngle)
 {
-    goal_angle = destAngle;
+    goal_angle = constrain(destAngle, -1 * max_angle, max_angle);
 
-    if (goal_angle > max_angle)
-    {
-        goal_angle = max_angle;
-    }
-    if (goal_angle < (-1 * max_angle))
-    {
-        goal_angle = -1 * max_angle;
-    }
+    m_target_ticks = ConvertAngleToTicks(goal_angle);
 }
 
 void TendonController::UpdateMotorControl() {
@@ -404,4 +403,13 @@ void TendonController::Set_Max_Angle(float angle) {
 
 float TendonController::Get_Max_Angle() {
     return max_angle;
+}
+
+float TendonController::Get_Goal_Angle() {
+    return ConvertTicksToAngle(m_target_ticks);
+    // return goal_angle;
+}
+
+float TendonController::Set_Angle(float angle) {
+    m_currentTicks = ConvertAngleToTicks(-90);
 }

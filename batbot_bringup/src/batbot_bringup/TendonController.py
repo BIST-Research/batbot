@@ -127,19 +127,21 @@ class TendonController:
 
         assert(ret["status"] == 0)
 
-
 if __name__ == "__main__":  
 
     import time
 
-    tc = TendonController(port_name="/dev/ttyACM0")
+    tc = TendonController(port_name="COM3")
 
-    tc.setMotorMaxAngle(0, 180)
+    # tc.setMotorMaxAngle(0, 180)
+
+    angles = [0, 0, 0, 0, 0]
 
     while True:
-        print("Writing angle...")
-        tc.writeMotorAnglePercentMax(0, 100)
-        time.sleep(0.5)
-        print("Reading angle...")
-        angle = tc.readMotorAngle(0)
-        print("Received angle", angle)
+        for i in range(0, 5):
+            angles[i] = tc.readMotorAngle(i)
+
+        print(angles)
+
+        time.sleep(3)
+            

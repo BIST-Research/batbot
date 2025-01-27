@@ -177,11 +177,9 @@ void attach_tendons()
 
 void uart_controlled()
 {
-
+  char buff[TENDON_CONTROL_PKT_MAX_NUM_BYTES_IN_FRAME];
   if (Serial.available())
   {
-    char buff[TENDON_CONTROL_PKT_MAX_NUM_BYTES_IN_FRAME];
-
     size_t i = 0;
     while (Serial.available())
     {
@@ -228,7 +226,7 @@ void setup()
   {
     tendons[i].init_peripheral();
     tendons[i].Set_Direction(OFF);
-    tendons[i].Set_PID_Param(900, 0, 10, 6000);
+    tendons[i].Set_PID_Param(100, 0, 10, 6000);
     // tendons[i].CalibrateLimits();
   }
 

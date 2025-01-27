@@ -43,7 +43,10 @@ public:
         // calc control signal
         float sig = m_kp*error + m_kd*dedt + m_ki*m_error_integral;
 
-        sig = fmax(-1 * m_umax, fmin(m_umax, sig));
+        if (sig > m_umax)
+            sig = m_umax;
+        if (sig < -1 * m_umax)
+            sig = -1 * m_umax;
 
         return sig;
     }
