@@ -236,36 +236,36 @@ void test_packet_handling(void)
     // Scenario 1: Test packet handling without CRC
     TendonControl_data_packet_s pkt;
     
-    // pkt.data_packet_u.data_packet_s.header[0] = 0xFF;
-    // pkt.data_packet_u.data_packet_s.header[1] = 0x00;
-    // pkt.data_packet_u.data_packet_s.motorId = 0;
-    // pkt.data_packet_u.data_packet_s.opcode = SET_MAX_ANGLE;
-    // pkt.data_packet_u.data_packet_s.len = 6;
-    // pkt.data_packet_u.data_packet_s.pkt_params[0] = TENDON_CONTROL_GET_UPPER_8B(100);
-    // pkt.data_packet_u.data_packet_s.pkt_params[1] = TENDON_CONTROL_GET_LOWER_8B(100);
+    pkt.data_packet_u.data_packet_s.header[0] = 0xFF;
+    pkt.data_packet_u.data_packet_s.header[1] = 0x00;
+    pkt.data_packet_u.data_packet_s.motorId = 0;
+    pkt.data_packet_u.data_packet_s.opcode = SET_MAX_ANGLE;
+    pkt.data_packet_u.data_packet_s.len = 6;
+    pkt.data_packet_u.data_packet_s.pkt_params[0] = TENDON_CONTROL_GET_UPPER_8B(100);
+    pkt.data_packet_u.data_packet_s.pkt_params[1] = TENDON_CONTROL_GET_LOWER_8B(100);
 
 
-    // TendonControl_data_packet_s return_pkt = handlePacket((const char*)pkt.data_packet_u.data_packet, tendons);
-    // TEST_ASSERT_EQUAL(READ_STATUS, return_pkt.data_packet_u.data_packet_s.opcode);
-    // TEST_ASSERT_EQUAL(COMM_CRC_ERROR, return_pkt.data_packet_u.data_packet_s.pkt_params[0]);
+    TendonControl_data_packet_s return_pkt = handlePacket((const char*)pkt.data_packet_u.data_packet, tendons);
+    TEST_ASSERT_EQUAL(READ_STATUS, return_pkt.data_packet_u.data_packet_s.opcode);
+    TEST_ASSERT_EQUAL(COMM_CRC_ERROR, return_pkt.data_packet_u.data_packet_s.pkt_params[0]);
 
     // Scenario 2: Test packet handling with CRC
-    // pkt.data_packet_u.data_packet_s.header[0] = 0xFF;
-    // pkt.data_packet_u.data_packet_s.header[1] = 0x00;
-    // pkt.data_packet_u.data_packet_s.motorId = 0;
-    // pkt.data_packet_u.data_packet_s.opcode = SET_MAX_ANGLE;
-    // pkt.data_packet_u.data_packet_s.len = 6;
-    // pkt.data_packet_u.data_packet_s.pkt_params[0] = TENDON_CONTROL_GET_UPPER_8B(100);
-    // pkt.data_packet_u.data_packet_s.pkt_params[1] = TENDON_CONTROL_GET_LOWER_8B(100);
-    // uint16_t crc = updateCRC(0, pkt.data_packet_u.data_packet, 3 + 6 - TENDON_CONTROL_PKT_NUM_CRC_BYTES);
-    // pkt.data_packet_u.data_packet_s.pkt_params[2] = TENDON_CONTROL_GET_UPPER_8B(crc);
-    // pkt.data_packet_u.data_packet_s.pkt_params[3] = TENDON_CONTROL_GET_LOWER_8B(crc);
+    pkt.data_packet_u.data_packet_s.header[0] = 0xFF;
+    pkt.data_packet_u.data_packet_s.header[1] = 0x00;
+    pkt.data_packet_u.data_packet_s.motorId = 0;
+    pkt.data_packet_u.data_packet_s.opcode = SET_MAX_ANGLE;
+    pkt.data_packet_u.data_packet_s.len = 6;
+    pkt.data_packet_u.data_packet_s.pkt_params[0] = TENDON_CONTROL_GET_UPPER_8B(100);
+    pkt.data_packet_u.data_packet_s.pkt_params[1] = TENDON_CONTROL_GET_LOWER_8B(100);
+    uint16_t crc = updateCRC(0, pkt.data_packet_u.data_packet, 3 + 6 - TENDON_CONTROL_PKT_NUM_CRC_BYTES);
+    pkt.data_packet_u.data_packet_s.pkt_params[2] = TENDON_CONTROL_GET_UPPER_8B(crc);
+    pkt.data_packet_u.data_packet_s.pkt_params[3] = TENDON_CONTROL_GET_LOWER_8B(crc);
 
-    // return_pkt = handlePacket((const char*)pkt.data_packet_u.data_packet, tendons);
-    // TEST_ASSERT_EQUAL(READ_STATUS, return_pkt.data_packet_u.data_packet_s.opcode);
+    return_pkt = handlePacket((const char*)pkt.data_packet_u.data_packet, tendons);
+    TEST_ASSERT_EQUAL(READ_STATUS, return_pkt.data_packet_u.data_packet_s.opcode);
 
-    // TEST_ASSERT_EQUAL(COMM_SUCCESS, return_pkt.data_packet_u.data_packet_s.pkt_params[0]);
-    // TEST_ASSERT_FLOAT_WITHIN(0.01, 100, tendons[0].Get_Max_Angle());
+    TEST_ASSERT_EQUAL(COMM_SUCCESS, return_pkt.data_packet_u.data_packet_s.pkt_params[0]);
+    TEST_ASSERT_FLOAT_WITHIN(0.01, 100, tendons[0].Get_Max_Angle());
 
     // Scenario 3: Test read angle
     tendons[0].Reset_Encoder_Zero();

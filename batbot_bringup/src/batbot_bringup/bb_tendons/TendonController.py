@@ -1,5 +1,4 @@
-# from tendonhardware import TendonHardwareInterface
-from TendonHardware import TendonHardwareInterface
+from ..bb_tendons.TendonHardware import TendonHardwareInterface
 
 from enum import Enum
 

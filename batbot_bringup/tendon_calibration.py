@@ -1,7 +1,7 @@
 import curses
 import os
 
-from TendonController import TendonController
+from batbot_bringup.bb_tendons.TendonController import TendonController
 
 NUM_TENDONS = 5
 INCREMENT_AMOUNTS = [1, 5, 10]

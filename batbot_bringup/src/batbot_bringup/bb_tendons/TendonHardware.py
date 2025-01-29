@@ -1,5 +1,8 @@
-import bb_serial
 import time
+
+import serial
+from serial import Serial
+from enum import Enum
 
 def crc16(data: bytes):
     '''
@@ -49,35 +52,105 @@ def crc16(data: bytes):
     for byte in data:
         crc = (crc << 8) ^ table[(crc >> 8) ^ byte & 0xFF]
         crc &= 0xFFFF                                   # important, crc must stay 16bits all the way through
-    return crc
 
+    crc_h = crc >> 8
+    crc_l = crc & 0xFF
+    return [crc_h, crc_l]
 
-start = time.time()
-# data = [0xFF, 0x00, 0x0A, 0x02, 0x00, 0xFF, 0xFE, 0xFF, 0xFE, 0xFF, 0xFE] # Write PID
-data = [0xFF, 0x00, 0x04, 0x00, 0x02] # Read Angle
-# data = [0xFF, 0x00, 0x0A, 0x02, 0x03, 0xFF, 0xFE, 0xFF, 0xFE, 0xFF, 0xFE]
-# data = [0xFF, 0x00, 0x06, 0x01, 0x03, 0x00, 0x0] # Write Angle
-crc = crc16(data)
-print(hex(crc))
-data.append(crc >> 8)
-data.append(crc & 0xFF)
-print(data)
-end = time.time()
-print(f'Packet construction time: {(end - start) * 1000} ms')
+class OPCODE(Enum):
+    ECHO = 0
+    READ_STATUS = 1
+    READ_ANGLE = 2
+    WRITE_ANGLE = 3
+    WRITE_PID = 4
 
-ser = bb_serial.BB_Serial('/dev/ttyACM0')
-ser.set_attributes(115200, 1)
-ser.enable_blocking(True)
+class TendonHardwareInterface:
 
-start = time.time()
-ser.writeBytes(data, len(data))
-end = time.time()
-print(f'Packet write time: {(end - start) * 1000} ms')
+    def __init__(self, port_name):
+        self.test_mode = True
 
-start = time.time()
-n, buff = ser.readBytes(100)
-end = time.time()
-print(f'Packet read time: {(end - start) * 1000} ms')
+        self.ser = None
+        if port_name:
+            self.ser = Serial(port_name, baudrate=115200, parity=serial.PARITY_NONE, stopbits=1)
+            self.test_mode = False
+        
+        self.packet = []
 
-print("".join('{:02x} '.format(x) for x in buff))
-# print("".join(map(chr, buff)))
+    def __del__(self):
+        self.ser.close()
+        print("Terminated serial connection")
+
+    def BuildPacket(self, id, opcode, params):
+        data = [0xFF, 0x00]
+
+        length = len(params) + 4
+        data.append(length)
+        data.append(id)
+        data.append(opcode)
+        data = data + params
+        crc = crc16(data)
+        data = data + crc
+
+        self.packet = data
+
+    def ReadRx(self):
+        data = list(self.ser.read(2))
+
+        timeout = 5000
+        start = time.time()
+
+        while data != [0xff, 0x00]:
+            end = time.time()
+
+            if 1000*(end - start) > timeout:
+                self.ser.flush()
+                print("Timeout error")
+                return -1
+
+            data[0] = data[1]
+            data[1] = int.from_bytes(self.ser.read(1), byteorder='big')
+
+        len = int.from_bytes(self.ser.read(1), byteorder='big')
+        data.append(len)
+        for i in range(0, len):
+            byte = int.from_bytes(self.ser.read(), byteorder='big')
+            data.append(byte)
+
+        self.ser.reset_input_buffer()
+
+        crc = data[-2:]
+        data = data[0:-2]
+
+        new_crc = crc16(data)
+
+        if crc != new_crc:
+            print('CRC ERROR!')
+            return data
+
+        return data
+
+    def SendTxRx(self):
+        self.SendTx()
+
+        if not self.test_mode:
+            data = self.ReadRx()
+        else:
+            data = self.packet
+            data[5] = 0
+
+        if data != -1:
+            return {
+                "id": data[3],
+                "opcode": data[4],
+                "status": data[5],
+                "params": data[6:]
+            }
+        else:
+            return -1
+
+    def SendTx(self):
+        if not self.test_mode:
+            self.ser.reset_output_buffer()
+            self.ser.write(bytes(self.packet))
+        else:
+            pass
