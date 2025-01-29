@@ -1,2 +1,0 @@
-batbot_bringup
-tendonhardware

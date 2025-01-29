@@ -1,4 +1,5 @@
 #include "ml_tendon_comm_protocol.hpp"
+#include "ml_tendon_commands.hpp"
 
 uint16_t updateCRC(uint16_t crc_accum, uint8_t *data, uint16_t data_blk_size)
 {
@@ -45,236 +46,79 @@ uint16_t updateCRC(uint16_t crc_accum, uint8_t *data, uint16_t data_blk_size)
 
   for (j = 0; j < data_blk_size; j++)
   {
-    i = ((uint16_t)(crc_accum >> 8) ^ *data++) & 0xFF;
+    i = ((uint16_t)(crc_accum >> 8) ^ data[j]) & 0xFF;
     crc_accum = (crc_accum << 8) ^ crc_table[i];
   }
 
   return crc_accum;
 }
 
-void parsePacket(TendonControl_packet_handler_t* pkt_handler, const char* buff)
+tendon_comm_result_t validatePacket(TendonControl_data_packet_s* pkt)
 {
-  free(pkt_handler->rx_packet);
-  pkt_handler->rx_packet = (TendonControl_data_packet_s *)buff;
-
   uint16_t total_packet_length = TENDON_CONTROL_PKT_NUM_HEADER_BYTES + \
                                       TENDON_CONTROL_PKT_NUM_LEN_BYTES + \
-                                      pkt_handler->rx_packet->data_packet_u.data_packet_s.len;
+                                      pkt->data_packet_u.data_packet_s.len;
 
     uint16_t crc = TENDON_CONTROL_MAKE_16B_WORD(
-      pkt_handler->rx_packet->data_packet_u.data_packet[total_packet_length - 2], 
-      pkt_handler->rx_packet->data_packet_u.data_packet[total_packet_length - 1]
+      pkt->data_packet_u.data_packet[total_packet_length - 2], 
+      pkt->data_packet_u.data_packet[total_packet_length - 1]
     );
 
-    uint16_t new_crc = updateCRC(0, pkt_handler->rx_packet->data_packet_u.data_packet, total_packet_length - TENDON_CONTROL_PKT_NUM_CRC_BYTES);
+    uint16_t new_crc = updateCRC(0, pkt->data_packet_u.data_packet, total_packet_length - TENDON_CONTROL_PKT_NUM_CRC_BYTES);
 
     if (new_crc != crc)
     {
-      pkt_handler->comm_result = COMM_CRC_ERROR;
+      return COMM_CRC_ERROR;
     } else {
-      pkt_handler->comm_result = COMM_SUCCESS;
+      return COMM_SUCCESS;
     }
 }
 
-void buildPacket(TendonControl_packet_handler_t* pkt_handler, tendon_opcode_t opcode, uint8_t id, int numParams)
+TendonControl_data_packet_s buildResponsePacket(CommandReturn_t* response, tendon_comm_result_t comm_result)
 {
-  if (pkt_handler->tx_packet == NULL)
-    pkt_handler->tx_packet = new TendonControl_data_packet_s;
+  TendonControl_data_packet_s return_pkt;
 
-  pkt_handler->tx_packet->data_packet_u.data_packet_s.header[0] = 0xFF;
-  pkt_handler->tx_packet->data_packet_u.data_packet_s.header[1] = 0x00;
-  pkt_handler->tx_packet->data_packet_u.data_packet_s.len = numParams + TENDON_CONTROL_PKT_NUM_CRC_BYTES + TENDON_CONTROL_PKT_NUM_ID_BYTES + TENDON_CONTROL_PKT_NUM_OPCODE_BYTES;
-  pkt_handler->tx_packet->data_packet_u.data_packet_s.motorId = id; 
-  pkt_handler->tx_packet->data_packet_u.data_packet_s.opcode = (uint8_t)opcode;
+  return_pkt.data_packet_u.data_packet_s.header[0] = 0xFF;
+  return_pkt.data_packet_u.data_packet_s.header[1] = 0x00;
+  return_pkt.data_packet_u.data_packet_s.len = response->numParams + 4 + 1;
+  return_pkt.data_packet_u.data_packet_s.motorId = 0;
+  return_pkt.data_packet_u.data_packet_s.opcode = READ_STATUS;
+  return_pkt.data_packet_u.data_packet_s.pkt_params[0] = comm_result;
 
-  int i = 0;
-  for (; i < numParams; ++i) {
-    pkt_handler->tx_packet->data_packet_u.data_packet_s.pkt_params[i] = pkt_handler->pkt_params[i];
-  }
-
-  uint16_t rx_crc = updateCRC(0, pkt_handler->tx_packet->data_packet_u.data_packet, numParams + 5);
-  pkt_handler->tx_packet->data_packet_u.data_packet_s.pkt_params[i] = rx_crc >> 8;
-  pkt_handler->tx_packet->data_packet_u.data_packet_s.pkt_params[i + 1] = rx_crc & 0xFF;
-}
-
-void executeEcho(TendonControl_packet_handler_t* pkt_handler)
-{
-  int numParams = pkt_handler->rx_packet->data_packet_u.data_packet_s.len - 4;
-
-  for (int i = 0; i < numParams; ++i)
+  size_t i = 0;
+  for (; i < response->numParams; ++i)
   {
-    pkt_handler->pkt_params[i] = pkt_handler->rx_packet->data_packet_u.data_packet_s.pkt_params[i];
+    return_pkt.data_packet_u.data_packet_s.pkt_params[1 + i] = response->params[i];
   }
 
-  buildPacket(pkt_handler, ECHO, pkt_handler->rx_packet->data_packet_u.data_packet_s.motorId, numParams);
+  uint16_t rx_crc = updateCRC(0, return_pkt.data_packet_u.data_packet, response->numParams + 4 + 1 + 3 - 2);
+  return_pkt.data_packet_u.data_packet_s.pkt_params[i + 1] = TENDON_CONTROL_GET_UPPER_8B(rx_crc);
+  return_pkt.data_packet_u.data_packet_s.pkt_params[i + 2] = TENDON_CONTROL_GET_LOWER_8B(rx_crc);
+
+  if (response->params != NULL)
+    free(response->params);
+
+  return return_pkt;
 }
 
-void executeReadStatus(TendonControl_packet_handler_t* pkt_handler, TendonController tendon)
+TendonControl_data_packet_s handlePacket(const char* buff, TendonController* tendons)
 {
-  
-}
+  TendonControl_data_packet_s* pkt = (TendonControl_data_packet_s *)buff;
+  tendon_comm_result_t comm_result = validatePacket(pkt);
+  CommandReturn_t ret{0, NULL};
 
-void executeReadAngle(TendonControl_packet_handler_t* pkt_handler, TendonController tendon)
-{
-  int angle = (int)(tendon.Get_Angle());
-
-  uint8_t angle_upper = TENDON_CONTROL_GET_UPPER_16B(angle);
-  uint8_t angle_lower = TENDON_CONTROL_GET_LOWER_16B(angle);
-
-  pkt_handler->pkt_params[0] = COMM_SUCCESS;
-  pkt_handler->pkt_params[1] = angle_upper;
-  pkt_handler->pkt_params[2] = angle_lower;
-
-  buildPacket(pkt_handler, READ_STATUS, pkt_handler->rx_packet->data_packet_u.data_packet_s.motorId, 3);
-}
-
-void executeWriteAngle(TendonControl_packet_handler_t* pkt_handler, TendonController tendon)
-{
-  uint8_t len = pkt_handler->rx_packet->data_packet_u.data_packet_s.len - 4;
-
-  if (len != 1) {
-    pkt_handler->comm_result = COMM_PARAM_ERROR;
-    return;
-  }
-
-  int16_t angle_percent = (int16_t)pkt_handler->rx_packet->data_packet_u.data_packet_s.pkt_params[0];
-
-  float angle = tendon.Get_Max_Angle() * (angle_percent / 100);
-
-  pkt_handler->pkt_params[0] = COMM_SUCCESS;
-  buildPacket(pkt_handler, READ_STATUS, pkt_handler->rx_packet->data_packet_u.data_packet_s.motorId, 1);
-  tendon.Set_Goal_Angle(angle);
-}
-
-void executeWritePID(TendonControl_packet_handler_t* pkt_handler, TendonController tendon)
-{
-  // {
-  //   uint8_t len = rx_packet->data_packet_u.data_packet_s.len - 4;
-  //   if (len != 6) {
-  //     // sprintf(outbuff, "Argument error: write pid opcode must have 6 arguments!");
-  //     pkt_handler->comm_result = COMM_PARAM_ERROR;
-  //   } else {
-  //     int16_t P = (int16_t)TENDON_CONTROL_MAKE_16B_WORD(
-  //       rx_packet->data_packet_u.data_packet_s.pkt_params[0],
-  //       rx_packet->data_packet_u.data_packet_s.pkt_params[1]
-  //     ); 
-  //     int16_t I = (int16_t)TENDON_CONTROL_MAKE_16B_WORD(
-  //       rx_packet->data_packet_u.data_packet_s.pkt_params[2],
-  //       rx_packet->data_packet_u.data_packet_s.pkt_params[3]
-  //     ); 
-  //     int16_t D = (int16_t)TENDON_CONTROL_MAKE_16B_WORD(
-  //       rx_packet->data_packet_u.data_packet_s.pkt_params[4],
-  //       rx_packet->data_packet_u.data_packet_s.pkt_params[5]
-  //     ); 
-  //     // sprintf(outbuff, "Writing motor %d pid: %d, %d, %d", rx_packet->data_packet_u.data_packet_s.motorId, P, I, D);
-  //   }
-  //   break;
-  // }
-}
-
-void executeSetZeroAngle(TendonControl_packet_handler_t* pkt_handler, TendonController tendon) {
-  uint8_t len = pkt_handler->rx_packet->data_packet_u.data_packet_s.len - 4;
-
-  if (len != 0) {
-    pkt_handler->comm_result = COMM_PARAM_ERROR;
-    return;
-  }
-
-  pkt_handler->pkt_params[0] = COMM_SUCCESS;
-  buildPacket(pkt_handler, READ_STATUS, pkt_handler->rx_packet->data_packet_u.data_packet_s.motorId, 1);
-  tendon.Reset_Encoder_Zero();
-}
-
-void executeSetMaxAngle(TendonControl_packet_handler_t* pkt_handler, TendonController tendon)
-{
-  uint8_t len = pkt_handler->rx_packet->data_packet_u.data_packet_s.len - 4;
-
-  if (len != 2) {
-    pkt_handler->comm_result = COMM_PARAM_ERROR;
-    return;
-  }
-
-  int16_t angle = (int16_t)TENDON_CONTROL_MAKE_16B_WORD(
-    pkt_handler->rx_packet->data_packet_u.data_packet_s.pkt_params[0],
-    pkt_handler->rx_packet->data_packet_u.data_packet_s.pkt_params[1]
-  );
-
-  pkt_handler->pkt_params[0] = COMM_SUCCESS;
-  buildPacket(pkt_handler, READ_STATUS, pkt_handler->rx_packet->data_packet_u.data_packet_s.motorId, 1);
-  tendon.Set_Max_Angle(angle);
-}
-
-
-void execute(TendonControl_packet_handler_t* pkt_handler, TendonController* tendons, int16_t *target_angles,uint8_t num_tendons)
-{
-  TendonControl_data_packet_s *rx_packet = pkt_handler->rx_packet;
-
-  if (pkt_handler->comm_result != COMM_SUCCESS)
+  if (comm_result == COMM_SUCCESS)
   {
-    pkt_handler->pkt_params[0] = pkt_handler->comm_result;
-    buildPacket(pkt_handler, READ_STATUS, pkt_handler->rx_packet->data_packet_u.data_packet_s.motorId, 1);
+    ML_TendonCommandBase* cmd = NULL;
+    comm_result = CommandFactory_CreateCommand(&cmd, pkt, tendons);
+
+    if (comm_result == COMM_SUCCESS && cmd != NULL)
+    {
+      ret = cmd->fn(cmd);
+    }
+
+    free(cmd);
   }
-   
-  switch (rx_packet->data_packet_u.data_packet_s.opcode)
-  {
-    case ECHO:
-      executeEcho(pkt_handler);
-      break;
-    case READ_STATUS:
-      break;
-    case READ_ANGLE:
-      {
-        uint8_t id = rx_packet->data_packet_u.data_packet_s.motorId;
 
-        if (id <= num_tendons)
-          executeReadAngle(pkt_handler, tendons[id]);
-        else {
-          pkt_handler->pkt_params[0] = COMM_ID_ERROR;
-          buildPacket(pkt_handler, READ_STATUS, pkt_handler->rx_packet->data_packet_u.data_packet_s.motorId, 1);
-        }
-      }
-      break;
-    case WRITE_ANGLE:
-      {
-      
-        uint8_t id = rx_packet->data_packet_u.data_packet_s.motorId;
-
-        executeWriteAngle(pkt_handler, tendons[id]);
-      }
-      break;
-    case WRITE_PID:
-      break;
-
-    case SET_ZERO_ANGLE:
-      {
-        uint8_t id = rx_packet->data_packet_u.data_packet_s.motorId;
-
-        if (id <= num_tendons)
-          executeSetZeroAngle(pkt_handler, tendons[id]);
-        else {
-          pkt_handler->pkt_params[0] = COMM_ID_ERROR;
-          buildPacket(pkt_handler, READ_STATUS, pkt_handler->rx_packet->data_packet_u.data_packet_s.motorId, 1);
-        }
-      }
-      break;
-
-    case SET_MAX_ANGLE:
-      {
-        uint8_t id = rx_packet->data_packet_u.data_packet_s.motorId;
-
-        if (id <= num_tendons)
-          executeSetMaxAngle(pkt_handler, tendons[id]);
-        else {
-          pkt_handler->pkt_params[0] = COMM_ID_ERROR;
-          buildPacket(pkt_handler, READ_STATUS, pkt_handler->rx_packet->data_packet_u.data_packet_s.motorId, 1);
-        }
-      }
-      break;
-    default:
-      pkt_handler->comm_result = COMM_INSTRUCTION_ERROR;
-      pkt_handler->pkt_params[0] = pkt_handler->comm_result;
-      buildPacket(pkt_handler, READ_STATUS, pkt_handler->rx_packet->data_packet_u.data_packet_s.motorId, 1);
-      break;
-  }
-  return;
+  return buildResponsePacket(&ret, comm_result);
 }

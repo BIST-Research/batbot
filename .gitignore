@@ -14,4 +14,4 @@ dist
 experiments
 __pycache__/
 
-*/*.egg-info/
+*.egg-info
