@@ -1,9 +1,10 @@
 import curses
 import os
+import sys
 
 from batbot_bringup.bb_tendons.TendonController import TendonController
 
-NUM_TENDONS = 5
+NUM_TENDONS = 1
 INCREMENT_AMOUNTS = [1, 5, 10]
 INCREMENT_IDX = 0
 
@@ -20,8 +21,13 @@ def GetInput(screen, prompt):
     screen.nodelay(True)
     return input
 
-if __name__ == "__main__":
-    tc = TendonController(port_name='COM3')
+def tendon_calibration_app(port_name):
+    global NUM_TENDONS
+    global INCREMENT_AMOUNTS
+    global INCREMENT_IDX
+
+
+    tc = TendonController(port_name='')
 
     screen = curses.initscr()
     screen.keypad(True)
@@ -102,3 +108,15 @@ if __name__ == "__main__":
     curses.napms(1000)
     curses.endwin()
     tc.th.ser.close()
+
+if __name__ == "__main__":
+
+    port_name = ""
+
+    if len(sys.argv) == 2:
+        port_name = sys.argv[1]
+
+    tendon_calibration_app(port_name=port_name)
+        
+
+    
