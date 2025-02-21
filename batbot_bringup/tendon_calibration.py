@@ -27,7 +27,7 @@ def tendon_calibration_app(port_name):
     global INCREMENT_IDX
 
 
-    tc = TendonController(port_name='')
+    tc = TendonController(port_name=port_name)
 
     screen = curses.initscr()
     screen.keypad(True)
@@ -76,11 +76,11 @@ def tendon_calibration_app(port_name):
                 if key == curses.KEY_LEFT or key == 452:
                     goal_angle -= INCREMENT_AMOUNTS[INCREMENT_IDX]
                     goal_angle = max(0, goal_angle)
-                    tc.writeMotorAnglePercentMax(i, max(0, goal_angle))
+                    tc.writeMotorAbsoluteAngle(i, goal_angle)
                 elif key == curses.KEY_RIGHT or key == 454:
                     goal_angle += INCREMENT_AMOUNTS[INCREMENT_IDX]
                     goal_angle = min(100, goal_angle)
-                    tc.writeMotorAnglePercentMax(i, min(100, goal_angle))
+                    tc.writeMotorAbsoluteAngle(i, goal_angle)
                 elif key == curses.KEY_UP or key == 450:
                     INCREMENT_IDX = min(len(INCREMENT_AMOUNTS) - 1, INCREMENT_IDX + 1)
                 elif key == curses.KEY_DOWN or key == 456:
@@ -97,7 +97,6 @@ def tendon_calibration_app(port_name):
                 key = screen.getch()
 
             tc.setNewZero(i)
-            
                 
     except Exception as e:
         print(e)
@@ -115,6 +114,7 @@ if __name__ == "__main__":
 
     if len(sys.argv) == 2:
         port_name = sys.argv[1]
+        print(f"Got portName = {port_name}")
 
     tendon_calibration_app(port_name=port_name)
         

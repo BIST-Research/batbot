@@ -76,8 +76,9 @@ void test_command_factory2(void)
     pkt.data_packet_u.data_packet_s.header[1] = 0x00;
     pkt.data_packet_u.data_packet_s.motorId = 0;
     pkt.data_packet_u.data_packet_s.opcode = WRITE_ANGLE;
-    pkt.data_packet_u.data_packet_s.len = 5;
-    pkt.data_packet_u.data_packet_s.pkt_params[0] = 50;
+    pkt.data_packet_u.data_packet_s.len = 6;
+    pkt.data_packet_u.data_packet_s.pkt_params[0] = TENDON_CONTROL_GET_UPPER_8B(180);
+    pkt.data_packet_u.data_packet_s.pkt_params[1] = TENDON_CONTROL_GET_LOWER_8B(180);
 
     ML_TendonCommandBase *cmd = NULL;
     tendon_comm_result_t result = CommandFactory_CreateCommand(
@@ -90,7 +91,7 @@ void test_command_factory2(void)
     TEST_ASSERT_NOT_NULL(cmd);
     TEST_ASSERT_EQUAL(ML_WriteAngleCommand_execute, ((ML_WriteAngleCommand*)cmd)->base.fn);
     TEST_ASSERT_EQUAL(&tendons[0], ((ML_WriteAngleCommand*)cmd)->base.motor_ref);
-    TEST_ASSERT_EQUAL(50, ((ML_WriteAngleCommand*)cmd)->anglePercent);
+    TEST_ASSERT_EQUAL(180, ((ML_WriteAngleCommand*)cmd)->angle);
 
     // Scenario 2: Assert that the motors goal angle has been updated to the set goal angle
     CommandReturn_t cmd_ret = cmd->fn(cmd);
@@ -98,7 +99,8 @@ void test_command_factory2(void)
     TEST_ASSERT_FLOAT_WITHIN(1, 180, tendons[0].Get_Goal_Angle());
     
     // Scenario 3: Try to exceed max angle
-    pkt.data_packet_u.data_packet_s.pkt_params[0] = 110;
+    pkt.data_packet_u.data_packet_s.pkt_params[0] = TENDON_CONTROL_GET_UPPER_8B(370);
+    pkt.data_packet_u.data_packet_s.pkt_params[1] = TENDON_CONTROL_GET_LOWER_8B(370);
     result = CommandFactory_CreateCommand(
         &cmd,
         &pkt,
@@ -108,7 +110,7 @@ void test_command_factory2(void)
     TEST_ASSERT_NOT_NULL(cmd);
     TEST_ASSERT_EQUAL(ML_WriteAngleCommand_execute, ((ML_WriteAngleCommand*)cmd)->base.fn);
     TEST_ASSERT_EQUAL(&tendons[0], ((ML_WriteAngleCommand*)cmd)->base.motor_ref);
-    TEST_ASSERT_EQUAL(110, ((ML_WriteAngleCommand*)cmd)->anglePercent);
+    TEST_ASSERT_EQUAL(370, ((ML_WriteAngleCommand*)cmd)->angle);
     cmd_ret = cmd->fn(cmd);
     TEST_ASSERT_EQUAL(0, cmd_ret.numParams);
     TEST_ASSERT_FLOAT_WITHIN(1, 360, tendons[0].Get_Goal_Angle());
@@ -274,11 +276,11 @@ void test_packet_handling(void)
     pkt.data_packet_u.data_packet_s.motorId = 0;
     pkt.data_packet_u.data_packet_s.opcode = READ_ANGLE;
     pkt.data_packet_u.data_packet_s.len = 4;
-    uint16_t crc = updateCRC(0, pkt.data_packet_u.data_packet, 3 + 4 - TENDON_CONTROL_PKT_NUM_CRC_BYTES);
+    crc = updateCRC(0, pkt.data_packet_u.data_packet, 3 + 4 - TENDON_CONTROL_PKT_NUM_CRC_BYTES);
     pkt.data_packet_u.data_packet_s.pkt_params[0] = TENDON_CONTROL_GET_UPPER_8B(crc);
     pkt.data_packet_u.data_packet_s.pkt_params[1] = TENDON_CONTROL_GET_LOWER_8B(crc);
 
-    TendonControl_data_packet_s return_pkt = handlePacket((const char*)pkt.data_packet_u.data_packet, tendons);
+    return_pkt = handlePacket((const char*)pkt.data_packet_u.data_packet, tendons);
     TEST_ASSERT_EQUAL(READ_STATUS, return_pkt.data_packet_u.data_packet_s.opcode);
     TEST_ASSERT_EQUAL(COMM_SUCCESS, return_pkt.data_packet_u.data_packet_s.pkt_params[0]);
 

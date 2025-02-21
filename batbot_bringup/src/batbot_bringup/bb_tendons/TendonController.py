@@ -65,7 +65,7 @@ class TendonController:
             print("WARNING: Beginning tendon calibration in test mode! Please supply a port name if this wasn't intentional.")
             time.sleep(3)
 
-    def writeMotorAnglePercentMax(self, id, percent):
+    def writeMotorAbsoluteAngle(self, id, angle):
         '''
         This function sets the motor specified by id to move to the angle
         that is percent of the maximum angle.
@@ -76,16 +76,17 @@ class TendonController:
         '''
         
         if not self.test_mode:
-            percent = 0xFF & (percent)
+            angle_h = (angle << 8) & 0xFF
+            angle_l = (angle & 0xFF)
 
-            params = [percent]
+            params = [angle_h, angle_l]
 
             self.th.BuildPacket(id, OPCODE.WRITE_ANGLE.value, params)
             ret = self.th.SendTxRx()
 
             assert(ret["status"] == 0)
         else:
-            self.test__angle = int(float(percent / 100.0) * float(self.test__max_angle))
+            self.test__angle = angle
 
     def readMotorAngle(self, id):
         '''
@@ -96,7 +97,7 @@ class TendonController:
             self.th.BuildPacket(id, OPCODE.READ_ANGLE.value, [])
             ret = self.th.SendTxRx()
 
-            if (self.th.test_mode):
+            if (self.test_mode):
                 return 0
 
             if ret != -1:
