@@ -8,10 +8,6 @@ The batbot_bringup contains some GUI applications for interfacing with Sonar and
 
 ## Setup and Installation
 
-Install all dependencies:
-```
-    pip3 install -r batbot_bringup/requirements.txt
-```
 Build the python GUI application by navigating to the `batbot_bringup` directory and running:
 ```
 python setup.py build
