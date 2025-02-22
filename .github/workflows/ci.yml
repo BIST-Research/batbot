@@ -24,4 +24,5 @@ jobs:
         run: pip install --upgrade platformio
 
       - name: Build PlatformIO Project
+        working-directory: ./batbot_tendon_controller
         run: pio run -e teensy41
