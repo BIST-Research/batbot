@@ -49,7 +49,7 @@ typedef struct ML_ReadAngleCommand {
 
 typedef struct ML_WriteAngleCommand {
     ML_TendonCommandBase base;
-    int anglePercent;
+    int angle;
 } ML_WriteAngleCommand;
 
 typedef struct ML_WritePIDCommand {

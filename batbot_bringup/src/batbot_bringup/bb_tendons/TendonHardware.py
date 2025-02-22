@@ -67,12 +67,9 @@ class OPCODE(Enum):
 class TendonHardwareInterface:
 
     def __init__(self, port_name):
-        self.test_mode = True
-
         self.ser = None
         if port_name:
             self.ser = Serial(port_name, baudrate=115200, parity=serial.PARITY_NONE, stopbits=1)
-            self.test_mode = False
         
         self.packet = []
 
@@ -132,11 +129,7 @@ class TendonHardwareInterface:
     def SendTxRx(self):
         self.SendTx()
 
-        if not self.test_mode:
-            data = self.ReadRx()
-        else:
-            data = self.packet
-            data[5] = 0
+        data = self.ReadRx()
 
         if data != -1:
             return {
@@ -149,8 +142,5 @@ class TendonHardwareInterface:
             return -1
 
     def SendTx(self):
-        if not self.test_mode:
-            self.ser.reset_output_buffer()
-            self.ser.write(bytes(self.packet))
-        else:
-            pass
+        self.ser.reset_output_buffer()
+        self.ser.write(bytes(self.packet))

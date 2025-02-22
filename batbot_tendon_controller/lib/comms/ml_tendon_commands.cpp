@@ -31,8 +31,7 @@ CommandReturn_t ML_ReadAngleCommand_execute(struct ML_ReadAngleCommand * self)
 
 CommandReturn_t ML_WriteAngleCommand_execute(struct ML_WriteAngleCommand * self)
 {
-    float angleToWrite = self->base.motor_ref->Get_Max_Angle() * (float)self->anglePercent / 100.0;
-    self->base.motor_ref->Set_Goal_Angle(angleToWrite);
+    self->base.motor_ref->Set_Goal_Angle(self->angle);
 
     return CommandReturn_t{
         0,
@@ -137,7 +136,7 @@ tendon_comm_result_t ML_WriteAngleCommand_create(
     if (id >= 8) // TODO: Move the definition of the motor number somewhere thats visible to this file
     {
         return COMM_ID_ERROR;
-    } else if (numParams != 1) {
+    } else if (numParams != 2) {
         return COMM_PARAM_ERROR;
     }
     else {
@@ -146,7 +145,11 @@ tendon_comm_result_t ML_WriteAngleCommand_create(
             (CommandExecuteFn)ML_WriteAngleCommand_execute,
             &tendons[id]
         };
-        write_command->anglePercent = (int)(dataPacket->data_packet_u.data_packet_s.pkt_params[0]);
+        // write_command->angle = (int)(dataPacket->data_packet_u.data_packet_s.pkt_params[0]);
+        write_command->angle = TENDON_CONTROL_MAKE_16B_WORD(
+            dataPacket->data_packet_u.data_packet_s.pkt_params[0],
+            dataPacket->data_packet_u.data_packet_s.pkt_params[1]
+        );
 
         *command = (ML_TendonCommandBase *)write_command;
 

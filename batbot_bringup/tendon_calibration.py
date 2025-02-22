@@ -1,9 +1,10 @@
 import curses
 import os
+import sys
 
 from batbot_bringup.bb_tendons.TendonController import TendonController
 
-NUM_TENDONS = 5
+NUM_TENDONS = 1
 INCREMENT_AMOUNTS = [1, 5, 10]
 INCREMENT_IDX = 0
 
@@ -20,8 +21,13 @@ def GetInput(screen, prompt):
     screen.nodelay(True)
     return input
 
-if __name__ == "__main__":
-    tc = TendonController(port_name='COM3')
+def tendon_calibration_app(port_name):
+    global NUM_TENDONS
+    global INCREMENT_AMOUNTS
+    global INCREMENT_IDX
+
+
+    tc = TendonController(port_name=port_name)
 
     screen = curses.initscr()
     screen.keypad(True)
@@ -70,11 +76,11 @@ if __name__ == "__main__":
                 if key == curses.KEY_LEFT or key == 452:
                     goal_angle -= INCREMENT_AMOUNTS[INCREMENT_IDX]
                     goal_angle = max(0, goal_angle)
-                    tc.writeMotorAnglePercentMax(i, max(0, goal_angle))
+                    tc.writeMotorAbsoluteAngle(i, goal_angle)
                 elif key == curses.KEY_RIGHT or key == 454:
                     goal_angle += INCREMENT_AMOUNTS[INCREMENT_IDX]
                     goal_angle = min(100, goal_angle)
-                    tc.writeMotorAnglePercentMax(i, min(100, goal_angle))
+                    tc.writeMotorAbsoluteAngle(i, goal_angle)
                 elif key == curses.KEY_UP or key == 450:
                     INCREMENT_IDX = min(len(INCREMENT_AMOUNTS) - 1, INCREMENT_IDX + 1)
                 elif key == curses.KEY_DOWN or key == 456:
@@ -91,7 +97,6 @@ if __name__ == "__main__":
                 key = screen.getch()
 
             tc.setNewZero(i)
-            
                 
     except Exception as e:
         print(e)
@@ -102,3 +107,16 @@ if __name__ == "__main__":
     curses.napms(1000)
     curses.endwin()
     tc.th.ser.close()
+
+if __name__ == "__main__":
+
+    port_name = ""
+
+    if len(sys.argv) == 2:
+        port_name = sys.argv[1]
+        print(f"Got portName = {port_name}")
+
+    tendon_calibration_app(port_name=port_name)
+        
+
+    

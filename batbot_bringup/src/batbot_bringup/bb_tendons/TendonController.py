@@ -1,4 +1,5 @@
 from ..bb_tendons.TendonHardware import TendonHardwareInterface
+import time
 
 from enum import Enum
 
@@ -49,14 +50,22 @@ class TendonController:
         The port name gives the serial port or device on which
         the motor controller is connected (e.g. COM9 or /dev/ttyACM0)
         '''
-        self.th = TendonHardwareInterface(port_name)
-            
 
-    def connectToDev(self, com:COM_TYPE, port_name):
+        # The following variables are used if no device is connected
+        self.test_mode = True
+        self.test__angle = 0
+        self.test__max_angle = 0
 
-        raise NotImplementedError
+        print(port_name)
 
-    def writeMotorAnglePercentMax(self, id, percent):
+        if port_name != '':
+            self.th = TendonHardwareInterface(port_name)
+            self.test_mode = False
+        else:
+            print("WARNING: Beginning tendon calibration in test mode! Please supply a port name if this wasn't intentional.")
+            time.sleep(3)
+
+    def writeMotorAbsoluteAngle(self, id, angle):
         '''
         This function sets the motor specified by id to move to the angle
         that is percent of the maximum angle.
@@ -66,31 +75,38 @@ class TendonController:
         to move the motor to.
         '''
         
-        percent = 0xFF & (percent)
+        if not self.test_mode:
+            angle_h = (angle << 8) & 0xFF
+            angle_l = (angle & 0xFF)
 
-        params = [percent]
+            params = [angle_h, angle_l]
 
-        self.th.BuildPacket(id, OPCODE.WRITE_ANGLE.value, params)
-        ret = self.th.SendTxRx()
+            self.th.BuildPacket(id, OPCODE.WRITE_ANGLE.value, params)
+            ret = self.th.SendTxRx()
 
-        assert(ret["status"] == 0)
+            assert(ret["status"] == 0)
+        else:
+            self.test__angle = angle
 
     def readMotorAngle(self, id):
         '''
         This function returns the angle of the motor specified by id.
         '''
 
-        self.th.BuildPacket(id, OPCODE.READ_ANGLE.value, [])
-        ret = self.th.SendTxRx()
+        if not self.test_mode:
+            self.th.BuildPacket(id, OPCODE.READ_ANGLE.value, [])
+            ret = self.th.SendTxRx()
 
-        if (self.th.test_mode):
-            return 0
+            if (self.test_mode):
+                return 0
 
-        if ret != -1:
-            assert(ret["status"] == 0)
+            if ret != -1:
+                assert(ret["status"] == 0)
 
-            angle = (ret["params"][0] << 8) | (ret["params"][1] & 0xFF)
-            return angle
+                angle = (ret["params"][0] << 8) | (ret["params"][1] & 0xFF)
+                return angle
+        else:
+            return self.test__angle
 
     def moveMotorToMin(self, id):
         '''
@@ -108,23 +124,29 @@ class TendonController:
         '''
         For the motor specified by id, sets its current angle to the zero angle
         '''
-        params = []
-        
-        self.th.BuildPacket(id, OPCODE.SET_ZERO_ANGLE.value, params)
-        ret = self.th.SendTxRx()
+        if not self.test_mode:
+            params = []
+            
+            self.th.BuildPacket(id, OPCODE.SET_ZERO_ANGLE.value, params)
+            ret = self.th.SendTxRx()
 
-        assert(ret["status"] == 0)
+            assert(ret["status"] == 0)
+        else:
+            self.test__angle = 0
     
     def setMotorMaxAngle(self, id, angle):
-        angle_h = (angle >> 8) & 0xFF
-        angle_l = angle & 0xFF
+        if not self.test_mode:
+            angle_h = (angle >> 8) & 0xFF
+            angle_l = angle & 0xFF
 
-        params = [angle_h, angle_l]
+            params = [angle_h, angle_l]
 
-        self.th.BuildPacket(id, OPCODE.SET_MAX_ANGLE.value, params)
-        ret = self.th.SendTxRx()
+            self.th.BuildPacket(id, OPCODE.SET_MAX_ANGLE.value, params)
+            ret = self.th.SendTxRx()
 
-        assert(ret["status"] == 0)
+            assert(ret["status"] == 0)
+        else:
+            self.test__max_angle = angle
 
 if __name__ == "__main__":  
 
