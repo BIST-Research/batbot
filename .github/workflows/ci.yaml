@@ -22,7 +22,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install PlatformIO Code
-        run: pip install --upgrade plaftormio
+        run: pip install --upgrade platformio
 
       - name: Build PlatformIO Project
         run: pio run
