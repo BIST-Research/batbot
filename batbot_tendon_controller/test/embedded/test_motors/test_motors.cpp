@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "Tendonmotor.h"
+#include "TendonMotor.h"
 #include "unity.h"
 
 TendonController tendon("test_tendon");
