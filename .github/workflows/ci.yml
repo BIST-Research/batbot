@@ -25,4 +25,4 @@ jobs:
 
       - name: Build PlatformIO Project
         working-directory: ./batbot_tendon_controller
-        run: pio run -e teensy41
+        run: pio run -e adafruit_grandcentral_m4
