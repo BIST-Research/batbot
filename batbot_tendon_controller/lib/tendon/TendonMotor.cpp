@@ -360,8 +360,8 @@ void TendonController::Set_Goal_Angle(float destAngle)
 
 void TendonController::UpdateMotorControl() {
     // grab current time
-    float curTime = micros();
-    float deltaTimeUs = curTime - m_prevPIDTime;
+    unsigned long curTime = micros();
+    unsigned long deltaTimeUs = curTime - m_prevPIDTime;
 
     float sig = pid.Compute_Signal(m_currentTicks, m_target_ticks, deltaTimeUs);
 
