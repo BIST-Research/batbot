@@ -11,6 +11,44 @@
 #include <TendonMotor.h>
 #include <ml_encoder.hpp>
 
+// // THIS CODE IS FOR TESTING PURPOSES
+// #define PHASE_PIN  14  // Pin for direction control
+// #define ENABLE_PIN 4  // Pin for speed (PWM)
+// #define LED_PIN 13 // M4 Onbaord LED
+
+// // Motor speed (0-255)
+// int speed = 150;
+
+// void setup() {
+//     pinMode(PHASE_PIN, OUTPUT);
+//     pinMode(ENABLE_PIN, OUTPUT);
+//     pinMode(LED_PIN, OUTPUT);
+// }
+
+// void loop() {
+//     // Forward direction
+//     digitalWrite(LED_PIN, HIGH);
+//     digitalWrite(PHASE_PIN, HIGH);
+//     analogWrite(ENABLE_PIN, speed);
+//     delay(3000);
+
+//     // Stop motor
+//     digitalWrite(LED_PIN, LOW);
+//     analogWrite(ENABLE_PIN, 0);
+//     delay(3000);
+
+//     // Reverse direction
+//     digitalWrite(LED_PIN, HIGH);
+//     digitalWrite(PHASE_PIN, LOW);
+//     analogWrite(ENABLE_PIN, speed);
+//     delay(3000);
+
+//     // Stop motor
+//     digitalWrite(LED_PIN, LOW);
+//     analogWrite(ENABLE_PIN, 0);
+//     delay(3000);
+// }
+
 /// @brief  SPI STUFF
 static DmacDescriptor base_descriptor[3] __attribute__((aligned(16)));
 static volatile DmacDescriptor wb_descriptor[3] __attribute__((aligned(16)));
@@ -226,7 +264,7 @@ void setup()
   {
     tendons[i].init_peripheral();
     tendons[i].Set_Direction(OFF);
-    tendons[i].Set_PID_Param(100, 0, 10, 6000);
+    tendons[i].Set_PID_Param(100, 0.05, 10, 6000);
     // tendons[i].CalibrateLimits();
   }
 

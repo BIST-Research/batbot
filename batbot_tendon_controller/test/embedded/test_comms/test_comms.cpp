@@ -115,6 +115,25 @@ void test_command_factory2(void)
     TEST_ASSERT_EQUAL(0, cmd_ret.numParams);
     TEST_ASSERT_FLOAT_WITHIN(1, 360, tendons[0].Get_Goal_Angle());
 
+    // Scenario 4: Negative angle
+    pkt.data_packet_u.data_packet_s.pkt_params[0] = TENDON_CONTROL_GET_UPPER_8B((int16_t)-10);
+    pkt.data_packet_u.data_packet_s.pkt_params[1] = TENDON_CONTROL_GET_LOWER_8B((int16_t)-10);
+    TEST_ASSERT_EQUAL(pkt.data_packet_u.data_packet_s.pkt_params[0], 0xFF);
+    TEST_ASSERT_EQUAL(pkt.data_packet_u.data_packet_s.pkt_params[1], 0xF6);
+    result = CommandFactory_CreateCommand(
+        &cmd,
+        &pkt,
+        tendons
+    );
+    TEST_ASSERT_EQUAL(COMM_SUCCESS, result);
+    TEST_ASSERT_NOT_NULL(cmd);
+    TEST_ASSERT_EQUAL(ML_WriteAngleCommand_execute, ((ML_WriteAngleCommand*)cmd)->base.fn);
+    TEST_ASSERT_EQUAL(&tendons[0], ((ML_WriteAngleCommand*)cmd)->base.motor_ref);
+    TEST_ASSERT_EQUAL(-10, ((ML_WriteAngleCommand*)cmd)->angle);
+    cmd_ret = cmd->fn(cmd);
+    TEST_ASSERT_EQUAL(0, cmd_ret.numParams);
+    TEST_ASSERT_FLOAT_WITHIN(1, -10, tendons[0].Get_Goal_Angle());
+
     free(cmd);
 }
 
@@ -221,9 +240,7 @@ void test_command_factory5(void)
     cmd_ret = cmd->fn(cmd);
 
     TEST_ASSERT_EQUAL(2, cmd_ret.numParams);
-    Serial.println(cmd_ret.params[0]);
-    Serial.println(cmd_ret.params[1]);
-    TEST_ASSERT_INT_WITHIN(2, (uint16_t)(-90), TENDON_CONTROL_MAKE_16B_WORD(cmd_ret.params[0], cmd_ret.params[1]));
+    TEST_ASSERT_INT_WITHIN(2, -90, TENDON_CONTROL_MAKE_16B_WORD(cmd_ret.params[0], cmd_ret.params[1]));
 
     free(cmd);
 }
