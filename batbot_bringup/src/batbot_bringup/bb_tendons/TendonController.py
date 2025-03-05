@@ -149,6 +149,10 @@ class TendonController:
         else:
             self.test__max_angle = angle
 
+    def close(self):
+        if self.th.ser:
+            self.th.ser.close()
+
 if __name__ == "__main__":  
 
     import time
