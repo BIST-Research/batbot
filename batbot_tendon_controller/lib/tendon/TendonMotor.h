@@ -101,6 +101,9 @@ public:
     float m_gear_ratio = ML_HPCB_LV_75P1;
 
 private:
+    float ConvertAngleToTicks(int16_t deg);
+    float ConvertTicksToAngle(int16_t ticks);
+
     // pin settings
     ml_pin_settings m_encoder_a;
     ml_pin_settings m_encoder_b;

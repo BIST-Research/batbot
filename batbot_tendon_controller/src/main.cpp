@@ -165,14 +165,14 @@ void attach_tendons()
   tendons[0].Attach_Direction_Pin(PORT_GRP_B, 16, PF_B);
   tendons[0].Attach_EncA_Pin(PORT_GRP_C, 12, PF_A);
   tendons[0].Attach_EncB_Pin(PORT_GRP_C, 13, PF_A);
-  tendons[0].m_gear_ratio = ML_HPCB_LV_100P1;
+  tendons[0].m_gear_ratio = ML_HPCB_LV_210P1;
 
   // motor 2
   tendons[1].Attach_Drive_Pin(PORT_GRP_C, 21, PF_F, 5);
   tendons[1].Attach_Direction_Pin(PORT_GRP_B, 17, PF_B);
   tendons[1].Attach_EncA_Pin(PORT_GRP_C, 15, PF_A);
   tendons[1].Attach_EncB_Pin(PORT_GRP_C, 14, PF_A);
-  tendons[1].m_gear_ratio = ML_HPCB_LV_100P1;
+  tendons[1].m_gear_ratio = ML_HPCB_LV_210P1;
 
   // motor 3
   tendons[2].Attach_Drive_Pin(PORT_GRP_C, 16, PF_F, 0);
@@ -186,7 +186,7 @@ void attach_tendons()
   tendons[3].Attach_Direction_Pin(PORT_GRP_B, 21, PF_B);
   tendons[3].Attach_EncB_Pin(PORT_GRP_C, 7, PF_A);
   tendons[3].Attach_EncA_Pin(PORT_GRP_C, 6, PF_A);
-  tendons[3].m_gear_ratio = ML_HPCB_LV_100P1;
+  // tendons[3].m_gear_ratio = ML_HPCB_LV_100P1;
 
   // motor 5
   tendons[4].Attach_Drive_Pin(PORT_GRP_C, 19, PF_F, 3);

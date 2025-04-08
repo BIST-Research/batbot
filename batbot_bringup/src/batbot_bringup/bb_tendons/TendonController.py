@@ -104,7 +104,8 @@ class TendonController:
             if ret != -1:
                 assert(ret["status"] == 0)
 
-                angle = np.int16(ret["params"][0] << 8) | (ret["params"][1] & 0xFF)
+
+                angle = np.int16(((ret["params"][0])  << 8) | (ret["params"][1] & 0xFF))
                 return angle
         else:
             return self.test__angle

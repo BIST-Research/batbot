@@ -7,12 +7,12 @@ float mapf(float x, float in_min, float in_max, float out_min, float out_max)
 }
 
 
-float ConvertTicksToAngle(int16_t ticks){
-    return ((360.0 * ticks) / (ML_ENC_CPR * ML_HPCB_LV_75P1));
+float TendonController::ConvertTicksToAngle(int16_t ticks){
+    return ((360.0 * ticks) / (ML_ENC_CPR * m_gear_ratio));
 }
 
-float ConvertAngleToTicks(int16_t deg){
-    return ((deg * ML_ENC_CPR * ML_HPCB_LV_75P1) / 360.0);
+float TendonController::ConvertAngleToTicks(int16_t deg){
+    return ((deg * ML_ENC_CPR * m_gear_ratio) / 360.0);
 }
 
 
