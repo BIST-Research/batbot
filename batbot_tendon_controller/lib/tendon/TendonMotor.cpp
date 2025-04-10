@@ -18,10 +18,18 @@ float TendonController::ConvertAngleToTicks(int16_t deg){
 
 // create tendon controller
 // TendonController::TendonController(uint8_t ccChan, ml_pin phasePin, ml_pin pwmPin, ml_pin encA, ml_pin encB, String name)
-TendonController::TendonController(String name)
+TendonController::TendonController(String name, uint8_t tcc_num)
 {
     // // set the TCC channel
-    m_pwm_channel = TCC0;
+    switch (tcc_num)
+    {
+        case 0:
+            m_pwm_channel = TCC0;
+            break;
+        case 2:
+            m_pwm_channel = TCC2;
+    }
+    
 
     // set PID to default
     pid.Set_Params(1, 0, 0, 6000);
@@ -156,7 +164,7 @@ void TendonController::Set_Direction(Tendon_Direction dir)
 {
     if (dir == OFF)
     {
-        TCC0->CCBUF[m_pwm_CC].reg = TCC_CCBUF_CCBUF(0x00);
+        m_pwm_channel->CCBUF[m_pwm_CC].reg = TCC_CCBUF_CCBUF(0x00);
         TCC_sync(m_pwm_channel);
     }
     else if (dir == CW)
@@ -410,6 +418,6 @@ float TendonController::Get_Goal_Angle() {
     // return goal_angle;
 }
 
-float TendonController::Set_Angle(float angle) {
+void TendonController::Set_Angle(float angle) {
     m_currentTicks = ConvertAngleToTicks(-90);
 }
