@@ -41,7 +41,7 @@ CommandReturn_t ML_WriteAngleCommand_execute(struct ML_WriteAngleCommand * self)
 
 CommandReturn_t ML_WritePIDCommand_execute(struct ML_WritePIDCommand * self)
 {
-    // TODO
+    self->base.motor_ref->Set_PID_Param(self->P, self->I, self->D, 6000);
 
     return CommandReturn_t {
         0,
@@ -145,7 +145,6 @@ tendon_comm_result_t ML_WriteAngleCommand_create(
             (CommandExecuteFn)ML_WriteAngleCommand_execute,
             &tendons[id]
         };
-        // write_command->angle = (int)(dataPacket->data_packet_u.data_packet_s.pkt_params[0]);
         write_command->angle = TENDON_CONTROL_MAKE_16B_WORD(
             dataPacket->data_packet_u.data_packet_s.pkt_params[0],
             dataPacket->data_packet_u.data_packet_s.pkt_params[1]
@@ -169,15 +168,39 @@ tendon_comm_result_t ML_WritePIDCommand_create(
     if (id >= 8) // TODO: Move the definition of the motor number somewhere thats visible to this file
     {
         return COMM_ID_ERROR;
-    } else if (numParams != 6) {
+    } else if (numParams != 12) {
         return COMM_PARAM_ERROR;
     }
     else {
-        *command = (ML_TendonCommandBase *)(new ML_WritePIDCommand);
-        (*command)->motor_ref = &tendons[id];
-        (*command)->fn = (CommandExecuteFn)ML_WritePIDCommand_execute;
+        ML_WritePIDCommand* pid_command = new ML_WritePIDCommand;
+        pid_command->base = {
+            (CommandExecuteFn)ML_WritePIDCommand_execute,
+            &tendons[id]
+        };
 
-        // todo
+        typedef union {
+            float f;
+            byte bytes[4];
+        } float_bytes;
+    
+        float_bytes kp, ki, kd;
+        kp.bytes[0] = dataPacket->data_packet_u.data_packet_s.pkt_params[0];
+        kp.bytes[1] = dataPacket->data_packet_u.data_packet_s.pkt_params[1];
+        kp.bytes[2] = dataPacket->data_packet_u.data_packet_s.pkt_params[2];
+
+        ki.bytes[0] = dataPacket->data_packet_u.data_packet_s.pkt_params[3];
+        ki.bytes[1] = dataPacket->data_packet_u.data_packet_s.pkt_params[4];
+        ki.bytes[2] = dataPacket->data_packet_u.data_packet_s.pkt_params[5];
+
+        ki.bytes[3] = dataPacket->data_packet_u.data_packet_s.pkt_params[6];
+        ki.bytes[4] = dataPacket->data_packet_u.data_packet_s.pkt_params[7];
+        ki.bytes[5] = dataPacket->data_packet_u.data_packet_s.pkt_params[8];
+
+        pid_command->P = kp.f;
+        pid_command->I = ki.f;
+        pid_command->D = kd.f;
+        
+        *command = (ML_TendonCommandBase *)pid_command;
 
         return COMM_SUCCESS;
     }
