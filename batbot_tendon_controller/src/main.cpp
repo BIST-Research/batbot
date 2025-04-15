@@ -11,6 +11,44 @@
 #include <TendonMotor.h>
 #include <ml_encoder.hpp>
 
+// // THIS CODE IS FOR TESTING PURPOSES
+// #define PHASE_PIN  14  // Pin for direction control
+// #define ENABLE_PIN 4  // Pin for speed (PWM)
+// #define LED_PIN 13 // M4 Onbaord LED
+
+// // Motor speed (0-255)
+// int speed = 150;
+
+// void setup() {
+//     pinMode(PHASE_PIN, OUTPUT);
+//     pinMode(ENABLE_PIN, OUTPUT);
+//     pinMode(LED_PIN, OUTPUT);
+// }
+
+// void loop() {
+//     // Forward direction
+//     digitalWrite(LED_PIN, HIGH);
+//     digitalWrite(PHASE_PIN, HIGH);
+//     analogWrite(ENABLE_PIN, speed);
+//     delay(3000);
+
+//     // Stop motor
+//     digitalWrite(LED_PIN, LOW);
+//     analogWrite(ENABLE_PIN, 0);
+//     delay(3000);
+
+//     // Reverse direction
+//     digitalWrite(LED_PIN, HIGH);
+//     digitalWrite(PHASE_PIN, LOW);
+//     analogWrite(ENABLE_PIN, speed);
+//     delay(3000);
+
+//     // Stop motor
+//     digitalWrite(LED_PIN, LOW);
+//     analogWrite(ENABLE_PIN, 0);
+//     delay(3000);
+// }
+
 /// @brief  SPI STUFF
 static DmacDescriptor base_descriptor[3] __attribute__((aligned(16)));
 static volatile DmacDescriptor wb_descriptor[3] __attribute__((aligned(16)));
@@ -100,6 +138,27 @@ void dstack_a_init(void)
    * CC4 -> PC20 (D4)
    * CC5 -> PC21 (D5)
    */
+  ML_SET_GCLK7_PCHCTRL(TCC2_GCLK_ID);
+
+  TCC_DISABLE(TCC2);
+  TCC_SWRST(TCC2);
+  TCC_sync(TCC2);
+
+  TCC2->CTRLA.reg =
+      (TCC_CTRLA_PRESCALER_DIV2 |
+       TCC_CTRLA_PRESCSYNC_PRESC);
+
+  TCC2->WAVE.reg |= TCC_WAVE_WAVEGEN_NPWM;
+
+  TCC_set_period(TCC2, 6000);
+
+  // default output matrix configuration (pg. 1829)
+  TCC2->WEXCTRL.reg |= TCC_WEXCTRL_OTMX(0x00);
+
+  for (uint8_t i = 0; i < 6; i++)
+  {
+    TCC2->CC[i].reg |= TCC_CC_CC(6000 / 2);
+  }
 }
 
 // create bunch of tendons
@@ -113,7 +172,7 @@ TendonController tendons[NUM_TENDONS] = {
     TendonController("motor 2"),
     TendonController("motor 3"),
     TendonController("motor 4"),
-    TendonController("motor 5"),
+    TendonController("motor 5", 2),
     TendonController("motor 6"),
     TendonController("motor 7"),
     TendonController("motor 8")};
@@ -123,56 +182,56 @@ void attach_tendons()
 
   // left
   // motor 1
-  tendons[0].Attach_Drive_Pin(PORT_GRP_C, 20, PF_F, 4);
-  tendons[0].Attach_Direction_Pin(PORT_GRP_B, 16, PF_B);
-  tendons[0].Attach_EncA_Pin(PORT_GRP_C, 12, PF_A);
-  tendons[0].Attach_EncB_Pin(PORT_GRP_C, 13, PF_A);
-  tendons[0].m_gear_ratio = ML_HPCB_LV_100P1;
+  tendons[0].Attach_Drive_Pin(PORT_GRP_C, 20, PF_F, 4);   // D04
+  tendons[0].Attach_Direction_Pin(PORT_GRP_C, 21, PF_B);  // D05
+  tendons[0].Attach_EncB_Pin(PORT_GRP_B, 17, PF_A);       // D15: EXTINT[1]
+  tendons[0].Attach_EncA_Pin(PORT_GRP_B, 16, PF_A);       // D14: EXTINT[0] 
+  tendons[0].m_gear_ratio = ML_HPCB_LV_210P1;
 
-  // motor 2
-  tendons[1].Attach_Drive_Pin(PORT_GRP_C, 21, PF_F, 5);
-  tendons[1].Attach_Direction_Pin(PORT_GRP_B, 17, PF_B);
-  tendons[1].Attach_EncA_Pin(PORT_GRP_C, 15, PF_A);
-  tendons[1].Attach_EncB_Pin(PORT_GRP_C, 14, PF_A);
-  tendons[1].m_gear_ratio = ML_HPCB_LV_100P1;
+  // // motor 2
+  tendons[1].Attach_Drive_Pin(PORT_GRP_D, 10, PF_F, 3);   // D53
+  tendons[1].Attach_Direction_Pin(PORT_GRP_D, 9, PF_B);   // D52
+  tendons[1].Attach_EncB_Pin(PORT_GRP_C, 5, PF_A);        // D49: EXTINT[5]
+  tendons[1].Attach_EncA_Pin(PORT_GRP_C, 4, PF_A);        // D48: EXTINT[4]
+  tendons[1].m_gear_ratio = ML_HPCB_LV_210P1;
 
-  // motor 3
-  tendons[2].Attach_Drive_Pin(PORT_GRP_C, 16, PF_F, 0);
-  tendons[2].Attach_Direction_Pin(PORT_GRP_B, 20, PF_B);
-  tendons[2].Attach_EncA_Pin(PORT_GRP_C, 11, PF_A);
-  tendons[2].Attach_EncB_Pin(PORT_GRP_C, 10, PF_A);
+  // // motor 3
+  tendons[2].Attach_Drive_Pin(PORT_GRP_D, 8, PF_F, 0);    // D51
+  tendons[2].Attach_Direction_Pin(PORT_GRP_D, 11, PF_B);  // D50
+  tendons[2].Attach_EncB_Pin(PORT_GRP_C, 7, PF_A);        // D47: EXTINT[9]
+  tendons[2].Attach_EncA_Pin(PORT_GRP_C, 6, PF_A);        // D46: EXTINT[6]
   tendons[2].m_gear_ratio = ML_HPCB_LV_100P1;
 
-  // motor 4
-  tendons[3].Attach_Drive_Pin(PORT_GRP_C, 17, PF_F, 1);
-  tendons[3].Attach_Direction_Pin(PORT_GRP_B, 21, PF_B);
-  tendons[3].Attach_EncB_Pin(PORT_GRP_C, 7, PF_A);
-  tendons[3].Attach_EncA_Pin(PORT_GRP_C, 6, PF_A);
-  tendons[3].m_gear_ratio = ML_HPCB_LV_100P1;
+  // // motor 4
+  tendons[3].Attach_Drive_Pin(PORT_GRP_C, 12, PF_F, 2);   // D41
+  tendons[3].Attach_Direction_Pin(PORT_GRP_C, 13, PF_B);  // D40 
+  tendons[3].Attach_EncB_Pin(PORT_GRP_C, 11, PF_A);       // D44: EXTINT[11]
+  tendons[3].Attach_EncA_Pin(PORT_GRP_C, 10, PF_A);       // D45: EXTINT[10]
+  // tendons[3].m_gear_ratio = ML_HPCB_LV_100P1;
 
-  // motor 5
-  tendons[4].Attach_Drive_Pin(PORT_GRP_C, 19, PF_F, 3);
-  tendons[4].Attach_Direction_Pin(PORT_GRP_C, 22, PF_B);
-  tendons[4].Attach_EncA_Pin(PORT_GRP_C, 4, PF_A);
-  tendons[4].Attach_EncB_Pin(PORT_GRP_C, 5, PF_A);
+  // // motor 5
+  tendons[4].Attach_Drive_Pin(PORT_GRP_A, 15, PF_F, 1);   // D23
+  tendons[4].Attach_Direction_Pin(PORT_GRP_D, 12, PF_B);  // D22
+  tendons[4].Attach_EncA_Pin(PORT_GRP_A, 13, PF_A);       // D27: EXTINT[13]
+  tendons[4].Attach_EncB_Pin(PORT_GRP_A, 12, PF_A);       // D26: EXTINT[12]
+  
+  // // motor 6
+  // tendons[5].Attach_Drive_Pin(PORT_GRP_C, 18, PF_F, 2);
+  // tendons[5].Attach_Direction_Pin(PORT_GRP_C, 23, PF_B);
+  // tendons[5].Attach_EncB_Pin(PORT_GRP_A, 23, PF_A);
+  // tendons[5].Attach_EncA_Pin(PORT_GRP_D, 8, PF_A);
 
-  // motor 6
-  tendons[5].Attach_Drive_Pin(PORT_GRP_C, 18, PF_F, 2);
-  tendons[5].Attach_Direction_Pin(PORT_GRP_C, 23, PF_B);
-  tendons[5].Attach_EncB_Pin(PORT_GRP_A, 23, PF_A);
-  tendons[5].Attach_EncA_Pin(PORT_GRP_D, 8, PF_A);
+  // // motor 7
+  // tendons[6].Attach_Drive_Pin(PORT_GRP_A, 12, PF_F, 6);
+  // tendons[6].Attach_Direction_Pin(PORT_GRP_B, 24, PF_B);
+  // tendons[6].Attach_EncA_Pin(PORT_GRP_A, 16, PF_A);
+  // tendons[6].Attach_EncB_Pin(PORT_GRP_A, 17, PF_A);
 
-  // motor 7
-  tendons[6].Attach_Drive_Pin(PORT_GRP_A, 12, PF_F, 6);
-  tendons[6].Attach_Direction_Pin(PORT_GRP_B, 24, PF_B);
-  tendons[6].Attach_EncA_Pin(PORT_GRP_A, 16, PF_A);
-  tendons[6].Attach_EncB_Pin(PORT_GRP_A, 17, PF_A);
-
-  // motor 8
-  tendons[7].Attach_Drive_Pin(PORT_GRP_A, 13, PF_F, 7);
-  tendons[7].Attach_Direction_Pin(PORT_GRP_B, 18, PF_B);
-  tendons[7].Attach_EncA_Pin(PORT_GRP_A, 18, PF_A);
-  tendons[7].Attach_EncB_Pin(PORT_GRP_B, 8, PF_A);
+  // // motor 8
+  // tendons[7].Attach_Drive_Pin(PORT_GRP_A, 13, PF_F, 7);
+  // tendons[7].Attach_Direction_Pin(PORT_GRP_B, 18, PF_B);
+  // tendons[7].Attach_EncA_Pin(PORT_GRP_A, 18, PF_A);
+  // tendons[7].Attach_EncB_Pin(PORT_GRP_B, 8, PF_A);
 }
 
 void uart_controlled()
@@ -217,6 +276,8 @@ void setup()
   dstack_a_init();
   TCC_ENABLE(TCC0);
   TCC_sync(TCC0);
+  TCC_ENABLE(TCC2);
+  TCC_sync(TCC2);
 
   // attach pins to tendon object
   attach_tendons();
@@ -226,13 +287,15 @@ void setup()
   {
     tendons[i].init_peripheral();
     tendons[i].Set_Direction(OFF);
-    tendons[i].Set_PID_Param(100, 0, 10, 6000);
+    tendons[i].Set_PID_Param(100, 0.05, 10, 6000);
     // tendons[i].CalibrateLimits();
   }
 
   // good measure why not start the TCC0 again..
   TCC_ENABLE(TCC0);
   TCC_sync(TCC0);
+  TCC_ENABLE(TCC2);
+  TCC_sync(TCC2);
 
   // tendons[0].CalibrateLimits();
   // tendons[1].CalibrateLimits();
@@ -361,9 +424,9 @@ void loop()
   tendons[2].UpdateMotorControl();
   tendons[3].UpdateMotorControl();
   tendons[4].UpdateMotorControl();
-  tendons[5].UpdateMotorControl();
-  tendons[6].UpdateMotorControl();
-  tendons[7].UpdateMotorControl();
+  // tendons[5].UpdateMotorControl();
+  // tendons[6].UpdateMotorControl();
+  // tendons[7].UpdateMotorControl();
 }
 
 //-----------------------------------------------------------------
@@ -404,12 +467,12 @@ void loop()
 void EIC_13_Handler(void)
 {
   ML_EIC_CLR_INTFLAG(13);
-  tendons[0].encoder_ISR();
+  tendons[4].encoder_ISR();
 }
 void EIC_12_Handler(void)
 {
   ML_EIC_CLR_INTFLAG(12);
-  tendons[0].encoder_ISR();
+  tendons[4].encoder_ISR();
 }
 
 // M1
@@ -418,12 +481,12 @@ void EIC_12_Handler(void)
 void EIC_15_Handler(void)
 {
   ML_EIC_CLR_INTFLAG(15);
-  tendons[1].encoder_ISR();
+  tendons[0].encoder_ISR();
 }
 void EIC_14_Handler(void)
 {
   ML_EIC_CLR_INTFLAG(14);
-  tendons[1].encoder_ISR();
+  tendons[0].encoder_ISR();
 }
 
 // M2
@@ -432,12 +495,12 @@ void EIC_14_Handler(void)
 void EIC_11_Handler(void)
 {
   ML_EIC_CLR_INTFLAG(11);
-  tendons[2].encoder_ISR();
+  tendons[3].encoder_ISR();
 }
 void EIC_10_Handler(void)
 {
   ML_EIC_CLR_INTFLAG(10);
-  tendons[2].encoder_ISR();
+  tendons[3].encoder_ISR();
 }
 
 // M3
@@ -446,12 +509,12 @@ void EIC_10_Handler(void)
 void EIC_6_Handler(void)
 {
   ML_EIC_CLR_INTFLAG(6);
-  tendons[3].encoder_ISR();
+  tendons[2].encoder_ISR();
 }
 void EIC_9_Handler(void)
 {
   ML_EIC_CLR_INTFLAG(9);
-  tendons[3].encoder_ISR();
+  tendons[2].encoder_ISR();
 }
 
 // M4
@@ -460,12 +523,12 @@ void EIC_9_Handler(void)
 void EIC_4_Handler(void)
 {
   ML_EIC_CLR_INTFLAG(4);
-  tendons[4].encoder_ISR();
+  tendons[1].encoder_ISR();
 }
 void EIC_5_Handler(void)
 {
   ML_EIC_CLR_INTFLAG(5);
-  tendons[4].encoder_ISR();
+  tendons[1].encoder_ISR();
 }
 
 // M5
@@ -488,12 +551,12 @@ void EIC_3_Handler(void)
 void EIC_0_Handler(void)
 {
   ML_EIC_CLR_INTFLAG(0);
-  tendons[6].encoder_ISR();
+  tendons[0].encoder_ISR();
 }
 void EIC_1_Handler(void)
 {
   ML_EIC_CLR_INTFLAG(1);
-  tendons[6].encoder_ISR();
+  tendons[0].encoder_ISR();
 }
 
 // M7:

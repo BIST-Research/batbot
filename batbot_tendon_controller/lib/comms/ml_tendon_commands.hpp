@@ -94,7 +94,7 @@ CommandReturn_t ML_EchoCommand_execute(struct ML_EchoCommand * self);
 CommandReturn_t ML_ReadStatusCommand_execute(struct ML_ReadStatusCommand * self);
 CommandReturn_t ML_ReadAngleCommand_execute(struct ML_ReadAngleCommand * self);
 CommandReturn_t ML_WriteAngleCommand_execute(struct ML_WriteAngleCommand * self);
-CommandReturn_t ML_WRitePIDCommand_execute(struct ML_WritePIDCommand * self);
+CommandReturn_t ML_WritePIDCommand_execute(struct ML_WritePIDCommand * self);
 CommandReturn_t ML_SetZeroAngleCommand_execute(struct ML_SetZeroAngleCommand * self);
 CommandReturn_t ML_SetMaxAngleCommand_execute(struct ML_SetMaxAngleCommand * self);
 

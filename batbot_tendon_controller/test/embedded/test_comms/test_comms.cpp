@@ -115,6 +115,25 @@ void test_command_factory2(void)
     TEST_ASSERT_EQUAL(0, cmd_ret.numParams);
     TEST_ASSERT_FLOAT_WITHIN(1, 360, tendons[0].Get_Goal_Angle());
 
+    // Scenario 4: Negative angle
+    pkt.data_packet_u.data_packet_s.pkt_params[0] = TENDON_CONTROL_GET_UPPER_8B((int16_t)-10);
+    pkt.data_packet_u.data_packet_s.pkt_params[1] = TENDON_CONTROL_GET_LOWER_8B((int16_t)-10);
+    TEST_ASSERT_EQUAL(pkt.data_packet_u.data_packet_s.pkt_params[0], 0xFF);
+    TEST_ASSERT_EQUAL(pkt.data_packet_u.data_packet_s.pkt_params[1], 0xF6);
+    result = CommandFactory_CreateCommand(
+        &cmd,
+        &pkt,
+        tendons
+    );
+    TEST_ASSERT_EQUAL(COMM_SUCCESS, result);
+    TEST_ASSERT_NOT_NULL(cmd);
+    TEST_ASSERT_EQUAL(ML_WriteAngleCommand_execute, ((ML_WriteAngleCommand*)cmd)->base.fn);
+    TEST_ASSERT_EQUAL(&tendons[0], ((ML_WriteAngleCommand*)cmd)->base.motor_ref);
+    TEST_ASSERT_EQUAL(-10, ((ML_WriteAngleCommand*)cmd)->angle);
+    cmd_ret = cmd->fn(cmd);
+    TEST_ASSERT_EQUAL(0, cmd_ret.numParams);
+    TEST_ASSERT_FLOAT_WITHIN(1, -10, tendons[0].Get_Goal_Angle());
+
     free(cmd);
 }
 
@@ -221,9 +240,60 @@ void test_command_factory5(void)
     cmd_ret = cmd->fn(cmd);
 
     TEST_ASSERT_EQUAL(2, cmd_ret.numParams);
-    Serial.println(cmd_ret.params[0]);
-    Serial.println(cmd_ret.params[1]);
-    TEST_ASSERT_INT_WITHIN(2, (uint16_t)(-90), TENDON_CONTROL_MAKE_16B_WORD(cmd_ret.params[0], cmd_ret.params[1]));
+    TEST_ASSERT_INT_WITHIN(2, -90, TENDON_CONTROL_MAKE_16B_WORD(cmd_ret.params[0], cmd_ret.params[1]));
+
+    free(cmd);
+}
+
+void test_command_factory6(void)
+{
+    tendons[0].Reset_Encoder_Zero();
+    
+    // Scenario 1: Test a valid read angle command packet
+    TendonControl_data_packet_s pkt;
+    
+    pkt.data_packet_u.data_packet_s.header[0] = 0xFF;
+    pkt.data_packet_u.data_packet_s.header[1] = 0x00;
+    pkt.data_packet_u.data_packet_s.motorId = 2;
+    pkt.data_packet_u.data_packet_s.opcode = WRITE_PID;
+    pkt.data_packet_u.data_packet_s.len = 14;
+    pkt.data_packet_u.data_packet_s.pkt_params[0] = 0;
+    pkt.data_packet_u.data_packet_s.pkt_params[1] = 0;
+    pkt.data_packet_u.data_packet_s.pkt_params[2] = 0;
+    pkt.data_packet_u.data_packet_s.pkt_params[3] = 0;
+    pkt.data_packet_u.data_packet_s.pkt_params[4] = 0;
+    pkt.data_packet_u.data_packet_s.pkt_params[5] = 0;
+    pkt.data_packet_u.data_packet_s.pkt_params[6] = 0;
+    pkt.data_packet_u.data_packet_s.pkt_params[7] = 0;
+    pkt.data_packet_u.data_packet_s.pkt_params[8] = 0;
+    pkt.data_packet_u.data_packet_s.pkt_params[9] = 0;
+    pkt.data_packet_u.data_packet_s.pkt_params[10] = 0;
+    pkt.data_packet_u.data_packet_s.pkt_params[11] = 0;
+
+    ML_TendonCommandBase *cmd = NULL;
+    tendon_comm_result_t result = CommandFactory_CreateCommand(
+        &cmd,
+        &pkt,
+        tendons
+    );
+
+    TEST_ASSERT_EQUAL(COMM_SUCCESS, result);
+    TEST_ASSERT_NOT_NULL(cmd);
+    TEST_ASSERT_EQUAL(ML_WritePIDCommand_execute, ((ML_WritePIDCommand*)cmd)->base.fn);
+    TEST_ASSERT_EQUAL(&tendons[2], ((ML_WritePIDCommand*)cmd)->base.motor_ref);
+
+    // Scenario 2: Assert that the correct angle has been read
+    // CommandReturn_t cmd_ret = cmd->fn(cmd);
+
+    // TEST_ASSERT_EQUAL(2, cmd_ret.numParams);
+    // TEST_ASSERT_EQUAL(0, TENDON_CONTROL_MAKE_16B_WORD(cmd_ret.params[0], cmd_ret.params[1]));
+
+    // Scenario 3: Test with negative angle
+    // tendons[0].Set_Angle(-90);
+    // cmd_ret = cmd->fn(cmd);
+
+    // TEST_ASSERT_EQUAL(2, cmd_ret.numParams);
+    // TEST_ASSERT_INT_WITHIN(2, -90, TENDON_CONTROL_MAKE_16B_WORD(cmd_ret.params[0], cmd_ret.params[1]));
 
     free(cmd);
 }
@@ -284,10 +354,6 @@ void test_packet_handling(void)
     TEST_ASSERT_EQUAL(READ_STATUS, return_pkt.data_packet_u.data_packet_s.opcode);
     TEST_ASSERT_EQUAL(COMM_SUCCESS, return_pkt.data_packet_u.data_packet_s.pkt_params[0]);
 
-    for (int i = 0; i < 3 + return_pkt.data_packet_u.data_packet_s.len; ++i)
-    {
-        Serial.println(return_pkt.data_packet_u.data_packet[i]);
-    }
     uint16_t angle = TENDON_CONTROL_MAKE_16B_WORD(return_pkt.data_packet_u.data_packet_s.pkt_params[1], return_pkt.data_packet_u.data_packet_s.pkt_params[2]);
     TEST_ASSERT_EQUAL(0.0, angle);
 }
@@ -302,6 +368,7 @@ void setup() {
     RUN_TEST(test_command_factory3);
     RUN_TEST(test_command_factory4);
     RUN_TEST(test_command_factory5);
+    RUN_TEST(test_command_factory6);
     RUN_TEST(test_packet_handling);
     UNITY_END();
 }

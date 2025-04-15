@@ -7,21 +7,29 @@ float mapf(float x, float in_min, float in_max, float out_min, float out_max)
 }
 
 
-float ConvertTicksToAngle(int16_t ticks){
-    return ((360.0 * ticks) / (ML_ENC_CPR * ML_HPCB_LV_75P1));
+float TendonController::ConvertTicksToAngle(int16_t ticks){
+    return ((360.0 * ticks) / (ML_ENC_CPR * m_gear_ratio));
 }
 
-float ConvertAngleToTicks(int16_t deg){
-    return ((deg * ML_ENC_CPR * ML_HPCB_LV_75P1) / 360.0);
+float TendonController::ConvertAngleToTicks(int16_t deg){
+    return ((deg * ML_ENC_CPR * m_gear_ratio) / 360.0);
 }
 
 
 // create tendon controller
 // TendonController::TendonController(uint8_t ccChan, ml_pin phasePin, ml_pin pwmPin, ml_pin encA, ml_pin encB, String name)
-TendonController::TendonController(String name)
+TendonController::TendonController(String name, uint8_t tcc_num)
 {
     // // set the TCC channel
-    m_pwm_channel = TCC0;
+    switch (tcc_num)
+    {
+        case 0:
+            m_pwm_channel = TCC0;
+            break;
+        case 2:
+            m_pwm_channel = TCC2;
+    }
+    
 
     // set PID to default
     pid.Set_Params(1, 0, 0, 6000);
@@ -156,7 +164,7 @@ void TendonController::Set_Direction(Tendon_Direction dir)
 {
     if (dir == OFF)
     {
-        TCC0->CCBUF[m_pwm_CC].reg = TCC_CCBUF_CCBUF(0x00);
+        m_pwm_channel->CCBUF[m_pwm_CC].reg = TCC_CCBUF_CCBUF(0x00);
         TCC_sync(m_pwm_channel);
     }
     else if (dir == CW)
@@ -360,8 +368,8 @@ void TendonController::Set_Goal_Angle(float destAngle)
 
 void TendonController::UpdateMotorControl() {
     // grab current time
-    float curTime = micros();
-    float deltaTimeUs = curTime - m_prevPIDTime;
+    unsigned long curTime = micros();
+    unsigned long deltaTimeUs = curTime - m_prevPIDTime;
 
     float sig = pid.Compute_Signal(m_currentTicks, m_target_ticks, deltaTimeUs);
 
@@ -410,6 +418,6 @@ float TendonController::Get_Goal_Angle() {
     // return goal_angle;
 }
 
-float TendonController::Set_Angle(float angle) {
+void TendonController::Set_Angle(float angle) {
     m_currentTicks = ConvertAngleToTicks(-90);
 }
