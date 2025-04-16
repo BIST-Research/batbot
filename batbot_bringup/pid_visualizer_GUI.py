@@ -104,6 +104,7 @@ class PIDVisualizer(QMainWindow):
         
         # Setup update timer
         self.timer = QTimer()
+        self.steady_state_timer = QTimer()
         self.timer.timeout.connect(self.update_plot)
         self.timer.setInterval(50)  # 20Hz update rate
     
@@ -133,6 +134,7 @@ class PIDVisualizer(QMainWindow):
             self.target_angle = step_size
             
             # Move motor to new position
+            self.tc.setNewZero(motor_id)
             print(f'Setting Angle to {int(step_size)}')
             self.tc.writeMotorAbsoluteAngle(motor_id, int(step_size))
             
@@ -144,7 +146,17 @@ class PIDVisualizer(QMainWindow):
             self.status_label.setText("Error: Please enter valid numbers")
         except Exception as e:
             self.status_label.setText(f"Error: {str(e)}")
-    
+
+    def check_steady_state(self, data):
+        if len(data) < 50:
+            return False
+        
+        window_data = list(data)[-50:]
+        mean = np.mean(window_data)
+        std = np.std(window_data)
+
+        return (std < 0.01)
+
     def update_plot(self):
         if not self.is_recording:
             self.timer.stop()
@@ -169,13 +181,14 @@ class PIDVisualizer(QMainWindow):
             
             # Set reasonable y-axis limits
             self.ax.set_ylim([0, max(self.target_angle * 1.2, max(self.angle_data) * 1.1)])
-            self.ax.set_xlim([0, 2])
+            self.ax.set_xlim([0, current_time * 1.1])
+
+            is_steady_state = self.check_steady_state(self.angle_data)
             
             # Stop recording after 2 seconds
-            if current_time >= 2.5:
+            if current_time >= 10 or is_steady_state:
                 self.is_recording = False
                 self.timer.stop()
-                self.tc.setNewZero(self.motor_id.value())
             
             self.canvas.draw()
             
@@ -187,6 +200,7 @@ class PIDVisualizer(QMainWindow):
     def reset_plot(self):
         self.is_recording = False
         self.timer.stop()
+        self.steady_state_timer.stop()
         self.time_data.clear()
         self.angle_data.clear()
         self.ax.clear()
