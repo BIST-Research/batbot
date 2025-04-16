@@ -421,3 +421,7 @@ float TendonController::Get_Goal_Angle() {
 void TendonController::Set_Angle(float angle) {
     m_currentTicks = ConvertAngleToTicks(-90);
 }
+
+void TendonController::Get_PID(float &_kp, float &_ki, float &_kd) {
+    pid.Get_Params(_kp, _ki, _kd);
+}

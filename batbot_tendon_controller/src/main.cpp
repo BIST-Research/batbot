@@ -187,6 +187,7 @@ void attach_tendons()
   tendons[0].Attach_EncB_Pin(PORT_GRP_B, 17, PF_A);       // D15: EXTINT[1]
   tendons[0].Attach_EncA_Pin(PORT_GRP_B, 16, PF_A);       // D14: EXTINT[0] 
   tendons[0].m_gear_ratio = ML_HPCB_LV_210P1;
+  tendons[0].Set_PID_Param(-100, -0.05, -10, 6000);
 
   // // motor 2
   tendons[1].Attach_Drive_Pin(PORT_GRP_D, 10, PF_F, 3);   // D53
@@ -194,20 +195,23 @@ void attach_tendons()
   tendons[1].Attach_EncB_Pin(PORT_GRP_C, 5, PF_A);        // D49: EXTINT[5]
   tendons[1].Attach_EncA_Pin(PORT_GRP_C, 4, PF_A);        // D48: EXTINT[4]
   tendons[1].m_gear_ratio = ML_HPCB_LV_210P1;
+  tendons[1].Set_PID_Param(-100, -0.05, -10, 6000);
 
   // // motor 3
-  tendons[2].Attach_Drive_Pin(PORT_GRP_D, 8, PF_F, 0);    // D51
+  tendons[2].Attach_Drive_Pin(PORT_GRP_D, 8, PF_F, 1);    // D51
   tendons[2].Attach_Direction_Pin(PORT_GRP_D, 11, PF_B);  // D50
   tendons[2].Attach_EncB_Pin(PORT_GRP_C, 7, PF_A);        // D47: EXTINT[9]
   tendons[2].Attach_EncA_Pin(PORT_GRP_C, 6, PF_A);        // D46: EXTINT[6]
   tendons[2].m_gear_ratio = ML_HPCB_LV_100P1;
+  tendons[2].Set_PID_Param(-100, -0.05, -10, 6000);
 
   // // motor 4
   tendons[3].Attach_Drive_Pin(PORT_GRP_C, 12, PF_F, 2);   // D41
   tendons[3].Attach_Direction_Pin(PORT_GRP_C, 13, PF_B);  // D40 
   tendons[3].Attach_EncB_Pin(PORT_GRP_C, 11, PF_A);       // D44: EXTINT[11]
   tendons[3].Attach_EncA_Pin(PORT_GRP_C, 10, PF_A);       // D45: EXTINT[10]
-  // tendons[3].m_gear_ratio = ML_HPCB_LV_100P1;
+  tendons[3].m_gear_ratio = ML_HPCB_LV_100P1;
+  tendons[3].Set_PID_Param(100, 0.05, 10, 6000);
 
   // // motor 5
   tendons[4].Attach_Drive_Pin(PORT_GRP_A, 15, PF_F, 1);   // D23
@@ -287,9 +291,10 @@ void setup()
   {
     tendons[i].init_peripheral();
     tendons[i].Set_Direction(OFF);
-    tendons[i].Set_PID_Param(100, 0.05, 10, 6000);
     // tendons[i].CalibrateLimits();
-  }
+  }    
+  
+
 
   // good measure why not start the TCC0 again..
   TCC_ENABLE(TCC0);
@@ -566,7 +571,7 @@ void EIC_1_Handler(void)
 void EIC_2_Handler(void)
 {
   ML_EIC_CLR_INTFLAG(2);
-  tendons[2].encoder_ISR();
+  // tendons[2].encoder_ISR();
 }
 
 void EIC_8_Handler(void)
