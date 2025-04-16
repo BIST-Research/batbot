@@ -177,28 +177,35 @@ tendon_comm_result_t ML_WritePIDCommand_create(
             (CommandExecuteFn)ML_WritePIDCommand_execute,
             &tendons[id]
         };
-
-        typedef union {
-            float f;
-            byte bytes[4];
-        } float_bytes;
     
-        float_bytes kp, ki, kd;
-        kp.bytes[0] = dataPacket->data_packet_u.data_packet_s.pkt_params[0];
-        kp.bytes[1] = dataPacket->data_packet_u.data_packet_s.pkt_params[1];
-        kp.bytes[2] = dataPacket->data_packet_u.data_packet_s.pkt_params[2];
+        float kp, ki, kd;
+        uint8_t kp_bytes[] = {
+            dataPacket->data_packet_u.data_packet_s.pkt_params[3],
+            dataPacket->data_packet_u.data_packet_s.pkt_params[2],
+            dataPacket->data_packet_u.data_packet_s.pkt_params[1],
+            dataPacket->data_packet_u.data_packet_s.pkt_params[0],
+        };
+        memcpy(&kp, kp_bytes, 4);
 
-        ki.bytes[0] = dataPacket->data_packet_u.data_packet_s.pkt_params[3];
-        ki.bytes[1] = dataPacket->data_packet_u.data_packet_s.pkt_params[4];
-        ki.bytes[2] = dataPacket->data_packet_u.data_packet_s.pkt_params[5];
+        uint8_t ki_bytes[] = {
+            dataPacket->data_packet_u.data_packet_s.pkt_params[7],
+            dataPacket->data_packet_u.data_packet_s.pkt_params[6],
+            dataPacket->data_packet_u.data_packet_s.pkt_params[5],
+            dataPacket->data_packet_u.data_packet_s.pkt_params[4],
+        };
+        memcpy(&ki, ki_bytes, 4);
 
-        ki.bytes[3] = dataPacket->data_packet_u.data_packet_s.pkt_params[6];
-        ki.bytes[4] = dataPacket->data_packet_u.data_packet_s.pkt_params[7];
-        ki.bytes[5] = dataPacket->data_packet_u.data_packet_s.pkt_params[8];
+        uint8_t kd_bytes[] = {
+            dataPacket->data_packet_u.data_packet_s.pkt_params[11],
+            dataPacket->data_packet_u.data_packet_s.pkt_params[10],
+            dataPacket->data_packet_u.data_packet_s.pkt_params[9],
+            dataPacket->data_packet_u.data_packet_s.pkt_params[8],
+        };
+        memcpy(&kd, kd_bytes, 4);
 
-        pid_command->P = kp.f;
-        pid_command->I = ki.f;
-        pid_command->D = kd.f;
+        pid_command->P = kp;
+        pid_command->I = ki;
+        pid_command->D = kd;
         
         *command = (ML_TendonCommandBase *)pid_command;
 

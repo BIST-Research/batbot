@@ -94,6 +94,8 @@ public:
 
     void Set_Angle(float angle);
 
+    void Get_PID(float &_kp, float &_ki, float &_kd);
+
     uint32_t m_encA_ticks = 0;
     uint32_t m_encB_ticks = 0;
 
