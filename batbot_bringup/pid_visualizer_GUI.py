@@ -134,8 +134,6 @@ class PIDVisualizer(QMainWindow):
             self.target_angle = step_size
             
             # Move motor to new position
-            self.tc.setNewZero(motor_id)
-            print(f'Setting Angle to {int(step_size)}')
             self.tc.writeMotorAbsoluteAngle(motor_id, int(step_size))
             
             # Start update timer
@@ -189,6 +187,7 @@ class PIDVisualizer(QMainWindow):
             if current_time >= 10 or is_steady_state:
                 self.is_recording = False
                 self.timer.stop()
+                self.tc.writeMotorAbsoluteAngle(self.motor_id.value(), 0)
             
             self.canvas.draw()
             

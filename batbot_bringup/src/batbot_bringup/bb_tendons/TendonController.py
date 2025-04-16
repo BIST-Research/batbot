@@ -163,7 +163,6 @@ class TendonController:
         
         # Convert the byte sequences into lists of individual byte values and combine them
             params = list(kp_bytes) + list(ki_bytes) + list(kd_bytes)
-            print(params)
         
             self.th.BuildPacket(id, OPCODE.WRITE_PID.value, params)
             ret = self.th.SendTxRx()
