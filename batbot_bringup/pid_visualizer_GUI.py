@@ -21,7 +21,7 @@ from batbot_bringup.bb_tendons.TendonController import TendonController
 from collections import deque
 
 class PIDVisualizer(QMainWindow):
-    def __init__(self):
+    def __init__(self, port_name=""):
         super().__init__()
         self.setWindowTitle("PID Step Response Visualizer")
         self.setGeometry(100, 100, 1200, 800)
@@ -96,7 +96,7 @@ class PIDVisualizer(QMainWindow):
         main_layout.addWidget(self.canvas)
         
         # Initialize controller in test mode
-        self.tc = TendonController(port_name='COM3')
+        self.tc = TendonController(port_name=port_name)
         
         # Status label
         self.status_label = QLabel("")
@@ -133,6 +133,7 @@ class PIDVisualizer(QMainWindow):
             self.target_angle = step_size
             
             # Move motor to new position
+            print(f'Setting Angle to {int(step_size)}')
             self.tc.writeMotorAbsoluteAngle(motor_id, int(step_size))
             
             # Start update timer
@@ -174,6 +175,7 @@ class PIDVisualizer(QMainWindow):
             if current_time >= 2.5:
                 self.is_recording = False
                 self.timer.stop()
+                self.tc.setNewZero(self.motor_id.value())
             
             self.canvas.draw()
             
@@ -196,7 +198,12 @@ class PIDVisualizer(QMainWindow):
 
 def main():
     app = QApplication(sys.argv)
-    window = PIDVisualizer()
+
+    port_name = ""
+    if len(sys.argv) == 2:
+        port_name = sys.argv[1]
+
+    window = PIDVisualizer(port_name=port_name)
     window.show()
     sys.exit(app.exec())  # Note: exec() instead of exec_() in PyQt6
 

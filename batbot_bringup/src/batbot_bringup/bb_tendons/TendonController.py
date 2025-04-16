@@ -1,4 +1,4 @@
-from TendonHardware import TendonHardwareInterface
+from ..bb_tendons.TendonHardware import TendonHardwareInterface
 import time
 import struct
 
@@ -148,9 +148,6 @@ class TendonController:
             assert(ret["status"] == 0)
         else:
             self.test__max_angle = angle
-            
-            
-    
 
     def setMotorPID(self, id, Kp, Ki, Kd):
         """
@@ -158,12 +155,13 @@ class TendonController:
         """
         if not self.test_mode:
         # Convert each PID parameter from float64 (default in Python) to float32 (4-byte representation)
-            kp_bytes = struct.pack('f', float(Kp))  # 'f' specifies a 32-bit float
-            ki_bytes = struct.pack('f', float(Ki))
-            kd_bytes = struct.pack('f', float(Kd))
+            kp_bytes = struct.pack('>f', float(Kp))  # 'f' specifies a 32-bit float, '>' specifies big endian
+            ki_bytes = struct.pack('>f', float(Ki))
+            kd_bytes = struct.pack('>f', float(Kd))
         
         # Convert the byte sequences into lists of individual byte values and combine them
             params = list(kp_bytes) + list(ki_bytes) + list(kd_bytes)
+            print(params)
         
             self.th.BuildPacket(id, OPCODE.WRITE_PID.value, params)
             ret = self.th.SendTxRx()
