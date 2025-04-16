@@ -17,7 +17,7 @@ import time
 
 
 # Direct import from the same directory
-from TendonController import TendonController, COM_TYPE
+from batbot_bringup.bb_tendons.TendonController import TendonController
 from collections import deque
 
 class PIDVisualizer(QMainWindow):
@@ -96,7 +96,7 @@ class PIDVisualizer(QMainWindow):
         main_layout.addWidget(self.canvas)
         
         # Initialize controller in test mode
-        self.tc = TendonController(com=COM_TYPE.NONE)
+        self.tc = TendonController(port_name='COM3')
         
         # Status label
         self.status_label = QLabel("")
