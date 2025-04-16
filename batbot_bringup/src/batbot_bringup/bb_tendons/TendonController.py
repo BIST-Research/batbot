@@ -1,6 +1,7 @@
 from ..bb_tendons.TendonHardware import TendonHardwareInterface
 import time
 import struct
+import numpy as np
 
 from enum import Enum
 
@@ -66,7 +67,7 @@ class TendonController:
             print("WARNING: Beginning tendon calibration in test mode! Please supply a port name if this wasn't intentional.")
             time.sleep(3)
 
-    def writeMotorAbsoluteAngle(self, id, angle):
+    def writeMotorAbsoluteAngle(self, id, angle: np.int16):
         '''
         This function sets the motor specified by id to move to the angle
         that is percent of the maximum angle.
@@ -77,7 +78,7 @@ class TendonController:
         '''
         
         if not self.test_mode:
-            angle_h = (angle << 8) & 0xFF
+            angle_h = (angle >> 8) & 0xFF
             angle_l = (angle & 0xFF)
 
             params = [angle_h, angle_l]
@@ -104,7 +105,8 @@ class TendonController:
             if ret != -1:
                 assert(ret["status"] == 0)
 
-                angle = (ret["params"][0] << 8) | (ret["params"][1] & 0xFF)
+
+                angle = np.int16(((ret["params"][0])  << 8) | (ret["params"][1] & 0xFF))
                 return angle
         else:
             return self.test__angle
@@ -170,9 +172,9 @@ class TendonController:
         else:
             print(f"Test mode: Setting PID parameters for motor {id}: Kp={Kp}, Ki={Ki}, Kd={Kd}")
             
-            
-            
-            
+    def close(self):
+        if self.th.ser:
+            self.th.ser.close()
 
 if __name__ == "__main__":  
 

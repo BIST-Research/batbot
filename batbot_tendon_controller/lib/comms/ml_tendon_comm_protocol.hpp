@@ -48,7 +48,7 @@
                                                     TENDON_CONTROL_PKT_NUM_ID_BYTES - \
                                                     TENDON_CONTROL_PKT_NUM_LEN_BYTES
 
-#define TENDON_CONTROL_MAKE_16B_WORD(a, b) ((uint16_t)a << 8) | ((uint16_t)b)
+#define TENDON_CONTROL_MAKE_16B_WORD(a, b) (int16_t)((uint16_t)a << 8) | ((uint16_t)b)
 #define TENDON_CONTROL_GET_UPPER_8B(a) (uint8_t)(((uint16_t)a >> 8) & 0xFF)
 #define TENDON_CONTROL_GET_LOWER_8B(a) (uint8_t)((uint16_t)a & 0xFF)
 
