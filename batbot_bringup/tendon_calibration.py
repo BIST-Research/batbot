@@ -4,7 +4,7 @@ import sys
 
 from batbot_bringup.bb_tendons.TendonController import TendonController
 
-NUM_TENDONS = 1
+DEFAULT_NUM_TENDONS = 5
 INCREMENT_AMOUNTS = [1, 5, 10]
 INCREMENT_IDX = 0
 
@@ -21,13 +21,9 @@ def GetInput(screen, prompt):
     screen.nodelay(True)
     return input
 
-def tendon_calibration_app(port_name):
-    global NUM_TENDONS
+def tendon_calibration_app(tc: TendonController, num_tendons: int = DEFAULT_NUM_TENDONS):
     global INCREMENT_AMOUNTS
     global INCREMENT_IDX
-
-
-    tc = TendonController(port_name=port_name)
 
     screen = curses.initscr()
     screen.keypad(True)
@@ -47,39 +43,27 @@ def tendon_calibration_app(port_name):
 
     try:
 
-        for i in range(0, NUM_TENDONS):
+        for i in range(0, num_tendons):
             screen.move(10, 0)
             screen.clrtobot()
             screen.addstr(f'Calibrating tendon {i + 1}...')
             screen.refresh()
-
-            maxAngleIsValid = False
-            maxAngle = None
-            while not maxAngleIsValid:
-                try:
-                    screen.move(11, 1)
-                    maxAngle = int(GetInput(screen, f"Enter the maximum angle: "))
-                    maxAngleIsValid = True
-                except:
-                    pass
             screen.move(12, 1)
-            screen.addstr(f'Set maximum angle to {maxAngle}')
-            tc.setMotorMaxAngle(i, maxAngle)
+            screen.addstr(f'Set initial angle')
+            tc.setMotorMaxAngle(i, 0Xff)
 
             goal_angle = 0
             key = None
             screen.move(13, 1)
-            screen.addstr(f'Current Motor Goal Angle Percentage Of Max: {goal_angle}           ')
+            screen.addstr(f'Current Motor Goal Angle (degrees): {goal_angle}           ')
             screen.refresh()
             while not (key == curses.KEY_ENTER or key == 10):
 
                 if key == curses.KEY_LEFT or key == 452:
                     goal_angle -= INCREMENT_AMOUNTS[INCREMENT_IDX]
-                    goal_angle = max(0, goal_angle)
                     tc.writeMotorAbsoluteAngle(i, goal_angle)
                 elif key == curses.KEY_RIGHT or key == 454:
                     goal_angle += INCREMENT_AMOUNTS[INCREMENT_IDX]
-                    goal_angle = min(100, goal_angle)
                     tc.writeMotorAbsoluteAngle(i, goal_angle)
                 elif key == curses.KEY_UP or key == 450:
                     INCREMENT_IDX = min(len(INCREMENT_AMOUNTS) - 1, INCREMENT_IDX + 1)
@@ -89,7 +73,7 @@ def tendon_calibration_app(port_name):
                 angle = tc.readMotorAngle(i)
 
                 screen.move(13, 1)
-                screen.addstr(f'Current Motor Goal Angle Percentage Of Max: {goal_angle}           ')
+                screen.addstr(f'Current Motor Goal Angle (degrees): {goal_angle}           ')
                 screen.move(14, 1)
                 screen.addstr(f'Current Motor Angle {angle}           ')
                 screen.refresh()
@@ -97,6 +81,37 @@ def tendon_calibration_app(port_name):
                 key = screen.getch()
 
             tc.setNewZero(i)
+
+            screen.move(12, 1)
+            screen.addstr(f'Set maximum angle range')
+            max_angle = 0
+            key = None
+            screen.move(13, 1)
+            screen.addstr(f'Current Motor Goal Angle (degrees): {max_angle}           ')
+            screen.refresh()
+            while not (key == curses.KEY_ENTER or key == 10):
+
+                if key == curses.KEY_LEFT or key == 452:
+                    max_angle -= INCREMENT_AMOUNTS[INCREMENT_IDX]
+                    max_angle = max(0, max_angle)
+                    tc.writeMotorAbsoluteAngle(i, max_angle)
+                elif key == curses.KEY_RIGHT or key == 454:
+                    max_angle += INCREMENT_AMOUNTS[INCREMENT_IDX]
+                    tc.writeMotorAbsoluteAngle(i, max_angle)
+                elif key == curses.KEY_UP or key == 450:
+                    INCREMENT_IDX = min(len(INCREMENT_AMOUNTS) - 1, INCREMENT_IDX + 1)
+                elif key == curses.KEY_DOWN or key == 456:
+                    INCREMENT_IDX = max(0, INCREMENT_IDX - 1)
+
+                angle = tc.readMotorAngle(i)
+
+                screen.move(13, 1)
+                screen.addstr(f'Current Motor Goal Angle (degrees): {max_angle}           ')
+                screen.move(14, 1)
+                screen.addstr(f'Current Motor Angle {angle}           ')
+                screen.refresh()
+
+                key = screen.getch()
                 
     except Exception as e:
         print(e)
@@ -116,7 +131,9 @@ if __name__ == "__main__":
         port_name = sys.argv[1]
         print(f"Got portName = {port_name}")
 
-    tendon_calibration_app(port_name=port_name)
+    tc = TendonController(port_name=port_name)
+
+    tendon_calibration_app(tc=tc)
         
 
     

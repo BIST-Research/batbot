@@ -6,6 +6,9 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
+import sys
+from pathlib import Path
+
 project = 'batbot'
 copyright = '2024, Ben Westcott, Kofi Ofosu-Tuffour, Mason Lopez, Jayson De La Vega'
 author = 'Ben Westcott, Kofi Ofosu-Tuffour, Mason Lopez, Jayson De La Vega'
@@ -13,7 +16,13 @@ author = 'Ben Westcott, Kofi Ofosu-Tuffour, Mason Lopez, Jayson De La Vega'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = []
+sys.path.insert(0, str(Path('..', 'batbot_bringup').resolve()))
+
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx_copybutton',
+    'sphinx_new_tab_link'
+]
 
 templates_path = ['_templates']
 exclude_patterns = []
@@ -22,7 +31,7 @@ html_theme = 'sphinx_rtd_theme'
 html_theme_options = {
     'canonical_url': '',
     'analytics_id': '',
-    'display_version': True,
+    # 'display_version': True,
     'prev_next_buttons_location': 'bottom',
     'style_external_links': False,
     

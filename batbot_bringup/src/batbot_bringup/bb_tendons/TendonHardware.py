@@ -1,3 +1,7 @@
+"""
+This module provides utility functions interfacing with the motor communication protocol.
+"""
+
 import time
 
 import serial
@@ -5,9 +9,14 @@ from serial import Serial
 from enum import Enum
 
 def crc16(data: bytes):
-    '''
-    CRC-16 (CCITT) implemented with a precomputed lookup table
-    '''
+    """
+    A utility function for computing CRC-16 (CCITT) implemented with a precomputed lookup table
+
+    :param data: an array of bytes to compute crc 16 on
+    :type data: bytes
+    :return: an array of 2 bytes with the first element being the high bytes, and the second being the low bytes
+    :rtype: bytes
+    """
     table = [ 0x0000,
         0x8005, 0x800F, 0x000A, 0x801B, 0x001E, 0x0014, 0x8011,
         0x8033, 0x0036, 0x003C, 0x8039, 0x0028, 0x802D, 0x8027,
@@ -58,6 +67,10 @@ def crc16(data: bytes):
     return [crc_h, crc_l]
 
 class OPCODE(Enum):
+    """
+    A data type for enumerating the opcodes for the tendon communication protocol. Note that the enum values
+    correspond to the actual opcode value in the protocol.
+    """
     ECHO = 0
     READ_STATUS = 1
     READ_ANGLE = 2
@@ -65,6 +78,21 @@ class OPCODE(Enum):
     WRITE_PID = 4
 
 class TendonHardwareInterface:
+    """
+    This module is designed acts as an abstraction layer between a high level Tendoncontrol API and the motor communication protocol.
+    This class should not be instantiated directly for any user code.
+    This class contains functions responsible for assembling and unpacking packet data transmitted to and from the motor controller.
+
+    Upon initialization, a serial connection is opened with the device specified by ``port_name``. If ``port_name``, is ``NONE``, then no serial connection is opened.
+    The serial device is closed automatically upon destruction.
+
+    :param port_name: The serial port name used for communication with the motor controller
+    :type port_name: str
+    :ivar ser: An instance of the serial communication device
+    :vartype ser: pyserial.Serial
+    :ivar packet: A byte array storing the packet to be transmitted or received
+    :vartype packet: byte
+    """
 
     def __init__(self, port_name):
         self.ser = None
@@ -78,6 +106,24 @@ class TendonHardwareInterface:
         print("Terminated serial connection")
 
     def BuildPacket(self, id, opcode, params):
+        """
+        This function constructs a packet according to the the motor communication protocol
+        and automatically appends a CRC16 checksum to the end of the packet.
+        The packet is stored in the ``packet`` instance variable and NOT returned to the user.
+        This function should therefore be called before everytime a packet is sent.
+        This function does NOT check:
+
+        - if the id is valid
+        - if the opcode is valid
+
+        :param id: The id of the motor to be commanded
+        :type id: int
+        :param opcode: The opcode corresponding to the operation to perform on motor ``id``
+        :type opcode: int
+        :param params: An array of packet parameters for the motor operation
+        :type params: list[int]
+        """
+
         data = [0xFF, 0x00]
 
         length = len(params) + 4
@@ -91,9 +137,22 @@ class TendonHardwareInterface:
         self.packet = data
 
     def ReadRx(self):
+        """
+        This function reads a packet from the serial device. 
+        Because the motor communication protocol function is a request-response model, this function shouldn't
+        be directly called by user code. Instead, this function is a helper function for the ``SendTxRX`` function.
+
+        This function will return a timeout error if no valid packets are ever read. The error will be given as the function returning -1 (TODO: its preferrable to raise an exception instead).
+        However, the function will block if no serial data is ever received (TODO: need to fix that and set a timeout). 
+        This function also performs automatic CRC checking, but will still return the data if CRC validation fails (TODO: maybe raise an exception instead).
+        Otherwise, if a packet is successfully read, the function returns a byte array containing everything after the packet header.
+
+        :return: A byte array containing the received packet data (without the packet header) or -1 if any communication errors occured
+        :rtype: bytes or int
+        """
         data = list(self.ser.read(2))
 
-        timeout = 5000
+        timeout = 5000          # TODO: make this a instance variable that can be set
         start = time.time()
 
         while data != [0xff, 0x00]:
@@ -101,7 +160,7 @@ class TendonHardwareInterface:
 
             if 1000*(end - start) > timeout:
                 self.ser.flush()
-                print("Timeout error")
+                print("Timeout error")  # Make this an exception
                 return -1
 
             data[0] = data[1]
@@ -127,6 +186,22 @@ class TendonHardwareInterface:
         return data
 
     def SendTxRx(self):
+        """
+        This function sends and reads a packet from the serial device. 
+        This function should be called directly in user code.
+        Before calling this function be sure to call :func:`~batbot_bringup.bb_tendons.TendonHardwareInterface.BuildPacket` to set the packet to be sent.
+        Read :func:`~batbot_bringup.bb_tendons.TendonHardwareInterface.ReadRxx` for information on possible errors when reading packets.
+        If any errors occured, this function will return -1 (TODO: maybe raise an exception instead). If the serial transaction was successfull, then
+        a dictionary will be returned with the following fields:
+
+        - *id*: the id of the motor being commanded
+        - *opcode*: the opcode corresponding to the motor command sent
+        - *status*: the status bit returned by the motor operation (refer to :ref:`tendon-embedded-software` for status codes)
+        - *params*: the parameters returned by the response packet
+
+        :return: A dict containing the response packet data as described above or -1 if any communication errors occured
+        :rtype: dict or int
+        """
         self.SendTx()
 
         data = self.ReadRx()
@@ -142,5 +217,10 @@ class TendonHardwareInterface:
             return -1
 
     def SendTx(self):
+        """
+        This function sends a packet from the serial device without reading the response packet. 
+        This function can be called directly in user code, but please make sure to clear the serial buffer to ensure future packets are read properly.
+        Before calling this function be sure to call :func:`~batbot_bringup.bb_tendons.TendonHardwareInterface.BuildPacket` to set the packet to be sent.
+        """
         self.ser.reset_output_buffer()
         self.ser.write(bytes(self.packet))

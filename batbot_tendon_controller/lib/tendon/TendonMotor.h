@@ -29,7 +29,7 @@ class TendonController
 public:
     // create motor and encoder object
     // TendonController(uint8_t ccChan, ml_pin phasePin, ml_pin pwmPi, ml_pin encA, ml_pin encB, String name);
-    TendonController(String name);
+    TendonController(String name, uint8_t tcc_num=0);
 
 
     void Attach_Drive_Pin(ml_port_group portGroup, ml_pin pin, ml_port_function, uint8_t cc_chan);
@@ -92,7 +92,13 @@ public:
     float Get_Max_Angle();
     float Get_Goal_Angle();
 
-    float Set_Angle(float angle);
+    void Set_Angle(float angle);
+
+    void Get_PID(float &_kp, float &_ki, float &_kd);
+
+    void EnableMotor();
+    
+    void DisableMotor();
 
     uint32_t m_encA_ticks = 0;
     uint32_t m_encB_ticks = 0;
@@ -101,6 +107,11 @@ public:
     float m_gear_ratio = ML_HPCB_LV_75P1;
 
 private:
+    bool enabled;
+  
+    float ConvertAngleToTicks(int16_t deg);
+    float ConvertTicksToAngle(int16_t ticks);
+
     // pin settings
     ml_pin_settings m_encoder_a;
     ml_pin_settings m_encoder_b;
@@ -116,10 +127,6 @@ private:
     float m_angle = 0;
     int32_t m_target_ticks = 0;
 
-    // pid stuff
-    // float m_kp, m_kd, m_ki, m_umax;
-    // float m_error_prev, m_error_integral;
-
     float m_prevPIDTime = 0;
     ML_PID pid;
 
@@ -127,15 +134,10 @@ private:
     uint16_t m_cur_pwm = 0;
     Tendon_Direction m_direction = OFF;
 
-
     // min PWM values for each motor
     uint16_t m_min_CW_PWM = 0;
     uint16_t m_min_CCW_PWM = 0;
     bool m_calibrated = false;
-
-    // limits
-    float m_start_angle = -180;
-    float m_end_angle = 180;
 
     // motor and encoder default settings
     uint32_t m_cycles_per_rev = ML_ENC_CPR;
