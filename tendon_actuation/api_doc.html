@@ -1,0 +1,521 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tendon API &mdash; batbot  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Tendon Scripts &amp; Tools" href="scripts_tools.html" />
+    <link rel="prev" title="Tendon Embedded Software Guide" href="embedded_software.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            batbot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/getting_started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tendon_actuation.html">Tendon Actuation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="embedded_software.html">Tendon Embedded Software Guide</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Tendon API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#batbot-bringup-bb-tendons-package">batbot_bringup.bb_tendons package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-batbot_bringup.bb_tendons.TendonController">batbot_bringup.bb_tendons.TendonController module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-batbot_bringup.bb_tendons.TendonHardware">batbot_bringup.bb_tendons.TendonHardware module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-batbot_bringup.bb_tendons">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#extending-the-tendon-api">Extending the Tendon API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#possible-improvements">Possible Improvements</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scripts_tools.html">Tendon Scripts &amp; Tools</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../sonar/sonar.html">Sonar</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">batbot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="tendon_actuation.html">Tendon Actuation</a></li>
+      <li class="breadcrumb-item active">Tendon API</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tendon_actuation/api_doc.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="tendon-api">
+<span id="tendon-api-doc"></span><h1>Tendon API<a class="headerlink" href="#tendon-api" title="Link to this heading"></a></h1>
+<p>The Tendon API is a set of Python APIs that allow for easy interaction with the motor control system from a host PC over serial USB connection.
+If you reviewed, the documentation for the <a class="reference internal" href="embedded_software.html#tendon-embedded-software"><span class="std std-ref">Tendon Embedded Software Guide</span></a>, then you will probably observe that the amount of
+control features for the system comes at the price of complexity. Fortunately, we don’t have to expose this complexity to everybody,
+and we can abstract away the communication protocol, which is the purpose of these APIs. This page documents how to use the APIs in your own code.
+There are two classes in the API and they are documented here.</p>
+<section id="batbot-bringup-bb-tendons-package">
+<h2>batbot_bringup.bb_tendons package<a class="headerlink" href="#batbot-bringup-bb-tendons-package" title="Link to this heading"></a></h2>
+<section id="submodules">
+<h3>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h3>
+</section>
+<section id="module-batbot_bringup.bb_tendons.TendonController">
+<span id="batbot-bringup-bb-tendons-tendoncontroller-module"></span><h3>batbot_bringup.bb_tendons.TendonController module<a class="headerlink" href="#module-batbot_bringup.bb_tendons.TendonController" title="Link to this heading"></a></h3>
+<p>This module provides high level functions for interacting with the motor communication protocol.</p>
+<p>After following the <a class="reference internal" href="../getting_started/software_setup.html#software-setup"><span class="std std-ref">Software Setup</span></a>, you should be able to import this module as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">batbot_bringup.bb_tendons.TendonController</span>
+</pre></div>
+</div>
+<p>See the rest of this documentation for the available classes and functions in this module.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonController.COM_TYPE">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">batbot_bringup.bb_tendons.TendonController.</span></span><span class="sig-name descname"><span class="pre">COM_TYPE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonController.COM_TYPE" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>A data type for enumerating the communication types available for the TendonController.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonController.COM_TYPE.FAKE_SPI">
+<span class="sig-name descname"><span class="pre">FAKE_SPI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonController.COM_TYPE.FAKE_SPI" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonController.COM_TYPE.NONE">
+<span class="sig-name descname"><span class="pre">NONE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">-1</span></em><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonController.COM_TYPE.NONE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonController.COM_TYPE.SPI">
+<span class="sig-name descname"><span class="pre">SPI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonController.COM_TYPE.SPI" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonController.COM_TYPE.UART">
+<span class="sig-name descname"><span class="pre">UART</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonController.COM_TYPE.UART" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonController.OPCODE">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">batbot_bringup.bb_tendons.TendonController.</span></span><span class="sig-name descname"><span class="pre">OPCODE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonController.OPCODE" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>A data type for enumerating the opcodes for the tendon communication protocol. Note that the enum values
+correspond to the actual opcode value in the protocol. (TODO: Probably delete this and use the one in TendonHardware.py)</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonController.OPCODE.ECHO">
+<span class="sig-name descname"><span class="pre">ECHO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonController.OPCODE.ECHO" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonController.OPCODE.READ_ANGLE">
+<span class="sig-name descname"><span class="pre">READ_ANGLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonController.OPCODE.READ_ANGLE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonController.OPCODE.READ_STATUS">
+<span class="sig-name descname"><span class="pre">READ_STATUS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonController.OPCODE.READ_STATUS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonController.OPCODE.SET_MAX_ANGLE">
+<span class="sig-name descname"><span class="pre">SET_MAX_ANGLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonController.OPCODE.SET_MAX_ANGLE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonController.OPCODE.SET_ZERO_ANGLE">
+<span class="sig-name descname"><span class="pre">SET_ZERO_ANGLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonController.OPCODE.SET_ZERO_ANGLE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonController.OPCODE.WRITE_ANGLE">
+<span class="sig-name descname"><span class="pre">WRITE_ANGLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonController.OPCODE.WRITE_ANGLE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonController.OPCODE.WRITE_PID">
+<span class="sig-name descname"><span class="pre">WRITE_PID</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonController.OPCODE.WRITE_PID" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonController.TendonController">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">batbot_bringup.bb_tendons.TendonController.</span></span><span class="sig-name descname"><span class="pre">TendonController</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">com</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">COM_TYPE.NONE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonController.TendonController" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class is used to control and interface with NEEC motor controller via a
+serial connection.</p>
+<p>Built off the <code class="xref py py-class docutils literal notranslate"><span class="pre">TendonHardwareInterface</span></code> class for packing and unpacking serial packet data.’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>com</strong> (<a class="reference internal" href="#batbot_bringup.bb_tendons.TendonController.COM_TYPE" title="batbot_bringup.bb_tendons.TendonController.COM_TYPE"><em>COM_TYPE</em></a>) – An enum specifying the communication interface to use (UART, SPI, etc.) (NOT USED!)</p></li>
+<li><p><strong>port_name</strong> (<em>str</em>) – The serial port name used for communication with the motor controller</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>test_mode</strong> (<em>bool</em>) – A boolean specifying if the tendon controller is in test mode</p></li>
+<li><p><strong>test__angle</strong> (<em>int</em>) – An internal variable used to store the angle in test mode</p></li>
+<li><p><strong>test__max_angle</strong> (<em>int</em>) – A internal variable used to store the max angle in test mode</p></li>
+<li><p><strong>th</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">TendonHardwareInterface</span></code>) – An instance of the <code class="xref py py-class docutils literal notranslate"><span class="pre">TendonHardwareInterface</span></code> class to be used as a packet handler</p></li>
+</ul>
+</dd>
+</dl>
+<section id="how-to-use">
+<h4>HOW TO USE<a class="headerlink" href="#how-to-use" title="Link to this heading"></a></h4>
+<p>1) First, create a TendonController object specifying the communication
+type and port number. Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tendonController</span> <span class="o">=</span> <span class="n">TendonController</span><span class="p">(</span><span class="n">port_name</span><span class="o">=</span><span class="s2">&quot;/dev/ttyACM0&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If no port name is specified, then the TendonController is started in test mode. In test mode, any commands are simply
+written or read from internal variables.</p>
+<p>2) You can then call any function to control a motor. For example,
+to write motor 0 to 120 degrees call:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tendonController</span><span class="o">.</span><span class="n">writeMotorAngle</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">120</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If this file is run as a script, it will run an example program utilizing this class.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonController.TendonController.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonController.TendonController.close" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonController.TendonController.moveMotorToMax">
+<span class="sig-name descname"><span class="pre">moveMotorToMax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonController.TendonController.moveMotorToMax" title="Link to this definition"></a></dt>
+<dd><p>NOT USED!</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonController.TendonController.moveMotorToMin">
+<span class="sig-name descname"><span class="pre">moveMotorToMin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonController.TendonController.moveMotorToMin" title="Link to this definition"></a></dt>
+<dd><p>NOT USED!</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonController.TendonController.readMotorAngle">
+<span class="sig-name descname"><span class="pre">readMotorAngle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonController.TendonController.readMotorAngle" title="Link to this definition"></a></dt>
+<dd><p>This function reads the motor specified by id.
+Raises an assertion error if the status returned by the response packet is not <code class="docutils literal notranslate"><span class="pre">COMM_SUCCESS</span></code></p>
+<p>TODO: The function currently breaks if any communication errors occured during packet transmission</p>
+<p>In test mode, the angle value simply reads the value of <code class="docutils literal notranslate"><span class="pre">test__angle</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> (<em>int</em>) – The motor id whose angle is to be set</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The angle of motor <code class="docutils literal notranslate"><span class="pre">id</span></code></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>signed int16</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonController.TendonController.setMotorMaxAngle">
+<span class="sig-name descname"><span class="pre">setMotorMaxAngle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonController.TendonController.setMotorMaxAngle" title="Link to this definition"></a></dt>
+<dd><p>This function sets the max angle of the motor specified by id to the passed in angle.
+Raises an assertion error if the status returned by the response packet is not <code class="docutils literal notranslate"><span class="pre">COMM_SUCCESS</span></code></p>
+<p>TODO: The function currently breaks if any communication errors occured during packet transmission</p>
+<p>In test mode, the angle value simply gets written to <code class="docutils literal notranslate"><span class="pre">test__max_angle</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>int</em>) – The motor id whose angle is to be set</p></li>
+<li><p><strong>angle</strong> – The maximum motor angle</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonController.TendonController.setMotorPID">
+<span class="sig-name descname"><span class="pre">setMotorPID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Kp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ki</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Kd</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonController.TendonController.setMotorPID" title="Link to this definition"></a></dt>
+<dd><p>Sets the PID (Proportional-Integral-Derivative) parameters for a motor.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonController.TendonController.setNewZero">
+<span class="sig-name descname"><span class="pre">setNewZero</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonController.TendonController.setNewZero" title="Link to this definition"></a></dt>
+<dd><p>Resets the encoder count of the motor specified by id, effectively setting the current position to the 0 angle.
+Raises an assertion error if the status returned by the response packet is not <code class="docutils literal notranslate"><span class="pre">COMM_SUCCESS</span></code></p>
+<p>TODO: The function currently breaks if any communication errors occured during packet transmission</p>
+<p>In test mode, the <code class="docutils literal notranslate"><span class="pre">test__angle</span></code> variable is simply set to 0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> (<em>int</em>) – The motor id whose angle is to be reset</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonController.TendonController.writeMotorAbsoluteAngle">
+<span class="sig-name descname"><span class="pre">writeMotorAbsoluteAngle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int16</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonController.TendonController.writeMotorAbsoluteAngle" title="Link to this definition"></a></dt>
+<dd><p>This function sets the motor specified by id to move to the passed in angle.
+Raises an assertion error if the status returned by the response packet is not <code class="docutils literal notranslate"><span class="pre">COMM_SUCCESS</span></code></p>
+<p>TODO: The function currently breaks if any communication errors occured during packet transmission</p>
+<p>In test mode, the angle value simply gets written to <code class="docutils literal notranslate"><span class="pre">test__angle</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>int</em>) – The motor id whose angle is to be set</p></li>
+<li><p><strong>angle</strong> – The motor angle</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-batbot_bringup.bb_tendons.TendonHardware">
+<span id="batbot-bringup-bb-tendons-tendonhardware-module"></span><h3>batbot_bringup.bb_tendons.TendonHardware module<a class="headerlink" href="#module-batbot_bringup.bb_tendons.TendonHardware" title="Link to this heading"></a></h3>
+<p>This module provides utility functions interfacing with the motor communication protocol.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonHardware.OPCODE">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">batbot_bringup.bb_tendons.TendonHardware.</span></span><span class="sig-name descname"><span class="pre">OPCODE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonHardware.OPCODE" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>A data type for enumerating the opcodes for the tendon communication protocol. Note that the enum values
+correspond to the actual opcode value in the protocol.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonHardware.OPCODE.ECHO">
+<span class="sig-name descname"><span class="pre">ECHO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonHardware.OPCODE.ECHO" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonHardware.OPCODE.READ_ANGLE">
+<span class="sig-name descname"><span class="pre">READ_ANGLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonHardware.OPCODE.READ_ANGLE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonHardware.OPCODE.READ_STATUS">
+<span class="sig-name descname"><span class="pre">READ_STATUS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonHardware.OPCODE.READ_STATUS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonHardware.OPCODE.WRITE_ANGLE">
+<span class="sig-name descname"><span class="pre">WRITE_ANGLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonHardware.OPCODE.WRITE_ANGLE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonHardware.OPCODE.WRITE_PID">
+<span class="sig-name descname"><span class="pre">WRITE_PID</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonHardware.OPCODE.WRITE_PID" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonHardware.TendonHardwareInterface">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">batbot_bringup.bb_tendons.TendonHardware.</span></span><span class="sig-name descname"><span class="pre">TendonHardwareInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonHardware.TendonHardwareInterface" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This module is designed acts as an abstraction layer between a high level Tendoncontrol API and the motor communication protocol.
+This class should not be instantiated directly for any user code.
+This class contains functions responsible for assembling and unpacking packet data transmitted to and from the motor controller.</p>
+<p>Upon initialization, a serial connection is opened with the device specified by <code class="docutils literal notranslate"><span class="pre">port_name</span></code>. If <code class="docutils literal notranslate"><span class="pre">port_name</span></code>, is <code class="docutils literal notranslate"><span class="pre">NONE</span></code>, then no serial connection is opened.
+The serial device is closed automatically upon destruction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>port_name</strong> (<em>str</em>) – The serial port name used for communication with the motor controller</p>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ser</strong> (<em>pyserial.Serial</em>) – An instance of the serial communication device</p></li>
+<li><p><strong>packet</strong> (<em>byte</em>) – A byte array storing the packet to be transmitted or received</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonHardware.TendonHardwareInterface.BuildPacket">
+<span class="sig-name descname"><span class="pre">BuildPacket</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opcode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonHardware.TendonHardwareInterface.BuildPacket" title="Link to this definition"></a></dt>
+<dd><p>This function constructs a packet according to the the motor communication protocol
+and automatically appends a CRC16 checksum to the end of the packet.
+The packet is stored in the <code class="docutils literal notranslate"><span class="pre">packet</span></code> instance variable and NOT returned to the user.
+This function should therefore be called before everytime a packet is sent.
+This function does NOT check:</p>
+<ul class="simple">
+<li><p>if the id is valid</p></li>
+<li><p>if the opcode is valid</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>int</em>) – The id of the motor to be commanded</p></li>
+<li><p><strong>opcode</strong> (<em>int</em>) – The opcode corresponding to the operation to perform on motor <code class="docutils literal notranslate"><span class="pre">id</span></code></p></li>
+<li><p><strong>params</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – An array of packet parameters for the motor operation</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonHardware.TendonHardwareInterface.ReadRx">
+<span class="sig-name descname"><span class="pre">ReadRx</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonHardware.TendonHardwareInterface.ReadRx" title="Link to this definition"></a></dt>
+<dd><p>This function reads a packet from the serial device. 
+Because the motor communication protocol function is a request-response model, this function shouldn’t
+be directly called by user code. Instead, this function is a helper function for the <code class="docutils literal notranslate"><span class="pre">SendTxRX</span></code> function.</p>
+<p>This function will return a timeout error if no valid packets are ever read. The error will be given as the function returning -1 (TODO: its preferrable to raise an exception instead).
+However, the function will block if no serial data is ever received (TODO: need to fix that and set a timeout). 
+This function also performs automatic CRC checking, but will still return the data if CRC validation fails (TODO: maybe raise an exception instead).
+Otherwise, if a packet is successfully read, the function returns a byte array containing everything after the packet header.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A byte array containing the received packet data (without the packet header) or -1 if any communication errors occured</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bytes or int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonHardware.TendonHardwareInterface.SendTx">
+<span class="sig-name descname"><span class="pre">SendTx</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonHardware.TendonHardwareInterface.SendTx" title="Link to this definition"></a></dt>
+<dd><p>This function sends a packet from the serial device without reading the response packet. 
+This function can be called directly in user code, but please make sure to clear the serial buffer to ensure future packets are read properly.
+Before calling this function be sure to call <code class="xref py py-func docutils literal notranslate"><span class="pre">BuildPacket()</span></code> to set the packet to be sent.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonHardware.TendonHardwareInterface.SendTxRx">
+<span class="sig-name descname"><span class="pre">SendTxRx</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonHardware.TendonHardwareInterface.SendTxRx" title="Link to this definition"></a></dt>
+<dd><p>This function sends and reads a packet from the serial device. 
+This function should be called directly in user code.
+Before calling this function be sure to call <code class="xref py py-func docutils literal notranslate"><span class="pre">BuildPacket()</span></code> to set the packet to be sent.
+Read <code class="xref py py-func docutils literal notranslate"><span class="pre">ReadRxx()</span></code> for information on possible errors when reading packets.
+If any errors occured, this function will return -1 (TODO: maybe raise an exception instead). If the serial transaction was successfull, then
+a dictionary will be returned with the following fields:</p>
+<ul class="simple">
+<li><p><em>id</em>: the id of the motor being commanded</p></li>
+<li><p><em>opcode</em>: the opcode corresponding to the motor command sent</p></li>
+<li><p><em>status</em>: the status bit returned by the motor operation (refer to <a class="reference internal" href="embedded_software.html#tendon-embedded-software"><span class="std std-ref">Tendon Embedded Software Guide</span></a> for status codes)</p></li>
+<li><p><em>params</em>: the parameters returned by the response packet</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A dict containing the response packet data as described above or -1 if any communication errors occured</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict or int</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="batbot_bringup.bb_tendons.TendonHardware.crc16">
+<span class="sig-prename descclassname"><span class="pre">batbot_bringup.bb_tendons.TendonHardware.</span></span><span class="sig-name descname"><span class="pre">crc16</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.bb_tendons.TendonHardware.crc16" title="Link to this definition"></a></dt>
+<dd><p>A utility function for computing CRC-16 (CCITT) implemented with a precomputed lookup table</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>bytes</em>) – an array of bytes to compute crc 16 on</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>an array of 2 bytes with the first element being the high bytes, and the second being the low bytes</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bytes</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-batbot_bringup.bb_tendons">
+<span id="module-contents"></span><h3>Module contents<a class="headerlink" href="#module-batbot_bringup.bb_tendons" title="Link to this heading"></a></h3>
+</section>
+</section>
+<section id="extending-the-tendon-api">
+<h2>Extending the Tendon API<a class="headerlink" href="#extending-the-tendon-api" title="Link to this heading"></a></h2>
+<p>After creating a new command (as shown in <a class="reference internal" href="embedded_software.html#tendon-embedded-software"><span class="std std-ref">Tendon Embedded Software Guide</span></a>), you will likely want to create a new API function for your command.
+This is as simple as adding a new function to the <code class="xref py py-class docutils literal notranslate"><span class="pre">TendonHardwareInterface</span></code> class.
+You should utilize the class’s <code class="docutils literal notranslate"><span class="pre">th</span></code> instance variable for automatic parsing and packing of your command packet.</p>
+</section>
+<section id="possible-improvements">
+<h2>Possible Improvements<a class="headerlink" href="#possible-improvements" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>More graceful error handling on the Python API (use exceptions instead of returns)</p></li>
+<li><p>Implement all the functions created in the embedded side</p></li>
+<li><p>Alternate communication protocols (SPI)</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="embedded_software.html" class="btn btn-neutral float-left" title="Tendon Embedded Software Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="scripts_tools.html" class="btn btn-neutral float-right" title="Tendon Scripts &amp; Tools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Ben Westcott, Kofi Ofosu-Tuffour, Mason Lopez, Jayson De La Vega.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

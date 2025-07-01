@@ -1,0 +1,182 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>batbot_bringup.bb_serial package &mdash; batbot  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            batbot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started/getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tendon_actuation/tendon_actuation.html">Tendon Actuation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sonar/sonar.html">Sonar</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">batbot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">batbot_bringup.bb_serial package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/batbot_bringup.bb_serial.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="batbot-bringup-bb-serial-package">
+<h1>batbot_bringup.bb_serial package<a class="headerlink" href="#batbot-bringup-bb-serial-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-batbot_bringup.bb_serial.fake_spidev">
+<span id="batbot-bringup-bb-serial-fake-spidev-module"></span><h2>batbot_bringup.bb_serial.fake_spidev module<a class="headerlink" href="#module-batbot_bringup.bb_serial.fake_spidev" title="Link to this heading"></a></h2>
+<p>Author: Mason Lopez
+Date: 2/2/2024
+Purpose: spidev is only on linux (pi) so to run and develop on 
+other platforms this is a fake library taht hold the same interface but does
+nothing but log the information to console</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="batbot_bringup.bb_serial.fake_spidev.fake_SpiDev">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">batbot_bringup.bb_serial.fake_spidev.</span></span><span class="sig-name descname"><span class="pre">fake_SpiDev</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bus</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ss</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.bb_serial.fake_spidev.fake_SpiDev" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.bb_serial.fake_spidev.fake_SpiDev.open">
+<span class="sig-name descname"><span class="pre">open</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bus</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dev</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.bb_serial.fake_spidev.fake_SpiDev.open" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.bb_serial.fake_spidev.fake_SpiDev.xfer2">
+<span class="sig-name descname"><span class="pre">xfer2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.bb_serial.fake_spidev.fake_SpiDev.xfer2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-batbot_bringup.bb_serial.hwdefs">
+<span id="batbot-bringup-bb-serial-hwdefs-module"></span><h2>batbot_bringup.bb_serial.hwdefs module<a class="headerlink" href="#module-batbot_bringup.bb_serial.hwdefs" title="Link to this heading"></a></h2>
+</section>
+<section id="module-batbot_bringup.bb_serial.ser_utils">
+<span id="batbot-bringup-bb-serial-ser-utils-module"></span><h2>batbot_bringup.bb_serial.ser_utils module<a class="headerlink" href="#module-batbot_bringup.bb_serial.ser_utils" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="batbot_bringup.bb_serial.ser_utils.chunk_split">
+<span class="sig-prename descclassname"><span class="pre">batbot_bringup.bb_serial.ser_utils.</span></span><span class="sig-name descname"><span class="pre">chunk_split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.bb_serial.ser_utils.chunk_split" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="batbot_bringup.bb_serial.ser_utils.decode_msg">
+<span class="sig-prename descclassname"><span class="pre">batbot_bringup.bb_serial.ser_utils.</span></span><span class="sig-name descname"><span class="pre">decode_msg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.bb_serial.ser_utils.decode_msg" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="batbot_bringup.bb_serial.ser_utils.determine_num_chunks">
+<span class="sig-prename descclassname"><span class="pre">batbot_bringup.bb_serial.ser_utils.</span></span><span class="sig-name descname"><span class="pre">determine_num_chunks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buflen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.bb_serial.ser_utils.determine_num_chunks" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="batbot_bringup.bb_serial.ser_utils.encode_msg">
+<span class="sig-prename descclassname"><span class="pre">batbot_bringup.bb_serial.ser_utils.</span></span><span class="sig-name descname"><span class="pre">encode_msg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.bb_serial.ser_utils.encode_msg" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="batbot_bringup.bb_serial.ser_utils.pad_msg">
+<span class="sig-prename descclassname"><span class="pre">batbot_bringup.bb_serial.ser_utils.</span></span><span class="sig-name descname"><span class="pre">pad_msg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.bb_serial.ser_utils.pad_msg" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="batbot_bringup.bb_serial.ser_utils.to_chunks">
+<span class="sig-prename descclassname"><span class="pre">batbot_bringup.bb_serial.ser_utils.</span></span><span class="sig-name descname"><span class="pre">to_chunks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ftype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.bb_serial.ser_utils.to_chunks" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-batbot_bringup.bb_serial.serial_helper">
+<span id="batbot-bringup-bb-serial-serial-helper-module"></span><h2>batbot_bringup.bb_serial.serial_helper module<a class="headerlink" href="#module-batbot_bringup.bb_serial.serial_helper" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="batbot_bringup.bb_serial.serial_helper.get_port_from_serial_num">
+<span class="sig-prename descclassname"><span class="pre">batbot_bringup.bb_serial.serial_helper.</span></span><span class="sig-name descname"><span class="pre">get_port_from_serial_num</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">serial_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#batbot_bringup.bb_serial.serial_helper.get_port_from_serial_num" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-batbot_bringup.bb_serial">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-batbot_bringup.bb_serial" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Ben Westcott, Kofi Ofosu-Tuffour, Mason Lopez, Jayson De La Vega.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,1003 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tendon Embedded Software Guide &mdash; batbot  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Tendon API" href="api_doc.html" />
+    <link rel="prev" title="Tendon Actuation" href="tendon_actuation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            batbot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/getting_started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tendon_actuation.html">Tendon Actuation</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Tendon Embedded Software Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#motor-control">Motor Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#serial-communication">Serial Communication</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#communication-protocol">Communication Protocol</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#commands-reference">Commands Reference</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#extending-the-communication-protocol">Extending the Communication Protocol</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#possible-improvements">Possible Improvements</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api_doc.html">Tendon API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts_tools.html">Tendon Scripts &amp; Tools</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../sonar/sonar.html">Sonar</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">batbot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="tendon_actuation.html">Tendon Actuation</a></li>
+      <li class="breadcrumb-item active">Tendon Embedded Software Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tendon_actuation/embedded_software.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="tendon-embedded-software-guide">
+<span id="tendon-embedded-software"></span><h1>Tendon Embedded Software Guide<a class="headerlink" href="#tendon-embedded-software-guide" title="Link to this heading"></a></h1>
+<p>The embedded software for the tendon actuation system performs the dedicated tasks of:</p>
+<ul class="simple">
+<li><p>Controlling the motors that actuate the tendons.</p></li>
+<li><p>Managing the serial interface for communication with a host computer.</p></li>
+</ul>
+<p>The software depends on an independently developed Hardware Abstraction Layer (HAL) developed by the BIST team, which can be found <a class="reference external" href="https://github.com/BIST-Research/EBatLib" rel="noreferrer" target="_blank">here</a>.
+This project automatically includes the HAL using PlatformIO’s library management system, so no further action is required to use it.</p>
+<section id="motor-control">
+<h2>Motor Control<a class="headerlink" href="#motor-control" title="Link to this heading"></a></h2>
+<p>Motor angle control is achieved through a PID controller that adjusts the motor’s position based on angle feedback.
+For this controller, we define the <strong>setpoint</strong> to be the desired angle of the motor, and the <strong>process variable</strong> is the current angle measured by the encoder.
+The <strong>control signal</strong> is a signed PWM signal with the sign indicating the direction the motor should spin. The control diagram for the PID controller is as follows:</p>
+<figure class="align-default" id="id16">
+<img alt="../_images/pid.png" src="../_images/pid.png" />
+<figcaption>
+<p><span class="caption-text">By Arturo Urquizo - <a class="reference external" href="File:PID.svg" rel="noreferrer" target="_blank">File:PID.svg</a>, CC BY-SA 3.0, <a class="reference external" href="https://commons.wikimedia.org/w/index.php?curid=17633925" rel="noreferrer" target="_blank">https://commons.wikimedia.org/w/index.php?curid=17633925</a></span><a class="headerlink" href="#id16" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>For those unfamiliar with PID control, it is a closed-loop controller that computes a control signal to minimize the error between the setpoint and the process variable.
+The PID controller computes the control signal as a weighted sum of three components: the proportional, integral and derivative components.</p>
+<ul class="simple">
+<li><p><strong>Proportional</strong>: The proportional component is simply the error multiplied by a gain factor, which determines how aggressively the controller responds to the error.</p></li>
+<li><p><strong>Integral</strong>: The integral component measures the accumulated error over time and allows the controller to correct for any residual error that may persist after the proportional response, also known as steady-state error. The integral component is multiplied by a gain factor that determines how aggressively the controller responds to the accumulated error.</p></li>
+<li><p><strong>Derivative</strong>: The derivative serves to predict the future behavior of the error by taking the derivative (rate of change) of the error. The derivative component is multiplied by a gain factor and can help to dampen the response of the controller, reducing oscillations in the process variable.</p></li>
+</ul>
+<p>For a more visual explanation of PID control, the following video provides a good introduction: <a class="reference external" href="https://youtu.be/wkfEZmsQqiA?si=vm7gll-HPGNSaMhs" rel="noreferrer" target="_blank">https://youtu.be/wkfEZmsQqiA?si=vm7gll-HPGNSaMhs</a>.</p>
+<p>The controller parameters and angle input limits can all be tuned during runtime.
+The input limits provide a way to constrain the motor setpoint angle to a specific range.
+Attempting to set the motor angle outside of the input limits will clamp the setpoint within the minimum and maximum angle.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>It is possible to damage the motors and connected systems if the PID parameters are not set correctly.
+The soft limits impose a maximum and minimum on the angle setpoint, but the PID controller can still reach values that exceed these limits if not tuned properly.</p>
+</div>
+<p>Angle feedback is provided by the motor encoders. The Pololu motor encoders used in this project are incremental encoders based on quadrature signals.
+Incremental encoders can only provide relative position information, so all angles are defined relative to the starting position at boot.
+However, the system can be calibrated to a known position at startup, allowing for positioning relative to that point.
+This is discussed in more detail in the calibration section in <a class="reference internal" href="scripts_tools.html#tendon-scripts"><span class="std std-ref">Tendon Scripts &amp; Tools</span></a>.
+The quadrature signals generated by the encoder are a pair of square wave signals that are out of phase, allowing the system to determine both the direction and amount of rotation.
+The pulses of the square waves can be used to determine the angle of the motor, while the phase difference between the two signals indicates the direction of rotation.</p>
+<p>Note that the motors are also geared and the BIST lab has a supply of motors with different gear ratios and even operating voltages.
+Thus, when creating a new motor control object in the code, please be sure to specify the correct gear ratio to ensure accurate angle calculations.
+Differences in operating voltage can also affect the motor’s performance, however, this can be compensated for by tuning the PID parameters.</p>
+<p>For more information on how to use the embedded motor control code, please refer to the <a class="reference internal" href="api_doc.html#tendon-api-doc"><span class="std std-ref">Tendon API</span></a> documentation.</p>
+</section>
+<section id="serial-communication">
+<h2>Serial Communication<a class="headerlink" href="#serial-communication" title="Link to this heading"></a></h2>
+<p>The embedded software also manages a serial interface for communication with a host computer. This allows the host to send commands to the embedded system and receive status updates via the onboard USB port or SPI (WIP).
+Currently, the serial interface allows for the following commands:</p>
+<ul class="simple">
+<li><p><strong>Echo</strong>: Echo back the received message.</p></li>
+<li><p><strong>Set Motor Angle</strong>: Set the desired angle for a specific motor.</p></li>
+<li><p><strong>Get Motor Angle</strong>: Retrieve the current angle of a specific motor.</p></li>
+<li><p><strong>Set PID Parameters</strong>: Set the PID parameters for a specific motor.</p></li>
+<li><p><strong>Zero Encoder</strong>: Reset the encoder position to zero for a specific motor.</p></li>
+<li><p><strong>Set Max Angle</strong>: Set the maximum angle limit for a specific motor.</p></li>
+</ul>
+<section id="communication-protocol">
+<h3>Communication Protocol<a class="headerlink" href="#communication-protocol" title="Link to this heading"></a></h3>
+<p>The serial interface relies on a communication protocol based on a simple request-response model with structured packets.
+The request-response model means that every command sent by the host will be followed by a response from the motor controller with requested data or an acknowledgment of the command.
+Each motor command is sent as a packet, which is a structured string of bytes containing the following information:</p>
+<ul class="simple">
+<li><p><strong>Command</strong>: The command to be executed (e.g., set angle, get angle, etc.).</p></li>
+<li><p><strong>Motor ID</strong>: The ID of the motor to which the command applies.</p></li>
+<li><p><strong>Data</strong>: Additional data required for the command (e.g., angle value, PID, etc.).</p></li>
+</ul>
+<p>The packet structure defines the format of messages exchanged between the host and the motor controller.
+For this application, the motor controller expects to receive a packet with the following structure:</p>
+<table class="docutils align-default" id="id17">
+<caption><span class="caption-text">Packet Structure</span><a class="headerlink" href="#id17" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 10.0%" />
+<col style="width: 10.0%" />
+<col style="width: 10.0%" />
+<col style="width: 10.0%" />
+<col style="width: 10.0%" />
+<col style="width: 10.0%" />
+<col style="width: 10.0%" />
+<col style="width: 10.0%" />
+<col style="width: 10.0%" />
+<col style="width: 10.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Byte 0</p></td>
+<td><p>Byte 1</p></td>
+<td><p>Byte2</p></td>
+<td><p>Byte 3</p></td>
+<td><p>Byte 4</p></td>
+<td><p>Byte 5</p></td>
+<td><p>Byte …</p></td>
+<td><p>Byte N</p></td>
+<td><p>Byte N+1</p></td>
+<td><p>Byte N+2</p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p>Header</p></td>
+<td><p>Length</p></td>
+<td><p>Motor ID</p></td>
+<td><p>Opcode</p></td>
+<td colspan="3"><p>Params</p></td>
+<td colspan="2"><p>CRC</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x00</p></td>
+<td><p>0xFF</p></td>
+<td><p>LEN</p></td>
+<td><p>ID</p></td>
+<td><p>Opcode</p></td>
+<td><p>Param 1</p></td>
+<td><p>…</p></td>
+<td><p>Param N</p></td>
+<td><p>CRC1</p></td>
+<td><p>CRC2</p></td>
+</tr>
+</tbody>
+</table>
+<section id="header">
+<h4>Header<a class="headerlink" href="#header" title="Link to this heading"></a></h4>
+<p>This field acts as a packet delimiter and is used to identify the start of a new packet.</p>
+</section>
+<section id="length">
+<h4>Length<a class="headerlink" href="#length" title="Link to this heading"></a></h4>
+<p>This field specifies the length of the packet, excluding the header and length. It can simply be computed as the number of parameter bytes + 4.
+The length field is a single byte, which allows for packets up to 255 bytes in length.
+However the code limits the packet length through a macro, which can be modified (See the API reference for information).</p>
+</section>
+<section id="motor-id">
+<h4>Motor ID<a class="headerlink" href="#motor-id" title="Link to this heading"></a></h4>
+<p>This field specifies the ID of the motor to which the command applies. It is a single byte, which allows for up to 256 motors to be addressed.
+The code limits the maximum number of motors through a configurable macro (See the API reference for information).</p>
+</section>
+<section id="opcode">
+<h4>Opcode<a class="headerlink" href="#opcode" title="Link to this heading"></a></h4>
+<p>This field specifies the command to be executed, please refer to the Commands Reference section below for a list of available opcodes.</p>
+</section>
+<section id="parameters">
+<h4>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h4>
+<p>This field contains any additional data required for the command. The number and type of parameters depend on the command being executed, so it can be variable in length.</p>
+</section>
+<section id="crc">
+<h4>CRC<a class="headerlink" href="#crc" title="Link to this heading"></a></h4>
+<p>This field contains a 16-bit checksum to determine if the packet was damaged during transmission.</p>
+</section>
+<section id="response-packet">
+<h4>Response Packet<a class="headerlink" href="#response-packet" title="Link to this heading"></a></h4>
+<p>The response packet sent back from the motor controller will have the same structure as specified above, but keep in mind that:</p>
+<ul class="simple">
+<li><p>The opcode will always be 0x01</p></li>
+<li><p>The motor ID will be the same as the one sent in the request</p></li>
+<li><p>The parameters will always (with the exception of the Echo response packet) contain a status code as the first byte followed by any requested data</p></li>
+</ul>
+<p>The following table gives the possible status codes that can be returned by the motor controller:</p>
+<table class="docutils align-default" id="id18">
+<caption><span class="caption-text">Packet Commands</span><a class="headerlink" href="#id18" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 5.0%" />
+<col style="width: 25.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Status Code</p></th>
+<th class="head"><p>Command Status</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00</p></td>
+<td><p>COMM_SUCCESS</p></td>
+<td><p>The command succecssfully executed</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x01</p></td>
+<td><p>COMM_FAIL</p></td>
+<td><p>The message could not be received, likely due to some communication error</p></td>
+</tr>
+<tr class="row-even"><td><p>0x02</p></td>
+<td><p>COMM_INSTRUCTION_ERROR</p></td>
+<td><p>The received opcode does not correspond to any valid commands</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x03</p></td>
+<td><p>COMM_CRC_ERROR</p></td>
+<td><p>The received packet failed checksum validation, likely because of data corruption</p></td>
+</tr>
+<tr class="row-even"><td><p>0x04</p></td>
+<td><p>COMM_ID_ERROR</p></td>
+<td><p>The received motor ID goes beyond the range of acceptable motor IDs</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x05</p></td>
+<td><p>COMM_PARAM_ERROR</p></td>
+<td><p>There is either an incorrect number or incorrect format of received parameters</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="commands-reference">
+<h3>Commands Reference<a class="headerlink" href="#commands-reference" title="Link to this heading"></a></h3>
+<p>The following table gives a quick overview of the the available commands that can be sent to the motor controller:</p>
+<table class="docutils align-default" id="id19">
+<caption><span class="caption-text">Packet Commands</span><a class="headerlink" href="#id19" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 5.0%" />
+<col style="width: 25.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Opcode</p></th>
+<th class="head"><p>Command</p></th>
+<th class="head"><p>Num Params</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00</p></td>
+<td><p>Echo Command</p></td>
+<td><p>Any</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x01</p></td>
+<td><p>Read Status (Not implemented)</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>0x02</p></td>
+<td><p>Read Angle</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x03</p></td>
+<td><p>Write Angle</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-even"><td><p>0x04</p></td>
+<td><p>Write PID Parameters</p></td>
+<td><p>6</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x06</p></td>
+<td><p>Set Zero Position</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>0x07</p></td>
+<td><p>Set Max Angle</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x08</p></td>
+<td><p>Disable Motor (Not implemented)</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>0x09</p></td>
+<td><p>Enable Motor (Not implemented)</p></td>
+<td><p>2</p></td>
+</tr>
+</tbody>
+</table>
+<p>In this section the functionality, parameters, and responses of each command will be described in detail.
+In discussion of the response packets returned by each command, the <code class="docutils literal notranslate"><span class="pre">COMM_FAIL</span></code>, <code class="docutils literal notranslate"><span class="pre">COMM_CRC_ERROR</span></code>, and <code class="docutils literal notranslate"><span class="pre">COMM_INSTRUCTION_ERROR</span></code> status codes
+will not be discussed because they are not command specific. The first two usually suggest some issue with the physical connection to the microcontroller,
+while the last error is obviously unrelated to any of the commands described below.</p>
+<section id="echo">
+<h4>Echo<a class="headerlink" href="#echo" title="Link to this heading"></a></h4>
+<p>The Echo command simply sends back the received packet exactly as it was received. This command can accept any arbitrary number of parameters and motor ID.</p>
+<section id="input-parameters">
+<h5>Input Parameters<a class="headerlink" href="#input-parameters" title="Link to this heading"></a></h5>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16.7%" />
+<col style="width: 83.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Param</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Param 1</p></td>
+<td><p>User Param 1</p></td>
+</tr>
+<tr class="row-odd"><td><p>Param …</p></td>
+<td><p>User Param …</p></td>
+</tr>
+<tr class="row-even"><td><p>Param N</p></td>
+<td><p>User Param N</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="return-parameters">
+<h5>Return Parameters<a class="headerlink" href="#return-parameters" title="Link to this heading"></a></h5>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16.7%" />
+<col style="width: 83.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Param</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Param 1</p></td>
+<td><p>User Param 1</p></td>
+</tr>
+<tr class="row-odd"><td><p>Param …</p></td>
+<td><p>User Param …</p></td>
+</tr>
+<tr class="row-even"><td><p>Param N</p></td>
+<td><p>User Param N</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="status-codes">
+<h5>Status Codes<a class="headerlink" href="#status-codes" title="Link to this heading"></a></h5>
+<p>The command does not return any status codes</p>
+</section>
+</section>
+<section id="read-status">
+<h4>Read Status<a class="headerlink" href="#read-status" title="Link to this heading"></a></h4>
+<p>Not implemented (not sure if needed anymore)</p>
+</section>
+<section id="read-angle">
+<h4>Read Angle<a class="headerlink" href="#read-angle" title="Link to this heading"></a></h4>
+<p>This command returns the angle of the motor specified by motor ID.</p>
+<section id="id1">
+<h5>Input Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h5>
+<p>This command does not take any input parameters, but will not return any errors if given any parameters</p>
+</section>
+<section id="id2">
+<h5>Return Parameters<a class="headerlink" href="#id2" title="Link to this heading"></a></h5>
+<p>The command returns the binary representation of the angle in degrees as a signed 16-bit integer separated into 2 parameters with MSB first.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16.7%" />
+<col style="width: 83.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Param</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Param 1</p></td>
+<td><p>Status code</p></td>
+</tr>
+<tr class="row-odd"><td><p>Param 2</p></td>
+<td><p>First 8 bits of angle in degrees as signed int16 (only returned on success)</p></td>
+</tr>
+<tr class="row-even"><td><p>Param 3</p></td>
+<td><p>Last 8 bits of angle in degrees as signed int16 (only returned on success)</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<p>A status packet with the parameters below would indicate a succesful read of a motor with angle 234 (0x00EA = 234) degrees.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16.7%" />
+<col style="width: 83.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Param</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Param 1</p></td>
+<td><p>0x00</p></td>
+</tr>
+<tr class="row-odd"><td><p>Param 2</p></td>
+<td><p>0x00</p></td>
+</tr>
+<tr class="row-even"><td><p>Param 3</p></td>
+<td><p>0xEA</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id3">
+<h5>Status Codes<a class="headerlink" href="#id3" title="Link to this heading"></a></h5>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16.7%" />
+<col style="width: 83.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Status Flag</p></th>
+<th class="head"><p>Cause</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>COMM_SUCCESS</p></td>
+<td><p>Successfully read the motor angle</p></td>
+</tr>
+<tr class="row-odd"><td><p>COMM_ID_ERROR</p></td>
+<td><p>The passed in motor ID is not within the range of valid motor IDs</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="write-angle">
+<h4>Write Angle<a class="headerlink" href="#write-angle" title="Link to this heading"></a></h4>
+<p>This command sets the PID angle setpoint of the motor specified by motor ID to the specified angle.</p>
+<section id="id4">
+<h5>Input Parameters<a class="headerlink" href="#id4" title="Link to this heading"></a></h5>
+<p>The command accepts the setpoint angle (in degrees) in signed 16-bit binary representation split into 2 parameters with MSB first.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16.7%" />
+<col style="width: 83.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Param</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Param 1</p></td>
+<td><p>First 8 bits of angle in degrees as signed int16</p></td>
+</tr>
+<tr class="row-odd"><td><p>Param 2</p></td>
+<td><p>Last 8 bits of angle in degrees as signed int16</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<p>To set the motor to -90 (-90 = 0xFFA6) degrees, set the params to be:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16.7%" />
+<col style="width: 83.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Param</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Param 1</p></td>
+<td><p>0xFF</p></td>
+</tr>
+<tr class="row-odd"><td><p>Param 2</p></td>
+<td><p>0xA6</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id5">
+<h5>Return Parameters<a class="headerlink" href="#id5" title="Link to this heading"></a></h5>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16.7%" />
+<col style="width: 83.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Param</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Param 1</p></td>
+<td><p>Status code</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id6">
+<h5>Status Codes<a class="headerlink" href="#id6" title="Link to this heading"></a></h5>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16.7%" />
+<col style="width: 83.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Status Flag</p></th>
+<th class="head"><p>Cause</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>COMM_SUCCESS</p></td>
+<td><p>Successfully set the motor angle</p></td>
+</tr>
+<tr class="row-odd"><td><p>COMM_ID_ERROR</p></td>
+<td><p>The passed in motor ID is not within the range of valid motor IDs</p></td>
+</tr>
+<tr class="row-even"><td><p>COMM_PARAM_ERROR</p></td>
+<td><p>Incorrect number of parameters passed in (must be 2 parameters exactly)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="write-pid">
+<h4>Write PID<a class="headerlink" href="#write-pid" title="Link to this heading"></a></h4>
+<p>This command sets the PID gains of the motor specified by motor ID to the specified gains.</p>
+<section id="id7">
+<h5>Input Parameters<a class="headerlink" href="#id7" title="Link to this heading"></a></h5>
+<p>The command accepts the PID gains as a set of 3 32-bit (4 byte) floats, resulting in 12 parameters in total.
+Floats must be converted to 32-bit binary representation using the IEEE 754 standard and transmitted to the motor control MSB last (TODO: For consistency with the other commands, we should send MSB first).</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16.7%" />
+<col style="width: 83.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Param</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Param 1</p></td>
+<td><p>Last 8 bits of P gain as 32-bit float</p></td>
+</tr>
+<tr class="row-odd"><td><p>Param 2</p></td>
+<td><p>Third 8 bits of P gain as 32-bit float</p></td>
+</tr>
+<tr class="row-even"><td><p>Param 3</p></td>
+<td><p>Second 8 bits of P gain as 32-bit float</p></td>
+</tr>
+<tr class="row-odd"><td><p>Param 4</p></td>
+<td><p>First 8 bits of P gain as 32-bit float</p></td>
+</tr>
+<tr class="row-even"><td><p>Param 5</p></td>
+<td><p>Last 8 bits of I gain as 32-bit float</p></td>
+</tr>
+<tr class="row-odd"><td><p>Param 6</p></td>
+<td><p>Third 8 bits of I gain as 32-bit float</p></td>
+</tr>
+<tr class="row-even"><td><p>Param 7</p></td>
+<td><p>Second 8 bits of I gain as 32-bit float</p></td>
+</tr>
+<tr class="row-odd"><td><p>Param 8</p></td>
+<td><p>First 8 bits of I gain as 32-bit float</p></td>
+</tr>
+<tr class="row-even"><td><p>Param 9</p></td>
+<td><p>Last 8 bits of D gain as 32-bit float</p></td>
+</tr>
+<tr class="row-odd"><td><p>Param 10</p></td>
+<td><p>Third 8 bits of D gain as 32-bit float</p></td>
+</tr>
+<tr class="row-even"><td><p>Param 11</p></td>
+<td><p>Second 8 bits of D gain as 32-bit float</p></td>
+</tr>
+<tr class="row-odd"><td><p>Param 12</p></td>
+<td><p>First 8 bits of D gain as 32-bit float</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<p>To set the PID gains to 1.0 (0x3F800000), 0.5 (0x3F000000), and 0.25 (0x3E800000), respectively set the params to be:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16.7%" />
+<col style="width: 83.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Param</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Param 1</p></td>
+<td><p>0x00</p></td>
+</tr>
+<tr class="row-odd"><td><p>Param 2</p></td>
+<td><p>0x00</p></td>
+</tr>
+<tr class="row-even"><td><p>Param 3</p></td>
+<td><p>0x80</p></td>
+</tr>
+<tr class="row-odd"><td><p>Param 4</p></td>
+<td><p>0x3F</p></td>
+</tr>
+<tr class="row-even"><td><p>Param 5</p></td>
+<td><p>0x00</p></td>
+</tr>
+<tr class="row-odd"><td><p>Param 6</p></td>
+<td><p>0x00</p></td>
+</tr>
+<tr class="row-even"><td><p>Param 7</p></td>
+<td><p>0x00</p></td>
+</tr>
+<tr class="row-odd"><td><p>Param 8</p></td>
+<td><p>0x3F</p></td>
+</tr>
+<tr class="row-even"><td><p>Param 9</p></td>
+<td><p>0x00</p></td>
+</tr>
+<tr class="row-odd"><td><p>Param 10</p></td>
+<td><p>0x00</p></td>
+</tr>
+<tr class="row-even"><td><p>Param 11</p></td>
+<td><p>0x80</p></td>
+</tr>
+<tr class="row-odd"><td><p>Param 12</p></td>
+<td><p>0x3E</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id8">
+<h5>Return Parameters<a class="headerlink" href="#id8" title="Link to this heading"></a></h5>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16.7%" />
+<col style="width: 83.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Param</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Param 1</p></td>
+<td><p>Status code</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id9">
+<h5>Status Codes<a class="headerlink" href="#id9" title="Link to this heading"></a></h5>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16.7%" />
+<col style="width: 83.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Status Flag</p></th>
+<th class="head"><p>Cause</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>COMM_SUCCESS</p></td>
+<td><p>Successfully set the PID gains angle</p></td>
+</tr>
+<tr class="row-odd"><td><p>COMM_ID_ERROR</p></td>
+<td><p>The passed in motor ID is not within the range of valid motor IDs</p></td>
+</tr>
+<tr class="row-even"><td><p>COMM_PARAM_ERROR</p></td>
+<td><p>Incorrect number of parameters passed in (must be 12 parameters exactly)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="set-zero-angle">
+<h4>Set Zero Angle<a class="headerlink" href="#set-zero-angle" title="Link to this heading"></a></h4>
+<p>This command resets the encounter count, effectively setting the current angle to be the zero angle.</p>
+<section id="id10">
+<h5>Input Parameters<a class="headerlink" href="#id10" title="Link to this heading"></a></h5>
+<p>This command does not take any input parameters, but will not return any errors if given any parameters</p>
+</section>
+<section id="id11">
+<h5>Return Parameters<a class="headerlink" href="#id11" title="Link to this heading"></a></h5>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16.7%" />
+<col style="width: 83.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Param</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Param 1</p></td>
+<td><p>Status code</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id12">
+<h5>Status Codes<a class="headerlink" href="#id12" title="Link to this heading"></a></h5>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16.7%" />
+<col style="width: 83.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Status Flag</p></th>
+<th class="head"><p>Cause</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>COMM_SUCCESS</p></td>
+<td><p>Successfully reset the the motor angle</p></td>
+</tr>
+<tr class="row-odd"><td><p>COMM_ID_ERROR</p></td>
+<td><p>The passed in motor ID is not within the range of valid motor IDs</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="set-max-angle">
+<h4>Set Max Angle<a class="headerlink" href="#set-max-angle" title="Link to this heading"></a></h4>
+<p>This command sets the passed in angle as the maximum possible setpoint angle.
+The maximum range is set symmetrically around the zero angle, so in other words, the minimum range will also
+be set to the negative of the maximum. For example, if the maximum is set to 90 degrees, the user may only
+set the motor to angles between -90 and 90, inclusive. Attempting to set the angle to anything beyond this range
+will clamp the angle to the limits (e.g. for the -90 to 90 range, attempting to set the motor angle to 100 will set it to 90).</p>
+<section id="id13">
+<h5>Input Parameters<a class="headerlink" href="#id13" title="Link to this heading"></a></h5>
+<p>The command accepts the maximum angle (in degrees) in unsigned 16-bit binary representation split into 2 parameters with MSB first.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The angle being unsigned suggests that the maximum angle should be positive.</p>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16.7%" />
+<col style="width: 83.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Param</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Param 1</p></td>
+<td><p>First 8 bits of angle in degrees as unsigned int16</p></td>
+</tr>
+<tr class="row-odd"><td><p>Param 2</p></td>
+<td><p>Last 8 bits of angle in degrees as unsigned int16</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<p>To set the motor angle range to -145 to 145 degrees (145 = 0x0091) degrees, set the params to be:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16.7%" />
+<col style="width: 83.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Param</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Param 1</p></td>
+<td><p>0x00</p></td>
+</tr>
+<tr class="row-odd"><td><p>Param 2</p></td>
+<td><p>0x91</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id14">
+<h5>Return Parameters<a class="headerlink" href="#id14" title="Link to this heading"></a></h5>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16.7%" />
+<col style="width: 83.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Param</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Param 1</p></td>
+<td><p>Status code</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id15">
+<h5>Status Codes<a class="headerlink" href="#id15" title="Link to this heading"></a></h5>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16.7%" />
+<col style="width: 83.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Status Flag</p></th>
+<th class="head"><p>Cause</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>COMM_SUCCESS</p></td>
+<td><p>Successfully set the motor angle</p></td>
+</tr>
+<tr class="row-odd"><td><p>COMM_ID_ERROR</p></td>
+<td><p>The passed in motor ID is not within the range of valid motor IDs</p></td>
+</tr>
+<tr class="row-even"><td><p>COMM_PARAM_ERROR</p></td>
+<td><p>Incorrect number of parameters passed in (must be 2 parameters exactly)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="disable-motor">
+<h4>Disable Motor<a class="headerlink" href="#disable-motor" title="Link to this heading"></a></h4>
+<p>Not yet implemented, but should disable PID motor control, effectively slacking the motor until reenabled</p>
+</section>
+<section id="enable-motor">
+<h4>Enable Motor<a class="headerlink" href="#enable-motor" title="Link to this heading"></a></h4>
+<p>Not yet implemented, but should enable PID motor control, after being enabled</p>
+</section>
+</section>
+<section id="extending-the-communication-protocol">
+<h3>Extending the Communication Protocol<a class="headerlink" href="#extending-the-communication-protocol" title="Link to this heading"></a></h3>
+<p>The number of implemented opcodes barely take up the range of possible opcodes, so there is more than enough room to accomodate new commands.
+Before implementing a command, it is important to understand how we go from a serial packet to a motor action:</p>
+<ol class="arabic simple">
+<li><p>The microcontroller receives a byte array from the microcontroller</p></li>
+<li><p>The byte array goes to a packet handler which parses the packet to extract the fields from the byte array.</p></li>
+<li><p>Next, CRC validation is performed. If CRC validation fails at this stage, the packet handler skips to sending the response packet with a <code class="docutils literal notranslate"><span class="pre">COMM_CRC_ERROR</span></code>.</p></li>
+<li><p>The handler then checks and validates the opcode. If the opcode is invalid, the packet handler skips to sending the response packet with a <code class="docutils literal notranslate"><span class="pre">COMM_INSTRUCTION_ERROR</span></code>.</p></li>
+<li><p>The handler validates motorIDs and parameter numbers. If the motorIDs or parameter numbers are invalid, the packet handler returns a response packet with a <code class="docutils literal notranslate"><span class="pre">COMM_ID_ERROR</span></code> or <code class="docutils literal notranslate"><span class="pre">COMM_PARAM_ERROR</span></code>, respectively.</p></li>
+<li><p>The handler then prepares any data required for the command to execute.</p></li>
+<li><p>Finally, the command is executed and a response packet is built and sent back to the host PC with a <code class="docutils literal notranslate"><span class="pre">COMM_SUCCESS</span></code> status and any returned parameters.</p></li>
+</ol>
+<p>Now, the following steps describe how to extend the communication control protocol with new commands:</p>
+<ol class="arabic">
+<li><dl class="simple">
+<dt>Add the new opcode</dt><dd><p>This can simlpy be done by adding a new entry to the <code class="docutils literal notranslate"><span class="pre">tendon_opcode_t</span></code> enum in <cite>ml_tendon_comm_protocol.hpp</cite>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Modify the packet structure (if needed!)</dt><dd><p>It is possible to modify the packet structure as well by modifying the <code class="docutils literal notranslate"><span class="pre">TendonControl_data_packet_s</span></code> struct and all associated enums if necessary, however this is discouraged as it may break some of the validation and parsing functions. Proceed with caution.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>Creating the command</dt><dd><p>In this system, commands are structs that are “derived” from a <code class="docutils literal notranslate"><span class="pre">ML_TendonCommandBase</span></code> struct, which contains a function pointer to the “command handler” and the motor ID corresponding to the command.
+The command handler is the function associated with the command. Command structs are “derived” from the <code class="docutils literal notranslate"><span class="pre">ML_TendonCommandBase</span></code> struct, meaning that they must have the <code class="docutils literal notranslate"><span class="pre">ML_TendonCommandBase</span></code> as the first field.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Having a <code class="docutils literal notranslate"><span class="pre">ML_TendonCommandBase</span></code> object as the first field allows the command to be cast to and from the <code class="docutils literal notranslate"><span class="pre">ML_TendonCommandBase</span></code> data type without any data loss. This is a feature of the C programming language and we leverage this to apply Object Oriented Programming, specifically a form of polymorphism using structs.
+This is useful for applying the Command design pattern (<a class="reference external" href="https://refactoring.guru/design-patterns/command" rel="noreferrer" target="_blank">read more about the command pattern</a>), which this code utilizes.</p>
+</div>
+<p>In addition to a <code class="docutils literal notranslate"><span class="pre">ML_TendonCommandBase</span></code> object, the command struct should contain any other required data fields for the command.
+The created struct should be located in <cite>ml_tendon_commands.hpp</cite>.
+For examples, please review the other command structs (they will be named <code class="docutils literal notranslate"><span class="pre">ML_[CommandName]Command</span></code>).</p>
+<p>The function should return a <code class="docutils literal notranslate"><span class="pre">CommandReturn_t</span></code> struct. If your command should return any data, this is where it should go.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Creating the command handler</dt><dd><p>The command handler is the function that performs the desired motor operation. When implementing this function, assume that any packet validation (e.g. CRC, motorID, params) has already been done (we will do it somewhere else).
+It is recommend to follow the naming convention for command handler functions, which is <code class="docutils literal notranslate"><span class="pre">ML_[CommandName]_Execute</span></code> and it should be located in <code class="docutils literal notranslate"><span class="pre">ml_tendon_commands.cpp</span></code>.
+Reveiew the other command handler functions for the function signature and examples.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>Create a command creation function**</dt><dd><p>To get from the data packet to a command struct, we utilize the Factory Design pattern (<a class="reference external" href="https://refactoring.guru/design-patterns/factory-method" rel="noreferrer" target="_blank">read more about the factory pattern</a>).
+A factory is already implemented in the form of the <code class="docutils literal notranslate"><span class="pre">CommandFactory_CreateCommand</span></code> function, which manages command creation based on the opcode and parameters.
+To “register” your command with the factory function, create a command creation function that returns an instance of your command struct from step 2.
+We recommended following the naming convention for creation functions, which is is <code class="docutils literal notranslate"><span class="pre">ML_[CommandName]_Create</span></code> and it should be located in <code class="docutils literal notranslate"><span class="pre">ml_tendon_commands.cpp</span></code>.
+Review the other command creation functions for the function signature and examples.</p>
+<p>Validation of motor IDs and number of parameters should occur in this function, and the function should then utilize the parameters to populate the command struct with any required data fields.
+Finally, add another switch case to the <code class="docutils literal notranslate"><span class="pre">CommandFactory_CreateCommand</span></code> function that calls your creation function.</p>
+</dd>
+</dl>
+</li>
+</ol>
+<p>And you’re done!… at least on the embedded side. Clearly, the communication protocol is a lot for a programmer to worry about,
+especially when some members on the BIST team aren’t as familiar with C programming or embedded software.
+Thus, we’ve created a more straightforward Python API that handles packet formation so you can use more readable Python code to perform motor commands from the host PC.
+The last step of extending the communication protocol would then be to also extend the Python API to include a function for your command.
+The process for this is much more straightforward (don’t worry it doesn’t use any design patterns or obscure language features) and you can read about it at the <a class="reference internal" href="api_doc.html#tendon-api-doc"><span class="std std-ref">Tendon API</span></a> documentation.</p>
+</section>
+</section>
+<section id="possible-improvements">
+<h2>Possible Improvements<a class="headerlink" href="#possible-improvements" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Implement the incomplete commands</p></li>
+<li><p>Utilize FreeRTOS to ensure that motor control deadlines are met</p></li>
+<li><p>Port the UART serial logic to SPI</p></li>
+<li><p>Packet delimiter isn’t actually checked for in the current code, so do that!</p></li>
+<li><p>Angle limits to prevent the motor from exceeding the set point range in case of PID control failure</p></li>
+<li><p>Move away from polling and used ISRs or DMA for processing UART</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tendon_actuation.html" class="btn btn-neutral float-left" title="Tendon Actuation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api_doc.html" class="btn btn-neutral float-right" title="Tendon API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Ben Westcott, Kofi Ofosu-Tuffour, Mason Lopez, Jayson De La Vega.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

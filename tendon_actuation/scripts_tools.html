@@ -1,0 +1,190 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tendon Scripts &amp; Tools &mdash; batbot  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Sonar" href="../sonar/sonar.html" />
+    <link rel="prev" title="Tendon API" href="api_doc.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            batbot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/getting_started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tendon_actuation.html">Tendon Actuation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="embedded_software.html">Tendon Embedded Software Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_doc.html">Tendon API</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Tendon Scripts &amp; Tools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#tendon-calibration">Tendon Calibration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tendon-time-profiling">Tendon Time Profiling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pid-tuning">PID Tuning</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#how-to-tune-the-controller">How to tune the controller</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../sonar/sonar.html">Sonar</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">batbot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="tendon_actuation.html">Tendon Actuation</a></li>
+      <li class="breadcrumb-item active">Tendon Scripts &amp; Tools</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tendon_actuation/scripts_tools.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="tendon-scripts-tools">
+<span id="tendon-scripts"></span><h1>Tendon Scripts &amp; Tools<a class="headerlink" href="#tendon-scripts-tools" title="Link to this heading"></a></h1>
+<p>The BIST team has developed some CLI and GUI tools to perform some typical tasks for tendon control.
+This document describes some of those tools.</p>
+<section id="tendon-calibration">
+<h2>Tendon Calibration<a class="headerlink" href="#tendon-calibration" title="Link to this heading"></a></h2>
+<p>This is python script acts as CLI tool for calibrating the motors. It is intended to act primarily as a script for setting the initial motor angles for use in any tendon actuation experiments.</p>
+<img alt="../_images/tendon-calibration.png" src="../_images/tendon-calibration.png" />
+<p>The number of motors is hard-coded in the script, and the script will iterate through each motor starting from 1 up to the last motor.</p>
+</section>
+<section id="tendon-time-profiling">
+<h2>Tendon Time Profiling<a class="headerlink" href="#tendon-time-profiling" title="Link to this heading"></a></h2>
+<p>(TODO: Add a picture)</p>
+<p>This script is used for evaluating and visualizing the phases of the communication protocol.
+Provides a breakdown of the average time spent during each major phase of the communication process:</p>
+<ul class="simple">
+<li><p>Packet Build Time</p></li>
+<li><p>Packet Transmission Time</p></li>
+<li><p>Packet Read Time</p></li>
+</ul>
+<p>If communication speed is not sufficient for your application, use this script to find out what steps may need improvement or optimization.</p>
+</section>
+<section id="pid-tuning">
+<h2>PID Tuning<a class="headerlink" href="#pid-tuning" title="Link to this heading"></a></h2>
+<p>This script is used for interactive tuning of PID controller for an individual motor.</p>
+<p>(TODO: Add a picture)</p>
+<p>This script provides a GUI with a visualization of the controller’s step response over time.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>It is possible to damage the motors and connected systems if the PID parameters are not set correctly.
+Some motors in the lab are inverted, so the PID gains may need to be negated.
+Please follow the tuning steps to ensure safety.</p>
+</div>
+<section id="how-to-tune-the-controller">
+<h3>How to tune the controller<a class="headerlink" href="#how-to-tune-the-controller" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><dl class="simple">
+<dt>Set initial gaings</dt><dd><p>Start with 0 gains for all parameters.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Tuning P</dt><dd><p>Begin incrementing the P gain by a small amount.
+If you observe the motor spinning uncontrollably, it may be that the controller is entering a positive feedback loop, and so you may just need to negate P.
+If you start to observe oscillations in the step response, P is likely too high, so decrease it to eliminate oscillatory behavior.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Tuning I</dt><dd><p>Sometimes the controller will not reach the set angle completely. This is steady-state error, and if it is too significant you can try tuning the I gain by increasing
+it until the controller closes the steady-state error in a satisfactory amount of time. If you start to notice oscillations, you likely over-tuned the I gain.
+As with the P gain, keep note of the sign of the I gain.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Tuning D</dt><dd><p>Lastly, you may observe an initial overshoot in the step response. If this is undesirable, you can try tuning the D gain.
+This can be done similarly by just increasing the D gain until the overshoot is barely eliminated.
+As with the P and I gain, keep note of the sign of the D gain.</p>
+</dd>
+</dl>
+</li>
+</ol>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="api_doc.html" class="btn btn-neutral float-left" title="Tendon API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../sonar/sonar.html" class="btn btn-neutral float-right" title="Sonar" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Ben Westcott, Kofi Ofosu-Tuffour, Mason Lopez, Jayson De La Vega.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

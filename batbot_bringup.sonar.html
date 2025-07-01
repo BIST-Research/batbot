@@ -1,0 +1,472 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>batbot_bringup.sonar package &mdash; batbot  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            batbot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started/getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tendon_actuation/tendon_actuation.html">Tendon Actuation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sonar/sonar.html">Sonar</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">batbot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">batbot_bringup.sonar package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/batbot_bringup.sonar.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="batbot-bringup-sonar-package">
+<h1>batbot_bringup.sonar package<a class="headerlink" href="#batbot-bringup-sonar-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-batbot_bringup.sonar.bb_emitter">
+<span id="batbot-bringup-sonar-bb-emitter-module"></span><h2>batbot_bringup.sonar.bb_emitter module<a class="headerlink" href="#module-batbot_bringup.sonar.bb_emitter" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.ECHO_SERIAL_CMD">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">batbot_bringup.sonar.bb_emitter.</span></span><span class="sig-name descname"><span class="pre">ECHO_SERIAL_CMD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.ECHO_SERIAL_CMD" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.ECHO_SERIAL_CMD.ACK">
+<span class="sig-name descname"><span class="pre">ACK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.ECHO_SERIAL_CMD.ACK" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.ECHO_SERIAL_CMD.ACK_REQ">
+<span class="sig-name descname"><span class="pre">ACK_REQ</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.ECHO_SERIAL_CMD.ACK_REQ" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.ECHO_SERIAL_CMD.CHIRP_DATA">
+<span class="sig-name descname"><span class="pre">CHIRP_DATA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.ECHO_SERIAL_CMD.CHIRP_DATA" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.ECHO_SERIAL_CMD.CHIRP_DATA_TOO_LONG">
+<span class="sig-name descname"><span class="pre">CHIRP_DATA_TOO_LONG</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.ECHO_SERIAL_CMD.CHIRP_DATA_TOO_LONG" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.ECHO_SERIAL_CMD.CLEAR_SERIAL">
+<span class="sig-name descname"><span class="pre">CLEAR_SERIAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.ECHO_SERIAL_CMD.CLEAR_SERIAL" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.ECHO_SERIAL_CMD.EMIT_CHIRP">
+<span class="sig-name descname"><span class="pre">EMIT_CHIRP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.ECHO_SERIAL_CMD.EMIT_CHIRP" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.ECHO_SERIAL_CMD.ERROR">
+<span class="sig-name descname"><span class="pre">ERROR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">100</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.ECHO_SERIAL_CMD.ERROR" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.ECHO_SERIAL_CMD.GET_MAX_UINT16_CHIRP_LEN">
+<span class="sig-name descname"><span class="pre">GET_MAX_UINT16_CHIRP_LEN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">7</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.ECHO_SERIAL_CMD.GET_MAX_UINT16_CHIRP_LEN" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.ECHO_SERIAL_CMD.NONE">
+<span class="sig-name descname"><span class="pre">NONE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.ECHO_SERIAL_CMD.NONE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.ECHO_SERIAL_CMD.START_AMP">
+<span class="sig-name descname"><span class="pre">START_AMP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">8</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.ECHO_SERIAL_CMD.START_AMP" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.ECHO_SERIAL_CMD.STOP_AMP">
+<span class="sig-name descname"><span class="pre">STOP_AMP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">9</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.ECHO_SERIAL_CMD.STOP_AMP" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.EchoEmitter">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">batbot_bringup.sonar.bb_emitter.</span></span><span class="sig-name descname"><span class="pre">EchoEmitter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">serial_obj:</span> <span class="pre">~serial.serialposix.Serial</span> <span class="pre">=</span> <span class="pre">Serial&lt;id=0x7fa41c351c00</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">open=False&gt;(port=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baudrate=9600</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bytesize=8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parity='N'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stopbits=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xonxoff=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtscts=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dsrdtr=False)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_freq:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1000000.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.EchoEmitter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.EchoEmitter.chirp">
+<span class="sig-name descname"><span class="pre">chirp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.EchoEmitter.chirp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.EchoEmitter.connect_Serial">
+<span class="sig-name descname"><span class="pre">connect_Serial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">serial</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Serial</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.EchoEmitter.connect_Serial" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.EchoEmitter.connection_status">
+<span class="sig-name descname"><span class="pre">connection_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">print_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.EchoEmitter.connection_status" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.EchoEmitter.convert_and_range_data">
+<span class="sig-name descname"><span class="pre">convert_and_range_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">uint16</span></span></span><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.EchoEmitter.convert_and_range_data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.EchoEmitter.disconnect_serial">
+<span class="sig-name descname"><span class="pre">disconnect_serial</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.EchoEmitter.disconnect_serial" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.EchoEmitter.gen_chirp">
+<span class="sig-name descname"><span class="pre">gen_chirp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f_start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">uint16</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.EchoEmitter.gen_chirp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.EchoEmitter.gen_sine">
+<span class="sig-name descname"><span class="pre">gen_sine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_ms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uint16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uint16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">uint16</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.EchoEmitter.gen_sine" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.EchoEmitter.get_and_convert_numpy">
+<span class="sig-name descname"><span class="pre">get_and_convert_numpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">uint16</span></span></span><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.EchoEmitter.get_and_convert_numpy" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.EchoEmitter.get_cmd">
+<span class="sig-name descname"><span class="pre">get_cmd</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#batbot_bringup.sonar.bb_emitter.ECHO_SERIAL_CMD" title="batbot_bringup.sonar.bb_emitter.ECHO_SERIAL_CMD"><span class="pre">ECHO_SERIAL_CMD</span></a></span></span><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.EchoEmitter.get_cmd" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.EchoEmitter.get_max_chirp_uint16_length">
+<span class="sig-name descname"><span class="pre">get_max_chirp_uint16_length</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">uint16</span></span></span><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.EchoEmitter.get_max_chirp_uint16_length" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.EchoEmitter.save_chirp_info">
+<span class="sig-name descname"><span class="pre">save_chirp_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.EchoEmitter.save_chirp_info" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.EchoEmitter.upload_chirp">
+<span class="sig-name descname"><span class="pre">upload_chirp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uint16</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.EchoEmitter.upload_chirp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.EchoEmitter.write_cmd">
+<span class="sig-name descname"><span class="pre">write_cmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#batbot_bringup.sonar.bb_emitter.ECHO_SERIAL_CMD" title="batbot_bringup.sonar.bb_emitter.ECHO_SERIAL_CMD"><span class="pre">ECHO_SERIAL_CMD</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.EchoEmitter.write_cmd" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.LAST_CHIRP_DATA">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">batbot_bringup.sonar.bb_emitter.</span></span><span class="sig-name descname"><span class="pre">LAST_CHIRP_DATA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.LAST_CHIRP_DATA" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.LAST_CHIRP_DATA.CUSTOM">
+<span class="sig-name descname"><span class="pre">CUSTOM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.LAST_CHIRP_DATA.CUSTOM" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.LAST_CHIRP_DATA.FILE">
+<span class="sig-name descname"><span class="pre">FILE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.LAST_CHIRP_DATA.FILE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.LAST_CHIRP_DATA.NONE">
+<span class="sig-name descname"><span class="pre">NONE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.LAST_CHIRP_DATA.NONE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.hide_cursor">
+<span class="sig-prename descclassname"><span class="pre">batbot_bringup.sonar.bb_emitter.</span></span><span class="sig-name descname"><span class="pre">hide_cursor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.hide_cursor" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.show_cursor">
+<span class="sig-prename descclassname"><span class="pre">batbot_bringup.sonar.bb_emitter.</span></span><span class="sig-name descname"><span class="pre">show_cursor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.show_cursor" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.t_colors">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">batbot_bringup.sonar.bb_emitter.</span></span><span class="sig-name descname"><span class="pre">t_colors</span></span><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.t_colors" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.t_colors.BOLD">
+<span class="sig-name descname"><span class="pre">BOLD</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[1m'</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.t_colors.BOLD" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.t_colors.ENDC">
+<span class="sig-name descname"><span class="pre">ENDC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[0m'</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.t_colors.ENDC" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.t_colors.FAIL">
+<span class="sig-name descname"><span class="pre">FAIL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[91m'</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.t_colors.FAIL" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.t_colors.HEADER">
+<span class="sig-name descname"><span class="pre">HEADER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[95m'</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.t_colors.HEADER" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.t_colors.OKBLUE">
+<span class="sig-name descname"><span class="pre">OKBLUE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[94m'</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.t_colors.OKBLUE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.t_colors.OKCYAN">
+<span class="sig-name descname"><span class="pre">OKCYAN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[96m'</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.t_colors.OKCYAN" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.t_colors.OKGREEN">
+<span class="sig-name descname"><span class="pre">OKGREEN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[92m'</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.t_colors.OKGREEN" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.t_colors.UNDERLINE">
+<span class="sig-name descname"><span class="pre">UNDERLINE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[4m'</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.t_colors.UNDERLINE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_emitter.t_colors.WARNING">
+<span class="sig-name descname"><span class="pre">WARNING</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[93m'</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_emitter.t_colors.WARNING" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-batbot_bringup.sonar.bb_listener">
+<span id="batbot-bringup-sonar-bb-listener-module"></span><h2>batbot_bringup.sonar.bb_listener module<a class="headerlink" href="#module-batbot_bringup.sonar.bb_listener" title="Link to this heading"></a></h2>
+<p>Reads ADC values from the Teensy</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_listener.EchoRecorder">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">batbot_bringup.sonar.bb_listener.</span></span><span class="sig-name descname"><span class="pre">EchoRecorder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">serial_obj:</span> <span class="pre">~serial.serialposix.Serial</span> <span class="pre">=</span> <span class="pre">Serial&lt;id=0x7fa41ae1f820</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">open=False&gt;(port=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baudrate=9600</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bytesize=8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parity='N'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stopbits=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xonxoff=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtscts=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dsrdtr=False)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_burst_len:</span> <span class="pre">~numpy.uint16</span> <span class="pre">=</span> <span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">left_channel_first=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_freq:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1000000.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.sonar.bb_listener.EchoRecorder" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_listener.EchoRecorder.check_status">
+<span class="sig-name descname"><span class="pre">check_status</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#batbot_bringup.sonar.bb_listener.EchoRecorder.check_status" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_listener.EchoRecorder.connect_Serial">
+<span class="sig-name descname"><span class="pre">connect_Serial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">serial</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Serial</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.sonar.bb_listener.EchoRecorder.connect_Serial" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_listener.EchoRecorder.connection_status">
+<span class="sig-name descname"><span class="pre">connection_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">print_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#batbot_bringup.sonar.bb_listener.EchoRecorder.connection_status" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_listener.EchoRecorder.disconnect_serial">
+<span class="sig-name descname"><span class="pre">disconnect_serial</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.sonar.bb_listener.EchoRecorder.disconnect_serial" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_listener.EchoRecorder.get_cmd">
+<span class="sig-name descname"><span class="pre">get_cmd</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#batbot_bringup.sonar.bb_listener.LISTENER_SERIAL_CMD" title="batbot_bringup.sonar.bb_listener.LISTENER_SERIAL_CMD"><span class="pre">LISTENER_SERIAL_CMD</span></a></span></span><a class="headerlink" href="#batbot_bringup.sonar.bb_listener.EchoRecorder.get_cmd" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_listener.EchoRecorder.listen">
+<span class="sig-name descname"><span class="pre">listen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listen_time_ms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uint16</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">uint16</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">uint16</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">uint16</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#batbot_bringup.sonar.bb_listener.EchoRecorder.listen" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>Reads bytes from Teensy for given amount of listen time. This listen time</dt><dd><p>is calculated into number of bytes so deviation of time is not an issue. The raw_data
+is interleaved between left and right ear for ease of demodulating at the end.</p>
+</dd>
+<dt>Args:</dt><dd><p>listen_time_ms (np.uint16): time to listen for in ms</p>
+</dd>
+<dt>Returns:</dt><dd><p>tuple[np.uint16,np.uint16,np.uint16]: raw_data, left_ear, right_ear</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_listener.EchoRecorder.write_cmd">
+<span class="sig-name descname"><span class="pre">write_cmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#batbot_bringup.sonar.bb_listener.LISTENER_SERIAL_CMD" title="batbot_bringup.sonar.bb_listener.LISTENER_SERIAL_CMD"><span class="pre">LISTENER_SERIAL_CMD</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#batbot_bringup.sonar.bb_listener.EchoRecorder.write_cmd" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_listener.LISTENER_SERIAL_CMD">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">batbot_bringup.sonar.bb_listener.</span></span><span class="sig-name descname"><span class="pre">LISTENER_SERIAL_CMD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batbot_bringup.sonar.bb_listener.LISTENER_SERIAL_CMD" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_listener.LISTENER_SERIAL_CMD.ACK">
+<span class="sig-name descname"><span class="pre">ACK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_listener.LISTENER_SERIAL_CMD.ACK" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_listener.LISTENER_SERIAL_CMD.ACK_REQ">
+<span class="sig-name descname"><span class="pre">ACK_REQ</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_listener.LISTENER_SERIAL_CMD.ACK_REQ" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_listener.LISTENER_SERIAL_CMD.ERROR">
+<span class="sig-name descname"><span class="pre">ERROR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">100</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_listener.LISTENER_SERIAL_CMD.ERROR" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_listener.LISTENER_SERIAL_CMD.NONE">
+<span class="sig-name descname"><span class="pre">NONE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_listener.LISTENER_SERIAL_CMD.NONE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_listener.LISTENER_SERIAL_CMD.START_LISTEN">
+<span class="sig-name descname"><span class="pre">START_LISTEN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_listener.LISTENER_SERIAL_CMD.START_LISTEN" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_listener.LISTENER_SERIAL_CMD.STOP_LISTEN">
+<span class="sig-name descname"><span class="pre">STOP_LISTEN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_listener.LISTENER_SERIAL_CMD.STOP_LISTEN" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_listener.t_colors">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">batbot_bringup.sonar.bb_listener.</span></span><span class="sig-name descname"><span class="pre">t_colors</span></span><a class="headerlink" href="#batbot_bringup.sonar.bb_listener.t_colors" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_listener.t_colors.BOLD">
+<span class="sig-name descname"><span class="pre">BOLD</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[1m'</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_listener.t_colors.BOLD" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_listener.t_colors.ENDC">
+<span class="sig-name descname"><span class="pre">ENDC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[0m'</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_listener.t_colors.ENDC" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_listener.t_colors.FAIL">
+<span class="sig-name descname"><span class="pre">FAIL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[91m'</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_listener.t_colors.FAIL" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_listener.t_colors.HEADER">
+<span class="sig-name descname"><span class="pre">HEADER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[95m'</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_listener.t_colors.HEADER" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_listener.t_colors.OKBLUE">
+<span class="sig-name descname"><span class="pre">OKBLUE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[94m'</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_listener.t_colors.OKBLUE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_listener.t_colors.OKCYAN">
+<span class="sig-name descname"><span class="pre">OKCYAN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[96m'</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_listener.t_colors.OKCYAN" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_listener.t_colors.OKGREEN">
+<span class="sig-name descname"><span class="pre">OKGREEN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[92m'</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_listener.t_colors.OKGREEN" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_listener.t_colors.UNDERLINE">
+<span class="sig-name descname"><span class="pre">UNDERLINE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[4m'</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_listener.t_colors.UNDERLINE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batbot_bringup.sonar.bb_listener.t_colors.WARNING">
+<span class="sig-name descname"><span class="pre">WARNING</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[93m'</span></em><a class="headerlink" href="#batbot_bringup.sonar.bb_listener.t_colors.WARNING" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-batbot_bringup.sonar">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-batbot_bringup.sonar" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Ben Westcott, Kofi Ofosu-Tuffour, Mason Lopez, Jayson De La Vega.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
