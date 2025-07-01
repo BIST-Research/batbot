@@ -36,6 +36,8 @@ TendonController::TendonController(String name, uint8_t tcc_num)
 
     // name of this tendon
     m_name = name;
+
+    enabled = true;
 }
 
 void TendonController::Attach_Drive_Pin(ml_port_group portGroup, ml_pin pin, ml_port_function portFunc, uint8_t cc_channel)
@@ -415,13 +417,19 @@ float TendonController::Get_Max_Angle() {
 
 float TendonController::Get_Goal_Angle() {
     return ConvertTicksToAngle(m_target_ticks);
-    // return goal_angle;
 }
 
 void TendonController::Set_Angle(float angle) {
     m_currentTicks = ConvertAngleToTicks(-90);
 }
 
+void TendonController::EnableMotor() {
+    enabled = true;
+}
+    
+void TendonController::DisableMotor() {
+    enabled = false;
+  
 void TendonController::Get_PID(float &_kp, float &_ki, float &_kd) {
     pid.Get_Params(_kp, _ki, _kd);
 }

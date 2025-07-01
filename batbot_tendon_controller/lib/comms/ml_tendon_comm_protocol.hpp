@@ -110,7 +110,9 @@ typedef enum {
   WRITE_ANGLE,
   WRITE_PID,
   SET_ZERO_ANGLE,
-  SET_MAX_ANGLE
+  SET_MAX_ANGLE,
+  DISABLE_MOTOR,
+  ENABLE_MOTOR
 } tendon_opcode_t;
 
 /**

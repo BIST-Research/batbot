@@ -96,6 +96,10 @@ public:
 
     void Get_PID(float &_kp, float &_ki, float &_kd);
 
+    void EnableMotor();
+    
+    void DisableMotor();
+
     uint32_t m_encA_ticks = 0;
     uint32_t m_encB_ticks = 0;
 
@@ -103,6 +107,8 @@ public:
     float m_gear_ratio = ML_HPCB_LV_75P1;
 
 private:
+    bool enabled;
+  
     float ConvertAngleToTicks(int16_t deg);
     float ConvertTicksToAngle(int16_t ticks);
 
@@ -121,10 +127,6 @@ private:
     float m_angle = 0;
     int32_t m_target_ticks = 0;
 
-    // pid stuff
-    // float m_kp, m_kd, m_ki, m_umax;
-    // float m_error_prev, m_error_integral;
-
     float m_prevPIDTime = 0;
     ML_PID pid;
 
@@ -132,15 +134,10 @@ private:
     uint16_t m_cur_pwm = 0;
     Tendon_Direction m_direction = OFF;
 
-
     // min PWM values for each motor
     uint16_t m_min_CW_PWM = 0;
     uint16_t m_min_CCW_PWM = 0;
     bool m_calibrated = false;
-
-    // limits
-    float m_start_angle = -180;
-    float m_end_angle = 180;
 
     // motor and encoder default settings
     uint32_t m_cycles_per_rev = ML_ENC_CPR;

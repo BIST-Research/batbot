@@ -69,6 +69,26 @@ CommandReturn_t ML_SetMaxAngleCommand_execute(struct ML_SetMaxAngleCommand * sel
     };
 }
 
+CommandReturn_t ML_DisableMotorCommand_execute(struct ML_SetMaxAngleCommand * self)
+{
+    // self->base.motor_ref->Set_Max_Angle(self->angle);f
+
+    return CommandReturn_t {
+        0,
+        {}
+    };
+}
+
+CommandReturn_t ML_EnableMotorCommand_execute(struct ML_SetMaxAngleCommand * self)
+{
+    // self->base.motor_ref->Set_Max_Angle(self->angle);f
+
+    return CommandReturn_t {
+        0,
+        {}
+    };
+}
+
 tendon_comm_result_t ML_EchoCommand_create(
     ML_TendonCommandBase** command,
     TendonControl_data_packet_s* dataPacket,
@@ -269,6 +289,56 @@ tendon_comm_result_t ML_SetMaxAngleCommand_create(
     }   
 }
 
+tendon_comm_result_t ML_DisableMotorCommand_create(
+    ML_TendonCommandBase** command,
+    TendonControl_data_packet_s* dataPacket,
+    TendonController* tendons
+)
+{
+    uint8_t id = dataPacket->data_packet_u.data_packet_s.motorId;
+    // size_t numParams = dataPacket->data_packet_u.data_packet_s.len - 4;
+
+    if (id >= 8) // TODO: Move the definition of the motor number somewhere thats visible to this file
+    {
+        return COMM_ID_ERROR;
+    } else {
+        ML_DisableMotorCommand* max_command = new ML_DisableMotorCommand;
+        max_command->base = {
+            (CommandExecuteFn)ML_DisableMotorCommand_execute,
+            &tendons[id]
+        };
+
+        *command = (ML_TendonCommandBase *)max_command;
+
+        return COMM_SUCCESS;
+    }   
+}
+
+tendon_comm_result_t ML_EnableMotorCommand_create(
+    ML_TendonCommandBase** command,
+    TendonControl_data_packet_s* dataPacket,
+    TendonController* tendons
+)
+{
+    uint8_t id = dataPacket->data_packet_u.data_packet_s.motorId;
+    // size_t numParams = dataPacket->data_packet_u.data_packet_s.len - 4;
+
+    if (id >= 8) // TODO: Move the definition of the motor number somewhere thats visible to this file
+    {
+        return COMM_ID_ERROR;
+    } else {
+        ML_EnableMotorCommand* max_command = new ML_EnableMotorCommand;
+        max_command->base = {
+            (CommandExecuteFn)ML_EnableMotorCommand_execute,
+            &tendons[id]
+        };
+
+        *command = (ML_TendonCommandBase *)max_command;
+
+        return COMM_SUCCESS;
+    }   
+}
+
 tendon_comm_result_t CommandFactory_CreateCommand(
     ML_TendonCommandBase** command,
     TendonControl_data_packet_s* dataPacket,
@@ -299,6 +369,12 @@ tendon_comm_result_t CommandFactory_CreateCommand(
             break;
         case SET_MAX_ANGLE:
             result = ML_SetMaxAngleCommand_create(command, dataPacket, tendons);
+            break;
+        case DISABLE_MOTOR:
+            result = ML_DisableMotorCommand_create(command, dataPacket, tendons);
+            break;
+        case ENABLE_MOTOR:
+            result = ML_DisableMotorCommand_create(command, dataPacket, tendons);
             break;
         default:
             result = COMM_INSTRUCTION_ERROR;
