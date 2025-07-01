@@ -54,6 +54,7 @@
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Contribution Guide</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#contributing-code">Contributing Code</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#writing-documentation">Writing Documentation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#for-administrators">For Administrators</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="testing_guide.html">Testing Guide</a></li>
@@ -120,22 +121,6 @@ When you have made progress on your code, push your local branch to the github r
 </dl>
 </li>
 </ol>
-<section id="for-administrators">
-<h3>For Administrators<a class="headerlink" href="#for-administrators" title="Link to this heading"></a></h3>
-<p>There are two important branches in this repository:</p>
-<ul class="simple">
-<li><p><cite>release</cite>: This branch contains the most up-to-date working code and you should point any researchers in the lab to utilize this branch for their work.</p></li>
-<li><p><cite>dev</cite>: This branch is used for integration of all new features. Any new work should be merged into this branch first to ensure that everything works together correctly.</p></li>
-</ul>
-<p>These branches are protected, so other team members are not allowed to push commits without first submitting a pull request, passing CI tests, and getting your approval.
-Administrators are allowed to override these checks.
-The general workflow we’ve been following is:</p>
-<ol class="arabic simple">
-<li><p>Create a new feature branch off of <cite>dev</cite> to work on new code</p></li>
-<li><p>After the code is complete, merge it into <cite>dev</cite> after all checks and tests pass</p></li>
-<li><p>Merge <cite>dev</cite> into <cite>release</cite> and implement any finalizing changes. Merging into <cite>release</cite> also automatically uploads the repo documentation.</p></li>
-</ol>
-</section>
 </section>
 <section id="writing-documentation">
 <h2>Writing Documentation<a class="headerlink" href="#writing-documentation" title="Link to this heading"></a></h2>
@@ -159,6 +144,28 @@ Any changes made to the documentation and code can be previewed on your local ma
 </div>
 <p>inside of the <code class="docutils literal notranslate"><span class="pre">batbot_bringup</span></code> folder.</p>
 </section>
+</section>
+<section id="for-administrators">
+<h2>For Administrators<a class="headerlink" href="#for-administrators" title="Link to this heading"></a></h2>
+<p>There are two important branches in this repository:</p>
+<ul class="simple">
+<li><p><cite>release</cite>: This branch contains the most up-to-date working code and you should point any researchers in the lab to utilize this branch for their work.</p></li>
+<li><p><cite>dev</cite>: This branch is used for integration of all new features. Any new work should be merged into this branch first to ensure that everything works together correctly.</p></li>
+</ul>
+<p>These branches are protected, so other team members are not allowed to push commits without first submitting a pull request, passing CI tests, and getting your approval.
+Administrators are allowed to override these checks.
+The general workflow we’ve been following is:</p>
+<ol class="arabic simple">
+<li><p>Create a new feature branch off of <cite>dev</cite> to work on new code</p></li>
+<li><p>After the code is complete, merge it into <cite>dev</cite> after all checks and tests pass</p></li>
+<li><p>Merge <cite>dev</cite> into <cite>release</cite> and implement any finalizing changes. Merging into <cite>release</cite> also automatically uploads the repo documentation.</p></li>
+<li><p>Merge <cite>release</cite> back into <cite>dev</cite> if any changes were made to <cite>release</cite>.</p></li>
+</ol>
+<p>As alluded to above, there are checks and automatic actions that occur during this workflow.
+These are achieved via GitHub actions.
+Some actions such as deploying documentation and running testing servers rely on GitHub secrets for authentication with certain tasks.
+If any actions are ever failing unexpectedly check the logs as some of these secrets may have expired
+(e.g the personal-access token being used to update the documentation is currently set to expire on Jan 1, 2026).</p>
 </section>
 </section>
 

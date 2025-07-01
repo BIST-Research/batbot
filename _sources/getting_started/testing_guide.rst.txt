@@ -19,10 +19,12 @@ Hardware testing is a bit more complicated but is still possible with to run wit
 Even though tests are run automatically, it is still useful to run tests on your own machine. The following guide outlines the testing process:
 
 1. Write your tests
-    Be sure to place your tests in the correct folder depending on the type of test.
+    Be sure to place your tests in the correct folder depending on the type of test. The Unity testing framework is utilized for tests.
 
 2. Run the tests
     To run your tests, use PlatformIO's testing tools located on the side bar:
+
+    (TODO: Add a picture)
 
     A menu will pop out and you can select specific tests to run.
     
@@ -31,7 +33,9 @@ Even though tests are run automatically, it is still useful to run tests on your
     To run a test run the following command:
     ::
 
-        pio test
+        pio test -e [ENVIRONMENT_TO_TEST] 
+
+    The test command is described in more detail here: https://docs.platformio.org/en/latest/core/userguide/cmd_test.html
 
 Common Testing Issues
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -45,7 +49,7 @@ If you ever write tests that don't return after a while, something definitely we
 Hardware-In-the-Loop 
 ^^^^^^^^^^^^^^^^^^^^^^
 As mentioned above, it is possible to run automatic CI hardware tests using PlatformIO remotes.
-The lab doesn't currently have this set up but, if you would like to set this up, we've outlined how to set this up:
+The lab doesn't currently have this capability, but if you would like to set this up, we've outlined the steps here:
 
 1. Set up a testing server
     Hook up a computer (a Raspberry Pi server might be good for this) hooked up to the microcontroller
@@ -61,7 +65,7 @@ The lab doesn't currently have this set up but, if you would like to set this up
 
         pio remote agent list
 
-    You should see the agent on the testing server.
+    You should see an entry for the agent running on the testing server.
 
 3. Run a remote test
     From here you can run ``pio remote test`` using the same arguments we passed in the testing procedure above.

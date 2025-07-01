@@ -25,22 +25,6 @@ If you're adding new code features, please consider following the workflow below
 
     After resolving all issues, request review from the github administrator, as this will be required for merging your code into the main code base.
 
-For Administrators
-^^^^^^^^^^^^^^^^^^^^^
-
-There are two important branches in this repository:
-
-- `release`: This branch contains the most up-to-date working code and you should point any researchers in the lab to utilize this branch for their work. 
-- `dev`: This branch is used for integration of all new features. Any new work should be merged into this branch first to ensure that everything works together correctly.
-
-These branches are protected, so other team members are not allowed to push commits without first submitting a pull request, passing CI tests, and getting your approval.
-Administrators are allowed to override these checks.
-The general workflow we've been following is:
-
-1. Create a new feature branch off of `dev` to work on new code
-2. After the code is complete, merge it into `dev` after all checks and tests pass
-3. Merge `dev` into `release` and implement any finalizing changes. Merging into `release` also automatically uploads the repo documentation.
-
 Writing Documentation
 #######################
 
@@ -67,3 +51,26 @@ inside the ``doc`` folder. If you made any changes to the Python code docstrings
     pip install .
 
 inside of the ``batbot_bringup`` folder.
+
+For Administrators
+######################
+
+There are two important branches in this repository:
+
+- `release`: This branch contains the most up-to-date working code and you should point any researchers in the lab to utilize this branch for their work. 
+- `dev`: This branch is used for integration of all new features. Any new work should be merged into this branch first to ensure that everything works together correctly.
+
+These branches are protected, so other team members are not allowed to push commits without first submitting a pull request, passing CI tests, and getting your approval.
+Administrators are allowed to override these checks.
+The general workflow we've been following is:
+
+1. Create a new feature branch off of `dev` to work on new code
+2. After the code is complete, merge it into `dev` after all checks and tests pass
+3. Merge `dev` into `release` and implement any finalizing changes. Merging into `release` also automatically uploads the repo documentation.
+4. Merge `release` back into `dev` if any changes were made to `release`.
+
+As alluded to above, there are checks and automatic actions that occur during this workflow. 
+These are achieved via GitHub actions.
+Some actions such as deploying documentation and running testing servers rely on GitHub secrets for authentication with certain tasks.
+If any actions are ever failing unexpectedly check the logs as some of these secrets may have expired 
+(e.g the personal-access token being used to update the documentation is currently set to expire on Jan 1, 2026).

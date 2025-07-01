@@ -141,7 +141,6 @@ The pulses of the square waves can be used to determine the angle of the motor, 
 <p>Note that the motors are also geared and the BIST lab has a supply of motors with different gear ratios and even operating voltages.
 Thus, when creating a new motor control object in the code, please be sure to specify the correct gear ratio to ensure accurate angle calculations.
 Differences in operating voltage can also affect the motor’s performance, however, this can be compensated for by tuning the PID parameters.</p>
-<p>For more information on how to use the embedded motor control code, please refer to the <a class="reference internal" href="api_doc.html#tendon-api-doc"><span class="std std-ref">Tendon API</span></a> documentation.</p>
 </section>
 <section id="serial-communication">
 <h2>Serial Communication<a class="headerlink" href="#serial-communication" title="Link to this heading"></a></h2>
@@ -326,7 +325,7 @@ The code limits the maximum number of motors through a configurable macro (See t
 </tr>
 <tr class="row-even"><td><p>0x04</p></td>
 <td><p>Write PID Parameters</p></td>
-<td><p>6</p></td>
+<td><p>12</p></td>
 </tr>
 <tr class="row-odd"><td><p>0x06</p></td>
 <td><p>Set Zero Position</p></td>
@@ -334,7 +333,7 @@ The code limits the maximum number of motors through a configurable macro (See t
 </tr>
 <tr class="row-even"><td><p>0x07</p></td>
 <td><p>Set Max Angle</p></td>
-<td><p>0</p></td>
+<td><p>2</p></td>
 </tr>
 <tr class="row-odd"><td><p>0x08</p></td>
 <td><p>Disable Motor (Not implemented)</p></td>
@@ -342,7 +341,7 @@ The code limits the maximum number of motors through a configurable macro (See t
 </tr>
 <tr class="row-even"><td><p>0x09</p></td>
 <td><p>Enable Motor (Not implemented)</p></td>
-<td><p>2</p></td>
+<td><p>0</p></td>
 </tr>
 </tbody>
 </table>
@@ -931,19 +930,19 @@ This is useful for applying the Command design pattern (<a class="reference exte
 <p>In addition to a <code class="docutils literal notranslate"><span class="pre">ML_TendonCommandBase</span></code> object, the command struct should contain any other required data fields for the command.
 The created struct should be located in <cite>ml_tendon_commands.hpp</cite>.
 For examples, please review the other command structs (they will be named <code class="docutils literal notranslate"><span class="pre">ML_[CommandName]Command</span></code>).</p>
-<p>The function should return a <code class="docutils literal notranslate"><span class="pre">CommandReturn_t</span></code> struct. If your command should return any data, this is where it should go.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>Creating the command handler</dt><dd><p>The command handler is the function that performs the desired motor operation. When implementing this function, assume that any packet validation (e.g. CRC, motorID, params) has already been done (we will do it somewhere else).
-It is recommend to follow the naming convention for command handler functions, which is <code class="docutils literal notranslate"><span class="pre">ML_[CommandName]_Execute</span></code> and it should be located in <code class="docutils literal notranslate"><span class="pre">ml_tendon_commands.cpp</span></code>.
-Reveiew the other command handler functions for the function signature and examples.</p>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt>Create a command creation function**</dt><dd><p>To get from the data packet to a command struct, we utilize the Factory Design pattern (<a class="reference external" href="https://refactoring.guru/design-patterns/factory-method" rel="noreferrer" target="_blank">read more about the factory pattern</a>).
+<dt>Creating the command handler</dt><dd><p>The command handler is the function that performs the desired motor operation. When implementing this function, assume that any packet validation (e.g. CRC, motorID, params) has already been done (we will do it somewhere else).
+It is recommend to follow the naming convention for command handler functions, which is <code class="docutils literal notranslate"><span class="pre">ML_[CommandName]_Execute</span></code> and it should be located in <code class="docutils literal notranslate"><span class="pre">ml_tendon_commands.cpp</span></code>.
+Reveiew the other command handler functions for the function signature and examples.</p>
+<p>The command handler should return a <code class="docutils literal notranslate"><span class="pre">CommandReturn_t</span></code> struct. If your command should return any data, this is where it should go.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>Create a command creation function</dt><dd><p>To get from the data packet to a command struct, we utilize the Factory Design pattern (<a class="reference external" href="https://refactoring.guru/design-patterns/factory-method" rel="noreferrer" target="_blank">read more about the factory pattern</a>).
 A factory is already implemented in the form of the <code class="docutils literal notranslate"><span class="pre">CommandFactory_CreateCommand</span></code> function, which manages command creation based on the opcode and parameters.
 To “register” your command with the factory function, create a command creation function that returns an instance of your command struct from step 2.
 We recommended following the naming convention for creation functions, which is is <code class="docutils literal notranslate"><span class="pre">ML_[CommandName]_Create</span></code> and it should be located in <code class="docutils literal notranslate"><span class="pre">ml_tendon_commands.cpp</span></code>.

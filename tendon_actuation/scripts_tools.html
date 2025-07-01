@@ -138,30 +138,48 @@ The script can then be run by navigating to the <code class="docutils literal no
 </div>
 <section id="how-to-tune-the-controller">
 <h3>How to tune the controller<a class="headerlink" href="#how-to-tune-the-controller" title="Link to this heading"></a></h3>
-<ol class="arabic simple">
+<ol class="arabic">
 <li><dl class="simple">
 <dt>Set initial gaings</dt><dd><p>Start with 0 gains for all parameters.</p>
 </dd>
 </dl>
 </li>
-<li><dl class="simple">
+<li><dl>
 <dt>Tuning P</dt><dd><p>Begin incrementing the P gain by a small amount.
 If you observe the motor spinning uncontrollably, it may be that the controller is entering a positive feedback loop, and so you may just need to negate P.
 If you start to observe oscillations in the step response, P is likely too high, so decrease it to eliminate oscillatory behavior.</p>
+<figure class="align-default" id="id1">
+<img alt="../_images/p_tuning.svg" src="../_images/p_tuning.svg" />
+<figcaption>
+<p><span class="caption-text">Example step response for P tuning (image source: <a class="reference external" href="https://tlk-energy.de/blog-en/practical-pid-tuning-guide" rel="noreferrer" target="_blank">https://tlk-energy.de/blog-en/practical-pid-tuning-guide</a>)</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+</figcaption>
+</figure>
 </dd>
 </dl>
 </li>
-<li><dl class="simple">
+<li><dl>
 <dt>Tuning I</dt><dd><p>Sometimes the controller will not reach the set angle completely. This is steady-state error, and if it is too significant you can try tuning the I gain by increasing
 it until the controller closes the steady-state error in a satisfactory amount of time. If you start to notice oscillations, you likely over-tuned the I gain.
 As with the P gain, keep note of the sign of the I gain.</p>
+<figure class="align-default" id="id2">
+<img alt="../_images/i_tuning.svg" src="../_images/i_tuning.svg" />
+<figcaption>
+<p><span class="caption-text">Example step response for I tuning (image source: <a class="reference external" href="https://tlk-energy.de/blog-en/practical-pid-tuning-guide" rel="noreferrer" target="_blank">https://tlk-energy.de/blog-en/practical-pid-tuning-guide</a>)</span><a class="headerlink" href="#id2" title="Link to this image"></a></p>
+</figcaption>
+</figure>
 </dd>
 </dl>
 </li>
-<li><dl class="simple">
+<li><dl>
 <dt>Tuning D</dt><dd><p>Lastly, you may observe an initial overshoot in the step response. If this is undesirable, you can try tuning the D gain.
 This can be done similarly by just increasing the D gain until the overshoot is barely eliminated.
 As with the P and I gain, keep note of the sign of the D gain.</p>
+<figure class="align-default" id="id3">
+<img alt="../_images/d_tuning.svg" src="../_images/d_tuning.svg" />
+<figcaption>
+<p><span class="caption-text">Example step response for D tuning (image source: <a class="reference external" href="https://tlk-energy.de/blog-en/practical-pid-tuning-guide" rel="noreferrer" target="_blank">https://tlk-energy.de/blog-en/practical-pid-tuning-guide</a>)</span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
+</figcaption>
+</figure>
 </dd>
 </dl>
 </li>

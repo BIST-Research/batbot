@@ -69,11 +69,25 @@ How to tune the controller
     Begin incrementing the P gain by a small amount.
     If you observe the motor spinning uncontrollably, it may be that the controller is entering a positive feedback loop, and so you may just need to negate P.
     If you start to observe oscillations in the step response, P is likely too high, so decrease it to eliminate oscillatory behavior.
+
+    .. figure:: ../img/p_tuning.svg
+
+        Example step response for P tuning (image source: https://tlk-energy.de/blog-en/practical-pid-tuning-guide)
+
 3. Tuning I
     Sometimes the controller will not reach the set angle completely. This is steady-state error, and if it is too significant you can try tuning the I gain by increasing
     it until the controller closes the steady-state error in a satisfactory amount of time. If you start to notice oscillations, you likely over-tuned the I gain.
     As with the P gain, keep note of the sign of the I gain.
+
+    .. figure:: ../img/i_tuning.svg
+
+        Example step response for I tuning (image source: https://tlk-energy.de/blog-en/practical-pid-tuning-guide)
+
 4. Tuning D
     Lastly, you may observe an initial overshoot in the step response. If this is undesirable, you can try tuning the D gain.
     This can be done similarly by just increasing the D gain until the overshoot is barely eliminated.
     As with the P and I gain, keep note of the sign of the D gain.
+
+    .. figure:: ../img/d_tuning.svg
+
+        Example step response for D tuning (image source: https://tlk-energy.de/blog-en/practical-pid-tuning-guide)

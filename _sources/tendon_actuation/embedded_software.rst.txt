@@ -58,8 +58,6 @@ Note that the motors are also geared and the BIST lab has a supply of motors wit
 Thus, when creating a new motor control object in the code, please be sure to specify the correct gear ratio to ensure accurate angle calculations.
 Differences in operating voltage can also affect the motor's performance, however, this can be compensated for by tuning the PID parameters.
 
-For more information on how to use the embedded motor control code, please refer to the :ref:`tendon-api-doc` documentation.
-
 ********************
 Serial Communication
 ********************
@@ -189,19 +187,19 @@ The following table gives a quick overview of the the available commands that ca
      - 2
    * - 0x04
      - Write PID Parameters
-     - 6
+     - 12
    * - 0x06
      - Set Zero Position
      - 0
    * - 0x07
      - Set Max Angle
-     - 0
+     - 2
    * - 0x08
      - Disable Motor (Not implemented)
      - 0
    * - 0x09
      - Enable Motor (Not implemented)
-     - 2
+     - 0
 
 In this section the functionality, parameters, and responses of each command will be described in detail. 
 In discussion of the response packets returned by each command, the ``COMM_FAIL``, ``COMM_CRC_ERROR``, and ``COMM_INSTRUCTION_ERROR`` status codes
@@ -619,13 +617,14 @@ Now, the following steps describe how to extend the communication control protoc
     The created struct should be located in `ml_tendon_commands.hpp`.
     For examples, please review the other command structs (they will be named ``ML_[CommandName]Command``).
 
-    The function should return a ``CommandReturn_t`` struct. If your command should return any data, this is where it should go.
 4. Creating the command handler
     The command handler is the function that performs the desired motor operation. When implementing this function, assume that any packet validation (e.g. CRC, motorID, params) has already been done (we will do it somewhere else).
     It is recommend to follow the naming convention for command handler functions, which is ``ML_[CommandName]_Execute`` and it should be located in ``ml_tendon_commands.cpp``.
     Reveiew the other command handler functions for the function signature and examples.
 
-5. Create a command creation function**
+    The command handler should return a ``CommandReturn_t`` struct. If your command should return any data, this is where it should go.
+
+5. Create a command creation function
     To get from the data packet to a command struct, we utilize the Factory Design pattern (`read more about the factory pattern <https://refactoring.guru/design-patterns/factory-method>`_).
     A factory is already implemented in the form of the ``CommandFactory_CreateCommand`` function, which manages command creation based on the opcode and parameters.
     To "register" your command with the factory function, create a command creation function that returns an instance of your command struct from step 2.
