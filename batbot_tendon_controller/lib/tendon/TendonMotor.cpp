@@ -391,12 +391,6 @@ void TendonController::UpdateMotorControl() {
         m_cur_pwm = m_tcc_freq;
     }
 
-    // safety: if the motor is at the angle limit, prevent it from going any further
-    if ((m_currentTicks > max_angle && sig > 0) || (m_currentTicks < (-1 * max_angle) && sig < 0))
-    {
-        m_cur_pwm = 0;
-    }
-
     // Set_Duty_Cyle(m_cur_pwm);
     set_PWM_Freq(m_cur_pwm);
     Set_Direction(m_direction);
