@@ -18,10 +18,10 @@ jobs:
 
       - name: Install Sphinx & Dependencies
         run: |
+          sudo apt-get install python3-pip
           sudo apt-get install python3-sphinx
           sudo apt-get install python3-sphinx-rtd-theme
-          sudo apt-get install python3-sphinx-copybutton
-          sudo apt-get install python3-sphinx-new-tab-link
+          python3 -m pip install sphinx-copybutton sphinx-new-tab-link
           cd batbot_bringup
           python3 setup.py build
           pip install .
@@ -36,4 +36,3 @@ jobs:
         with:
           folder: doc/_build/html
           branch: gh-pages
-          token: ${{ secrets.GH_PAGES_DEPLOY_TOKEN }}
