@@ -12,7 +12,7 @@ Tendon Calibration
 
 This is python script acts as CLI tool for calibrating the motors. It is intended to act primarily as a script for setting the initial motor angles for use in any tendon actuation experiments.
 
-(TODO: Add a picture)
+.. image:: ../img/tendon-calibration.png
 
 The number of motors is hard-coded in the script, and the script will iterate through each motor starting from 1 up to the last motor.
 

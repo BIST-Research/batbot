@@ -53,7 +53,7 @@ The following resources can help familiarize you with writing documentation with
 
 Previewing Documentation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
-The official documentation is located in (TODO), but this documentation reflects the most recent changes on the `release` branch.
+The official documentation is located at https://bist-research.github.io/, but this documentation reflects the most recent changes on the `release` branch.
 Any changes made to the documentation and code can be previewed on your local machine by running:
 
 ::

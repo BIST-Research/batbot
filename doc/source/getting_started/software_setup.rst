@@ -49,15 +49,18 @@ To install the embedded software for the tendon actuation application, follow th
 
 1. Preparing the project
     Open the ``batbot_tendon_controller`` folder in VSCode. This folder contains the PlatformIO project for the tendon actuation application.
-    If the PlatformIO extension is installed and loaded correctly, you should see PlatformIO options in the bottom bar of VSCode as well as some setup logs as shown below:
+    If the PlatformIO extension is installed and loaded correctly, you should see PlatformIO options in the bottom bar of VSCode:
 
-    TODO: Add image of VSCode with PlatformIO extension loaded.
+    .. image:: ../img/pio-installed.png
+
+    You should also see some set up logs similar to below:
+
+    .. image:: ../img/pio-setting-up.png
 
 2. Building the project
     In the bottom bar of VSCode, PlatformIO allows you to switch the active environment. For building and uploading the code to the microcontroller,
     this should be set to ``adafruit_grandcentral_m4``. Set it to the active environment by clicking on it in the bottom bar and selecting it from the dropdown.
 
-    TODO: Add image of PlatformIO environment selection.
 
     The other environments listed are used for testing purposes and should not be built. After switching to the correct environment, you can build the project by clicking on the checkmark icon in the top bar.
 

@@ -20,7 +20,9 @@ Motor angle control is achieved through a PID controller that adjusts the motor'
 For this controller, we define the **setpoint** to be the desired angle of the motor, and the **process variable** is the current angle measured by the encoder.
 The **control signal** is a signed PWM signal with the sign indicating the direction the motor should spin. The control diagram for the PID controller is as follows:
 
-(TODO add picture)
+.. figure:: ../img/pid.png
+
+  By Arturo Urquizo - File:PID.svg, CC BY-SA 3.0, https://commons.wikimedia.org/w/index.php?curid=17633925
 
 For those unfamiliar with PID control, it is a closed-loop controller that computes a control signal to minimize the error between the setpoint and the process variable.
 The PID controller computes the control signal as a weighted sum of three components: the proportional, integral and derivative components.
