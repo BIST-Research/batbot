@@ -15,6 +15,11 @@ This is python script acts as CLI tool for calibrating the motors. It is intende
 .. image:: ../img/tendon-calibration.png
 
 The number of motors is hard-coded in the script, and the script will iterate through each motor starting from 1 up to the last motor.
+Before running the script you will need to find the port name associated with the motor controller (e.g. /dev/ttyACM0, COM3, etc.).
+The script can then be run by navigating to the ``batbot_bringup`` folder in your terminal and running:
+:: 
+    
+    python tendon_calibration.py [PORT_NAME]
 
 Tendon Time Profiling
 ---------------------
@@ -29,6 +34,10 @@ Provides a breakdown of the average time spent during each major phase of the co
 - Packet Read Time
 
 If communication speed is not sufficient for your application, use this script to find out what steps may need improvement or optimization.
+The script can then be run by navigating to the ``batbot_bringup`` folder in your terminal and running:
+:: 
+    
+    python tendon_time_profiling.py
 
 PID Tuning
 ----------
@@ -44,6 +53,12 @@ This script provides a GUI with a visualization of the controller's step respons
     It is possible to damage the motors and connected systems if the PID parameters are not set correctly.
     Some motors in the lab are inverted, so the PID gains may need to be negated.
     Please follow the tuning steps to ensure safety.
+
+Before running the script you will need to find the port name associated with the motor controller (e.g. /dev/ttyACM0, COM3, etc.).
+The script can then be run by navigating to the ``batbot_bringup`` folder in your terminal and running:
+:: 
+    
+    python pid_visualizer_GUI.py [PORT_NAME]
 
 How to tune the controller
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
