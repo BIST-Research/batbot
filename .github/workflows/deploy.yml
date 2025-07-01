@@ -1,0 +1,39 @@
+name: Docs
+
+on:
+  push:
+    branches:
+      - release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install Sphinx & Dependencies
+        run: |
+          sudo apt-get install python3-sphinx
+          sudo apt-get install python3-sphinx-rtd-theme
+          sudo apt-get install python3-sphinx-copybutton
+          sudo apt-get install python3-sphinx-new-tab-link
+          cd batbot_bringup
+          python3 setup.py build
+          pip install .
+          cd ../doc
+          sudo make html
+
+      - name: Override Jekyll
+        run: sudo touch doc/_build/html/.nojekyll
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@releases/v4
+        with:
+          folder: doc/_build/html
+          branch: gh-pages
+          token: ${{ secrets.GH_PAGES_DEPLOY_TOKEN }}
