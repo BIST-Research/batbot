@@ -99,7 +99,12 @@
 <li><p>Managing the serial interface for communication with a host computer.</p></li>
 </ul>
 <p>The software depends on an independently developed Hardware Abstraction Layer (HAL) developed by the BIST team, which can be found <a class="reference external" href="https://github.com/BIST-Research/EBatLib" rel="noreferrer" target="_blank">here</a>.
-This project automatically includes the HAL using PlatformIO’s library management system, so no further action is required to use it.</p>
+This project automatically includes the HAL using PlatformIO’s library management system, so no further action is required to use it.
+To develop the HAL and any other bare-metal funcionality, please refer to the following resources below:</p>
+<ul class="simple">
+<li><p><strong>Pinout</strong>: <a class="reference external" href="https://learn.adafruit.com/adafruit-grand-central/pinouts" rel="noreferrer" target="_blank">https://learn.adafruit.com/adafruit-grand-central/pinouts</a></p></li>
+<li><p><strong>Chip reference manual</strong>: <a class="reference external" href="https://ww1.microchip.com/downloads/aemDocuments/documents/MCU32/ProductDocuments/DataSheets/SAM-D5x-E5x-Family-Data-Sheet-DS60001507.pdf" rel="noreferrer" target="_blank">https://ww1.microchip.com/downloads/aemDocuments/documents/MCU32/ProductDocuments/DataSheets/SAM-D5x-E5x-Family-Data-Sheet-DS60001507.pdf</a></p></li>
+</ul>
 <section id="motor-control">
 <h2>Motor Control<a class="headerlink" href="#motor-control" title="Link to this heading"></a></h2>
 <p>Motor angle control is achieved through a PID controller that adjusts the motor’s position based on angle feedback.

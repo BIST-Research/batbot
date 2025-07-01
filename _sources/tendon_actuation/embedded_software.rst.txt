@@ -11,6 +11,10 @@ The embedded software for the tendon actuation system performs the dedicated tas
 
 The software depends on an independently developed Hardware Abstraction Layer (HAL) developed by the BIST team, which can be found `here <https://github.com/BIST-Research/EBatLib>`_.
 This project automatically includes the HAL using PlatformIO's library management system, so no further action is required to use it.
+To develop the HAL and any other bare-metal funcionality, please refer to the following resources below:
+
+- **Pinout**: https://learn.adafruit.com/adafruit-grand-central/pinouts
+- **Chip reference manual**: https://ww1.microchip.com/downloads/aemDocuments/documents/MCU32/ProductDocuments/DataSheets/SAM-D5x-E5x-Family-Data-Sheet-DS60001507.pdf
 
 *************
 Motor Control

@@ -97,7 +97,12 @@ This document describes some of those tools.</p>
 <h2>Tendon Calibration<a class="headerlink" href="#tendon-calibration" title="Link to this heading"></a></h2>
 <p>This is python script acts as CLI tool for calibrating the motors. It is intended to act primarily as a script for setting the initial motor angles for use in any tendon actuation experiments.</p>
 <img alt="../_images/tendon-calibration.png" src="../_images/tendon-calibration.png" />
-<p>The number of motors is hard-coded in the script, and the script will iterate through each motor starting from 1 up to the last motor.</p>
+<p>The number of motors is hard-coded in the script, and the script will iterate through each motor starting from 1 up to the last motor.
+Before running the script you will need to find the port name associated with the motor controller (e.g. /dev/ttyACM0, COM3, etc.).
+The script can then be run by navigating to the <code class="docutils literal notranslate"><span class="pre">batbot_bringup</span></code> folder in your terminal and running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">tendon_calibration</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="n">PORT_NAME</span><span class="p">]</span>
+</pre></div>
+</div>
 </section>
 <section id="tendon-time-profiling">
 <h2>Tendon Time Profiling<a class="headerlink" href="#tendon-time-profiling" title="Link to this heading"></a></h2>
@@ -109,7 +114,11 @@ Provides a breakdown of the average time spent during each major phase of the co
 <li><p>Packet Transmission Time</p></li>
 <li><p>Packet Read Time</p></li>
 </ul>
-<p>If communication speed is not sufficient for your application, use this script to find out what steps may need improvement or optimization.</p>
+<p>If communication speed is not sufficient for your application, use this script to find out what steps may need improvement or optimization.
+The script can then be run by navigating to the <code class="docutils literal notranslate"><span class="pre">batbot_bringup</span></code> folder in your terminal and running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">tendon_time_profiling</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
 </section>
 <section id="pid-tuning">
 <h2>PID Tuning<a class="headerlink" href="#pid-tuning" title="Link to this heading"></a></h2>
@@ -121,6 +130,11 @@ Provides a breakdown of the average time spent during each major phase of the co
 <p>It is possible to damage the motors and connected systems if the PID parameters are not set correctly.
 Some motors in the lab are inverted, so the PID gains may need to be negated.
 Please follow the tuning steps to ensure safety.</p>
+</div>
+<p>Before running the script you will need to find the port name associated with the motor controller (e.g. /dev/ttyACM0, COM3, etc.).
+The script can then be run by navigating to the <code class="docutils literal notranslate"><span class="pre">batbot_bringup</span></code> folder in your terminal and running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">pid_visualizer_GUI</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="n">PORT_NAME</span><span class="p">]</span>
+</pre></div>
 </div>
 <section id="how-to-tune-the-controller">
 <h3>How to tune the controller<a class="headerlink" href="#how-to-tune-the-controller" title="Link to this heading"></a></h3>

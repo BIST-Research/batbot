@@ -74,7 +74,9 @@ To install the embedded software for the tendon actuation application, follow th
     TODO: Add image of successful upload.
 
 4. Verifying the upload
-    TODO: There isn't really an easy quick way to verify the upload (besides running it with motors), but maybe we can add a simple test that can be run to verify that the code is running correctly.
+    After installing the :ref:`Python scripts and APIs <tendon-scripts>`, try running one of the scripts (the tendon calibration script is probably best).
+    The microcontroller should light up with flashing yellow LEDs while using the script, which indicates that serial communication is happening.
+    This script can also be used to verify that motor control is working.
 
 For more information on the Tendon Actuation embedded software, refer to :ref:`tendon-embedded-software`.
 
