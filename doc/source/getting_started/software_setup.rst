@@ -94,6 +94,7 @@ To install the Python module, simply navigate to the ``batbot_bringup`` folder i
 
 .. code-block:: console
 
+    pip install -r requirements.txt
     python setup.py build
     pip install .
 

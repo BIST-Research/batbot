@@ -21,8 +21,8 @@ jobs:
           sudo apt-get install python3-pip
           sudo apt-get install python3-sphinx
           sudo apt-get install python3-sphinx-rtd-theme
-          python3 -m pip install sphinx-copybutton sphinx-new-tab-link
           cd batbot_bringup
+          python3 -m pip install -r requirements.txt
           python3 setup.py build
           pip install .
           cd ../doc
