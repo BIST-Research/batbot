@@ -19,5 +19,7 @@ pybind11
 setuptools
 
 # for building docs
+sphinx
+sphinx-rtd-theme
 sphinx-copybutton
 sphinx-new-tab-link

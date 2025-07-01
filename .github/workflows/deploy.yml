@@ -18,15 +18,12 @@ jobs:
 
       - name: Install Sphinx & Dependencies
         run: |
-          sudo apt-get install python3-pip
-          sudo apt-get install python3-sphinx
-          sudo apt-get install python3-sphinx-rtd-theme
           cd batbot_bringup
-          sudo python3 -m pip install -r requirements.txt
-          python setup.py build
+          pip install -r requirements.txt
+          python3 setup.py build
           pip install .
           cd ../doc
-          sudo make html
+          make html
 
       - name: Override Jekyll
         run: sudo touch doc/_build/html/.nojekyll
