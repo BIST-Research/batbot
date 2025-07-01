@@ -15,7 +15,7 @@ public:
     ML_PID() : m_kp(1), m_kd(0), m_ki(0), m_umax(255), m_error_prev(0), m_error_integral(0) {}
 
     // set paramaets
-    void Set_Params(float kp, float kd  , float ki, float umaxIn)
+    void Set_Params(float kp, float ki, float kd, float umaxIn)
     {
         m_kp = kp;
         m_kd = kd;
@@ -49,6 +49,13 @@ public:
             sig = -1 * m_umax;
 
         return sig;
+    }
+
+    void Get_Params(float &kp, float &ki, float &kd)
+    {
+        kp = m_kp;
+        ki = m_ki;
+        kd = m_kd;
     }
 
 private:

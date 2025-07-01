@@ -12,6 +12,8 @@ See the rest of this documentation for the available classes and functions in th
 
 from ..bb_tendons.TendonHardware import TendonHardwareInterface
 import time
+import struct
+import numpy as np
 
 from enum import Enum
 
@@ -97,7 +99,7 @@ class TendonController:
             print("WARNING: Beginning tendon calibration in test mode! Please supply a port name if this wasn't intentional.")
             time.sleep(3)
 
-    def writeMotorAbsoluteAngle(self, id, angle):
+    def writeMotorAbsoluteAngle(self, id, angle: np.int16):
         '''
         This function sets the motor specified by id to move to the passed in angle.
         Raises an assertion error if the status returned by the response packet is not ``COMM_SUCCESS``
@@ -113,7 +115,7 @@ class TendonController:
         '''
         
         if not self.test_mode:
-            angle_h = (angle << 8) & 0xFF
+            angle_h = (angle >> 8) & 0xFF
             angle_l = (angle & 0xFF)
 
             params = [angle_h, angle_l]
@@ -150,7 +152,8 @@ class TendonController:
             if ret != -1:
                 assert(ret["status"] == 0)
 
-                angle = (ret["params"][0] << 8) | (ret["params"][1] & 0xFF)
+
+                angle = np.int16(((ret["params"][0])  << 8) | (ret["params"][1] & 0xFF))
                 return angle
         else:
             return self.test__angle
@@ -217,6 +220,31 @@ class TendonController:
         else:
             self.test__max_angle = angle
 
+    def setMotorPID(self, id, Kp, Ki, Kd):
+        """
+        Sets the PID (Proportional-Integral-Derivative) parameters for a motor.
+        """
+        if not self.test_mode:
+        # Convert each PID parameter from float64 (default in Python) to float32 (4-byte representation)
+            kp_bytes = struct.pack('>f', float(Kp))  # 'f' specifies a 32-bit float, '>' specifies big endian
+            ki_bytes = struct.pack('>f', float(Ki))
+            kd_bytes = struct.pack('>f', float(Kd))
+        
+        # Convert the byte sequences into lists of individual byte values and combine them
+            params = list(kp_bytes) + list(ki_bytes) + list(kd_bytes)
+            print(params)
+        
+            self.th.BuildPacket(id, OPCODE.WRITE_PID.value, params)
+            ret = self.th.SendTxRx()
+
+            assert(ret["status"] == 0)
+        else:
+            print(f"Test mode: Setting PID parameters for motor {id}: Kp={Kp}, Ki={Ki}, Kd={Kd}")
+            
+    def close(self):
+        if self.th.ser:
+            self.th.ser.close()
+
 if __name__ == "__main__":  
 
     import time
@@ -234,4 +262,5 @@ if __name__ == "__main__":
         print(angles)
 
         time.sleep(3)
+            
             

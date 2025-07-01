@@ -29,7 +29,7 @@ class TendonController
 public:
     // create motor and encoder object
     // TendonController(uint8_t ccChan, ml_pin phasePin, ml_pin pwmPi, ml_pin encA, ml_pin encB, String name);
-    TendonController(String name);
+    TendonController(String name, uint8_t tcc_num=0);
 
 
     void Attach_Drive_Pin(ml_port_group portGroup, ml_pin pin, ml_port_function, uint8_t cc_chan);
@@ -92,7 +92,9 @@ public:
     float Get_Max_Angle();
     float Get_Goal_Angle();
 
-    float Set_Angle(float angle);
+    void Set_Angle(float angle);
+
+    void Get_PID(float &_kp, float &_ki, float &_kd);
 
     void EnableMotor();
     
@@ -106,6 +108,9 @@ public:
 
 private:
     bool enabled;
+  
+    float ConvertAngleToTicks(int16_t deg);
+    float ConvertTicksToAngle(int16_t ticks);
 
     // pin settings
     ml_pin_settings m_encoder_a;
