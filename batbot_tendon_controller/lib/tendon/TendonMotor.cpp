@@ -28,6 +28,8 @@ TendonController::TendonController(String name)
 
     // name of this tendon
     m_name = name;
+
+    enabled = true;
 }
 
 void TendonController::Attach_Drive_Pin(ml_port_group portGroup, ml_pin pin, ml_port_function portFunc, uint8_t cc_channel)
@@ -389,6 +391,12 @@ void TendonController::UpdateMotorControl() {
         m_cur_pwm = m_tcc_freq;
     }
 
+    // safety: if the motor is at the angle limit, prevent it from going any further
+    if ((m_currentTicks > max_angle && sig > 0) || (m_currentTicks < (-1 * max_angle) && sig < 0))
+    {
+        m_cur_pwm = 0;
+    }
+
     // Set_Duty_Cyle(m_cur_pwm);
     set_PWM_Freq(m_cur_pwm);
     Set_Direction(m_direction);
@@ -407,9 +415,16 @@ float TendonController::Get_Max_Angle() {
 
 float TendonController::Get_Goal_Angle() {
     return ConvertTicksToAngle(m_target_ticks);
-    // return goal_angle;
 }
 
 float TendonController::Set_Angle(float angle) {
     m_currentTicks = ConvertAngleToTicks(-90);
+}
+
+void TendonController::EnableMotor() {
+    enabled = true;
+}
+    
+void TendonController::DisableMotor() {
+    enabled = false;
 }

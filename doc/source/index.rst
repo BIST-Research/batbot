@@ -3,23 +3,12 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-batbot documentation
-====================
+Welcome to the BIST batbot documentation!
+=========================================
 
-Welcome to the batbot documentation!
+This page documents the software applications and tools used for the BIST batbot project // URL.
 
-This repository contains applications for running
-
-- Sonar
-- Tendon Actuation control
-
-Dependencies:
-
-- PyQt6
-- numpy
-- scipy
-- qdarkstyle
-- matplotlib
+To get started, please visit the `Getting Started <getting_started/getting_started>`_ page.
 
 Table of Contents
 ^^^^^^^^^^^^^^^^^
@@ -27,5 +16,6 @@ Table of Contents
 .. toctree::
    :maxdepth: 1
 
-   tendon_actuation
-   sonar
+   getting_started/getting_started
+   tendon_actuation/tendon_actuation
+   sonar/sonar
