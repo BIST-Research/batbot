@@ -6,9 +6,9 @@
 Welcome to the BIST batbot documentation!
 =========================================
 
-This page documents the software applications and tools used for the BIST batbot project // URL.
+This page documents the software applications and tools used for the BIST `batbot project <https://github.com/BIST-Research/batbot>`_.
 
-To get started, please visit the `Getting Started <getting_started/getting_started>`_ page.
+To get started, please visit the :ref:`getting-started` page.
 
 Table of Contents
 ^^^^^^^^^^^^^^^^^

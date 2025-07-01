@@ -5,7 +5,7 @@ Tendon API
 #############
 
 The Tendon API is a set of Python APIs that allow for easy interaction with the motor control system from a host PC over serial USB connection.
-If you reviewed, the documentation for the :ref:`tendon-embedded-software`, then you will probably observe that the amount of 
+If you reviewed the documentation for the :ref:`tendon-embedded-software`, then you will probably observe that the amount of 
 control features for the system comes at the price of complexity. Fortunately, we don't have to expose this complexity to everybody,
 and we can abstract away the communication protocol, which is the purpose of these APIs. This page documents how to use the APIs in your own code.
 There are two classes in the API and they are documented here.

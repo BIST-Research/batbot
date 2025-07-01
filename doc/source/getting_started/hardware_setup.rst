@@ -15,6 +15,7 @@ Prerequisites
 ^^^^^^^^^^^^^^^^^^^^
 
 The tendon actuation system consists of a pair of identical bat ear modules. A single module is built with the following components:
+
 - 5x Pololu micro metal gear motors and encoders
 - 6-pin JST connectors for the motors and encoders
 - 1x Adafruit Grand Central M4 Express microcontroller
