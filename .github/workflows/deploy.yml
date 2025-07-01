@@ -22,8 +22,8 @@ jobs:
           sudo apt-get install python3-sphinx
           sudo apt-get install python3-sphinx-rtd-theme
           cd batbot_bringup
-          python3 -m pip install -r requirements.txt
-          python3 setup.py build
+          python -m pip install -r requirements.txt
+          python setup.py build
           pip install .
           cd ../doc
           sudo make html
