@@ -33,3 +33,4 @@ jobs:
         with:
           folder: doc/build/html
           branch: gh-pages
+          token: ${{ secrets.GHPAGES_TOKEN }}
