@@ -26,10 +26,10 @@ jobs:
           make html
 
       - name: Override Jekyll
-        run: sudo touch doc/_build/html/.nojekyll
+        run: sudo touch doc/build/html/.nojekyll
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@releases/v4
         with:
-          folder: doc/_build/html
+          folder: doc/build/html
           branch: gh-pages
