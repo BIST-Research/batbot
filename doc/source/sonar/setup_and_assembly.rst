@@ -16,12 +16,12 @@ Components
 The microphone is connected to a Weipu connector, which is connected to the hand-twisted wires that connect it to the rest of the system. 
 The microphone should always be oriented towards the target. 
 
-.. figure:: ../images/microphone.png
+.. figure:: ../img/microphone.png
 
 - **Transducer**: The transducer takes in a voltage and outputs the signal (chirp). It is connected to the rest of the system by a power and ground wire, 
 connected to the connection points on the transducer itself. The transducer should always be oriented towards the target. 
 
-.. figure:: ../images/transducer.png
+.. figure:: ../img/transducer.png
 
 - **Amplifier**: The amplifier takes in a voltage output from the ItsyBitsy and amplified through the PCB board. It then amplifies the signal further and outputs it through the transducer. 
 The green LED on the amplifier’s board indicates that it is on and receiving power. 
@@ -31,7 +31,7 @@ Diagrams and schematics regarding the amplifier and the PCB it sits on can be fo
 If the LED on the itsybitsy is purple, it likely means that the embedded code has already been uploaded. If it is blue, upload the embedded code through Platformio.
 The pinout for the itsybitsy can be found `here <http://learn.adafruit.com/introducing-adafruit-itsybitsy-m4/pinouts>`, and the datasheet for the microchip embedded in the itsybitsy can be found `here <https://ww1.microchip.com/downloads/aemDocuments/documents/MCU32/ProductDocuments/DataSheets/SAM-D5x-E5x-Family-Data-Sheet-DS60001507.pdf>`.
 
-.. figure:: ../images/itsybitsy.png
+.. figure:: ../img/itsybitsy.png
 
 - **PCB Board**: The PCB board is the board on which the sonar setup sits. The board powers all other components, and ensures that the chirp makes it from the itsybitsy through an amplification circuit on the board, 
 then to the amplifier, out through the transducer and back in through the microphone. The red LED on the board being lit means that the board is powered. 
