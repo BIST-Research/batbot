@@ -1,4 +1,4 @@
-.. _chirp_operation:
+.. _chirp-operation:
 
 ###############
 Chirp Operation
