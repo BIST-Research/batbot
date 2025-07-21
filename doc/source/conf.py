@@ -10,8 +10,8 @@ import sys
 from pathlib import Path
 
 project = 'batbot'
-copyright = '2024, Ben Westcott, Kofi Ofosu-Tuffour, Mason Lopez, Jayson De La Vega'
-author = 'Ben Westcott, Kofi Ofosu-Tuffour, Mason Lopez, Jayson De La Vega'
+copyright = '2024, Ben Westcott, Kofi Ofosu-Tuffour, Mason Lopez, Jayson De La Vega, Alex White'
+author = 'Ben Westcott, Kofi Ofosu-Tuffour, Mason Lopez, Jayson De La Vega, Alex White'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
