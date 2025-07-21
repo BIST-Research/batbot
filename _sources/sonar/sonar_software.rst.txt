@@ -11,7 +11,8 @@ which in our lab is designed to replicate the echolocation abilities of bats.
 
 In order to use the sonar software, the following steps must be followed:
 
-- Install PlatformIO IDE extension in VSCode and ensure that you are able to establish connection with the ItsyBitsy M4 microcontroller. This often will not work at first, and may require additonal steps. Refer to the `PlatformIO documentation <https://docs.platformio.org/en/latest/integration/ide/vscode.html#ide-vscode>`__ for more details. 
+- Install PlatformIO IDE extension in VSCode and ensure that you are able to establish connection with the ItsyBitsy M4 microcontroller.
+- This often will not work at first, and may require additonal steps. Refer to the `PlatformIO documentation <https://docs.platformio.org/en/latest/integration/ide/vscode.html#ide-vscode>`__ for more details. 
 - Install Python to your computer from `python.org <https://www.python.org/downloads/>`__ and ensure that it is added to your system PATH.
 - While in the fieldbot repository, run the following command in the terminal to install the required Python packages:
 ``pip install -r requirements.txt``
