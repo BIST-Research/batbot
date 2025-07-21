@@ -15,6 +15,6 @@ In order to use the sonar software, the following steps must be followed:
 - This often will not work at first, and may require additonal steps. Refer to the `PlatformIO documentation <https://docs.platformio.org/en/latest/integration/ide/vscode.html#ide-vscode>`__ for more details. 
 - Install Python to your computer from `python.org <https://www.python.org/downloads/>`__ and ensure that it is added to your system PATH.
 - While in the fieldbot repository, run the following command in the terminal to install the required Python packages:
-``pip install -r requirements.txt``
+``pip install -r requirements.txt``.
 - Once these steps have been taken, you should be able to run the sonar software. Operation instructions can be found in
 :ref:`chirp-operation`.
