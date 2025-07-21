@@ -19,7 +19,7 @@ The sonar system consists of a pair of identical sonar modules. A single module 
  - Screw terminals for the transducer connections
  - 3D printed components for mounting the transducer and ear(optional)
 
-Assembly instructions and more detials about the components can be found in the setup and asssembly section of the sonar system documentation:
+Assembly instructions and more details about the components can be found in the setup and asssembly section of the sonar system documentation:
 :ref:`setup-and-assembly`
 
 Tendon Actuation System
