@@ -1,0 +1,161 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Setup and Assembly &mdash; batbot  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            batbot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tendon_actuation/tendon_actuation.html">Tendon Actuation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sonar.html">Sonar</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">batbot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Setup and Assembly</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/sonar/setup_and_assembly.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="setup-and-assembly">
+<span id="id1"></span><h1>Setup and Assembly<a class="headerlink" href="#setup-and-assembly" title="Link to this heading"></a></h1>
+<p>This section will go over the different components of the sonar system, and the steps which should be followed to
+assemble and set up the the system. All components should be readily available within the lab, or able to be assembled
+without too much difficulty.</p>
+<section id="components">
+<h2>Components<a class="headerlink" href="#components" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Microphone</strong>: The microphone is what receives the signal (chirp) which is outputted by the transducer and reflected off of a target.</p></li>
+</ul>
+<p>The microphone is connected to a Weipu connector, which is connected to the hand-twisted wires that connect it to the rest of the system.
+The microphone should always be oriented towards the target.</p>
+<figure class="align-default">
+<img alt="images/microphone.png" src="images/microphone.png" />
+</figure>
+<ul class="simple">
+<li><p><strong>Transducer</strong>: The transducer takes in a voltage and outputs the signal (chirp). It is connected to the rest of the system by a power and ground wire,</p></li>
+</ul>
+<p>connected to the connection points on the transducer itself. The transducer should always be oriented towards the target.</p>
+<figure class="align-default">
+<img alt="images/transducer.png" src="images/transducer.png" />
+</figure>
+<ul class="simple">
+<li><p><strong>Amplifier</strong>: The amplifier takes in a voltage output from the ItsyBitsy and amplified through the PCB board. It then amplifies the signal further and outputs it through the transducer.</p></li>
+</ul>
+<p>The green LED on the amplifier’s board indicates that it is on and receiving power.
+Diagrams and schematics regarding the amplifier and the PCB it sits on can be found in the Fusion drive, in the “sonar_preamp” folder.</p>
+<ul class="simple">
+<li><p><strong>ItsyBitsyM4</strong>: The ItsyBitsy M4 board is the brains of the sonar system. It controls the sending and receiving of the chirp, the conversion of the received signal into a spectrogram, and any other operations.</p></li>
+</ul>
+<p>If the LED on the itsybitsy is purple, it likely means that the embedded code has already been uploaded. If it is blue, upload the embedded code through Platformio.
+The pinout for the itsybitsy can be found <cite>here &lt;http://learn.adafruit.com/introducing-adafruit-itsybitsy-m4/pinouts&gt;</cite>, and the datasheet for the microchip embedded in the itsybitsy can be found <cite>here &lt;https://ww1.microchip.com/downloads/aemDocuments/documents/MCU32/ProductDocuments/DataSheets/SAM-D5x-E5x-Family-Data-Sheet-DS60001507.pdf&gt;</cite>.</p>
+<figure class="align-default">
+<img alt="images/itsybitsy.png" src="images/itsybitsy.png" />
+</figure>
+<ul class="simple">
+<li><p><strong>PCB Board</strong>: The PCB board is the board on which the sonar setup sits. The board powers all other components, and ensures that the chirp makes it from the itsybitsy through an amplification circuit on the board,</p></li>
+</ul>
+<p>then to the amplifier, out through the transducer and back in through the microphone. The red LED on the board being lit means that the board is powered.
+The current version of the board is revision 6. Diagrams and schematics can be found in the Fusion drive in the “rev6” folder within the “Sonar Board” folder.</p>
+</section>
+<section id="assembly">
+<h2>Assembly<a class="headerlink" href="#assembly" title="Link to this heading"></a></h2>
+<p>Assembly of the sonar system is fairly straightforward, as all components have been designed to be easily connected to the PCB board.</p>
+<p>The first step is to connect the amplifier to the PCB board. The amplifier has 5 pins on the underside of one end, and 4 pins on the underside
+of the other end. Align the pins with their corresponding holes on the PCB board and insert the amplifier into the board. This may take some wiggling,
+but should not require excessive force. Some of our PCBs have contact point issues with the amplifier, which can be solved by angling the amplifier
+towards the side of the PCB with the microphone connection. The amplifier should draw roughly 0.15-0.25 A when powered on. If it is drawing less than
+0.05 A, proceed with the aforementioned angling procedure to ensure proper contact, making sure to not move the amplifier while voltage is being applied.
+Additionally, the fan on the top of the amplifier should be spinning when powered on. If it is not, this is another sign that the amplifier is not receiving enough power.</p>
+<p>-Microphone</p>
+<p>-Transducer</p>
+<p>-ItsyBitsy</p>
+<p>-Power Supply</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Ben Westcott, Kofi Ofosu-Tuffour, Mason Lopez, Jayson De La Vega.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
