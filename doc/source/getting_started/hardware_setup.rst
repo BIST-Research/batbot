@@ -6,7 +6,21 @@ Hardware Setup
 Sonar System
 -------------
 
-TODO
+The sonar system consists of a pair of identical sonar modules. A single module is built with the following components:
+ 
+ - 1x SensComp Series 600 Open Face Ultrasonic Transducer
+ - 1x Dodotronic Momonic Analog Microphone
+ - 1x Weipu connector for the microphone with hand-twisted wires
+ - 1x Adafruit ItsyBitsy M4 microcontroller
+ - 1x BIST custom sonar PCB board
+ - 1x Texas Instruments OPA552 high-voltage op-amp
+ - 1x BIST custom amplifer PCB board upon which the OPA552 is soldered
+ - JST connectors for the microphone and power connections
+ - Screw terminals for the transducer connections
+ - 3D printed components for mounting the transducer and ear(optional)
+
+Assembly instructions and more detials about the components can be found in the setup and asssembly section of the sonar system documentation:
+:ref:`setup-and-assembly`
 
 Tendon Actuation System
 -----------------------
