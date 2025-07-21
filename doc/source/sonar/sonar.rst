@@ -1,5 +1,8 @@
 .. _sonar:
 
+Sonar
+=====
+
 This page documents the Sonar System for the BIST batbot project.
 
 .. toctree::
