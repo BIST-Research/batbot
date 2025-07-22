@@ -129,16 +129,21 @@ The current version of the board is revision 6. Diagrams and schematics can be f
 <section id="assembly">
 <h2>Assembly<a class="headerlink" href="#assembly" title="Link to this heading"></a></h2>
 <p>Assembly of the sonar system is fairly straightforward, as all components have been designed to be easily connected to the PCB board.</p>
+<p>-Amplfifier</p>
 <p>The first step is to connect the amplifier to the PCB board. The amplifier has 5 pins on the underside of one end, and 4 pins on the underside
 of the other end. Align the pins with their corresponding holes on the PCB board and insert the amplifier into the board. This may take some wiggling,
 but should not require excessive force. Some of our PCBs have contact point issues with the amplifier, which can be solved by angling the amplifier
-towards the side of the PCB with the microphone connection. The amplifier should draw roughly 0.15-0.25 A when powered on. If it is drawing less than
+towards the side of the PCB with the microphone connection. The amplifier should draw roughly 0.15-0.20 A when powered on. If it is drawing less than
 0.05 A, proceed with the aforementioned angling procedure to ensure proper contact, making sure to not move the amplifier while voltage is being applied.
 Additionally, the fan on the top of the amplifier should be spinning when powered on. If it is not, this is another sign that the amplifier is not receiving enough power.</p>
 <p>-Microphone</p>
 <p>-Transducer</p>
 <p>-ItsyBitsy</p>
 <p>-Power Supply</p>
+<p>The lab has a multitude of DC power supplies which can be used to power the sonar system. The power supply should be set to output 24V at 1A.
+The power supply is connected directly to the PCB board through the JST pins located near the ItsyBitsy, through a twisted pair of wires connected to a JST connector.
+The red wire is the power wire and should be on the left side of the connector, if you are looking at the connection straight on.
+The black wire is the ground wire and should be on the right side of the connector. The PCB board has a diode which will light up when the board is powered.</p>
 </section>
 </section>
 
