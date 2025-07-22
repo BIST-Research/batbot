@@ -44,3 +44,4 @@ TODO: explain how the easiest method testing itsybitsy is to print confirmation 
 PCB Board
 ^^^^^^^^^
 
+There is no easy way to test the PCB board itself, but if all other components have been tested and are working properly, the board is likely the issue. One way to spot a faulty board 

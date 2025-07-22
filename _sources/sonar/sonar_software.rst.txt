@@ -38,3 +38,11 @@ Processing Chirp Datas
 =====================
 
 TODO: Explain how the data is processed, including filtering, FFT, etc.
+
+
+**************
+Relevant Files
+**************
+
+TODO: Include a brief documentation for each file within the fieldbot repository, detailed explanations for the most important files.
+Detail probably needed for run chirp, main, continous chirp,
