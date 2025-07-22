@@ -8,13 +8,13 @@ Sonar System
 
 The sonar system consists of a pair of identical sonar modules. A single module is built with the following components:
  
- - 1x SensComp Series 600 Open Face Ultrasonic Transducer
- - 1x Dodotronic Momonic Analog Microphone
+ - 1x SensComp Series 600 Open Face Ultrasonic Transducer (`datasheet <https://github.com/BIST-Research/fieldbot/blob/vehicle/docs/Transducer_Datasheet.pdf>`__)
+ - 1x Dodotronic Momonic Analog Microphone (`datasheet <https://github.com/BIST-Research/fieldbot/blob/vehicle/docs/Microphone_datasheet.pdf>`__)
  - 1x Weipu connector for the microphone with hand-twisted wires
- - 1x Adafruit ItsyBitsy M4 microcontroller
+ - 1x Adafruit ItsyBitsy M4 microcontroller (`datasheet <https://github.com/BIST-Research/fieldbot/blob/vehicle/docs/ATDAMD51_Datasheet.pdf>`__) (`pinout <http://learn.adafruit.com/introducing-adafruit-itsybitsy-m4/pinouts>`__)
  - 1x BIST custom sonar PCB board
- - 1x Texas Instruments OPA552 high-voltage op-amp
- - 1x BIST custom amplifer PCB board upon which the OPA552 is soldered
+ - 1x Texas Instruments OPA552 high-voltage op-amp (`datasheet <https://www.ti.com/lit/gpn/opa552>`__)
+ - 1x PDm200 V9 high performance piezo driver  upon which the op-amp is soldered (`datasheet <https://github.com/BIST-Research/fieldbot/blob/vehicle/docs/PDm200-V9-Datasheet-R5.pdf>`__)
  - JST connectors for the microphone and power connections
  - Screw terminals for the transducer connections
  - 3D printed components for mounting the transducer and ear(optional)
