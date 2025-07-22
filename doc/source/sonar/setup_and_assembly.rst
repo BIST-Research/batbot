@@ -12,29 +12,42 @@ without too much difficulty.
 Components
 **********
 
-- **Microphone**: The microphone is what receives the signal (chirp) which is outputted by the transducer and reflected off of a target. The microphone is connected to a Weipu connector, which is connected to the hand-twisted wires that connect it to the rest of the system. The microphone should always be oriented towards the target. 
+* **Microphone**: The microphone is what receives the signal (chirp) which is outputted by the transducer and reflected off of a target. 
+  The microphone is connected to a Weipu connector, which is connected to the hand-twisted wires that connect it to the rest of the system. The microphone should always be oriented towards the target. 
 
 .. figure:: ../img/microphone.PNG
 
-- **Transducer**: The transducer takes in a voltage and outputs the signal (chirp). It is connected to the rest of the system by a power and ground wire, connected to the connection points on the transducer itself. The transducer should always be oriented towards the target. 
+* **Transducer**: The transducer takes in a voltage and outputs the signal (chirp). It is connected to the rest of the system by a power and ground wire, connected to the connection points on the transducer itself. 
+  The transducer should always be oriented towards the target. 
 
 .. figure:: ../img/transducer.PNG
 
-- **Amplifier**: The amplifier takes in a voltage output from the ItsyBitsy and amplified through the PCB board. It then amplifies the signal further and outputs it through the transducer. The green LED on the amplifier’s board indicates that it is on and receiving power. Diagrams and schematics regarding the amplifier and the PCB it sits on can be found in the Fusion drive, in the “sonar_preamp” folder. 
+* **Amplifier**: The amplifier takes in a voltage output from the ItsyBitsy and amplified through the PCB board. It then amplifies the signal further and outputs it through the transducer. 
+  The green LED on the amplifier’s board indicates that it is on and receiving power. Diagrams and schematics regarding the amplifier and the PCB it sits on can be found in the Fusion drive, in the “sonar_preamp” folder. 
 
-- **ItsyBitsyM4**: The ItsyBitsy M4 board is the brains of the sonar system. It controls the sending and receiving of the chirp, the conversion of the received signal into a spectrogram, and any other operations. If the LED on the itsybitsy is purple, it likely means that the embedded code has already been uploaded. If it is blue, upload the embedded code through Platformio.The pinout for the itsybitsy can be found `here <http://learn.adafruit.com/introducing-adafruit-itsybitsy-m4/pinouts>`__, and the datasheet for the microchip embedded in the itsybitsy can be found `here <https://ww1.microchip.com/downloads/aemDocuments/documents/MCU32/ProductDocuments/DataSheets/SAM-D5x-E5x-Family-Data-Sheet-DS60001507.pdf>`__.
+  TODO: Add image of amplifier
+
+* **ItsyBitsyM4**: The ItsyBitsy M4 board is the brains of the sonar system. It controls the sending and receiving of the chirp, the conversion of the received signal into a spectrogram, 
+  and any other operations. If the LED on the itsybitsy is purple, it likely means that the embedded code has already been uploaded. If it is blue, upload the embedded code through Platformio. 
+  The pinout for the itsybitsy can be found `here <http://learn.adafruit.com/introducing-adafruit-itsybitsy-m4/pinouts>`__, and the datasheet for the microchip embedded in the itsybitsy can be found `here <https://ww1.microchip.com/downloads/aemDocuments/documents/MCU32/ProductDocuments/DataSheets/SAM-D5x-E5x-Family-Data-Sheet-DS60001507.pdf>`__.
 
 .. figure:: ../img/itsybitsy.PNG
 
-- **PCB Board**: The PCB board is the board on which the sonar setup sits. The board powers all other components, and ensures that the chirp makes it from the itsybitsy through an amplification circuit on the board, then to the amplifier, out through the transducer and back in through the microphone. The red LED on the board being lit means that the board is powered. The current version of the board is revision 6. Diagrams and schematics can be found in the Fusion drive in the “rev6” folder within the “Sonar Board” folder.
+- **PCB Board**: The PCB board is the board on which the sonar setup sits. The board powers all other components, and ensures that the chirp makes it from the itsybitsy through an amplification circuit on the board, 
+  then to the amplifier, out through the transducer and back in through the microphone. The red LED on the board being lit means that the board is powered. The current version of the board is revision 6. 
+  Diagrams and schematics can be found in the Fusion drive in the “rev6” folder within the “Sonar Board” folder.
 
-
+TODO: Add image of PCB board
 
 ********
 Assembly
 ********
 
 Assembly of the sonar system is fairly straightforward, as all components have been designed to be easily connected to the PCB board.
+
+.. warning::
+    Never connect, disconnect, or adjust components while the system is powered on. Always ensure that the power supply is off before making any changes to the system, and whenever the system is not in use.
+
 
 - Amplifier
 
@@ -45,11 +58,19 @@ towards the side of the PCB with the microphone connection. The amplifier should
 0.05 A, proceed with the aforementioned angling procedure to ensure proper contact, making sure to not move the amplifier while voltage is being applied.
 Additionally, the fan on the top of the amplifier should be spinning when powered on. If it is not, this is another sign that the amplifier is not receiving enough power.
 
+
+
 - Microphone
+
+TODO: Add image of microphone connection
 
 - Transducer
 
+TODO: Add image of transducer connection
+
 - ItsyBitsy
+
+TODO: Add image of itsybitsy connection
 
 - Power Supply
 
@@ -57,6 +78,8 @@ The lab has a multitude of DC power supplies which can be used to power the sona
 The power supply is connected directly to the PCB board through the JST pins located near the ItsyBitsy, through a twisted pair of wires connected to a JST connector.
 The red wire is the power wire and should be on the left side of the connector, if you are looking at the connection straight on. 
 The black wire is the ground wire and should be on the right side of the connector. The PCB board has a diode which will light up when the board is powered.
+
+TODO: Add image of power supply connection
 
 
 
