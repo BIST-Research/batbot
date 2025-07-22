@@ -44,5 +44,16 @@ TODO: Explain how the data is processed, including filtering, FFT, etc.
 Relevant Files
 **************
 
-TODO: Include a brief documentation for each file within the fieldbot repository, detailed explanations for the most important files.
-Detail probably needed for run chirp, main, continous chirp,
+TODO: Include a brief documentation for the most important files.
+
+run_chirp.py
+------------
+
+TODO: Explain the purpose of this file, and a brief overview of how it works.
+
+ml_main.cpp
+-----------
+
+TODO: Explain the purpose of this file, and a brief overview of how it works.
+
+TODO: Add explanations for Elias' continuous chirp files

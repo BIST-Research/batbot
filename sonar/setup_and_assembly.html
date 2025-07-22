@@ -64,8 +64,10 @@
 <li class="toctree-l4"><a class="reference internal" href="#id3">Microphone</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#id4">Transducer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#itsybitsy">ItsyBitsy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jp4-testing-pins">JP4 Testing Pins</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#power-supply">Power Supply</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#target-selection-and-positioning">Target Selection and Positioning</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#potential-hardware-improvements">Potential Hardware Improvements</a></li>
 </ul>
 </li>
 </ul>
@@ -111,31 +113,46 @@ without too much difficulty.</p>
 <h3>Microphone<a class="headerlink" href="#microphone" title="Link to this heading"></a></h3>
 <p>The microphone is what receives the signal (chirp) which is outputted by the transducer and reflected off of a target.
 The microphone is connected to a Weipu connector, which is connected to the hand-twisted wires that connect it to the rest of the system. The microphone should always be oriented towards the target.</p>
-<figure class="align-default">
+<figure class="align-default" id="id5">
 <img alt="../_images/microphone.PNG" src="../_images/microphone.PNG" />
+<figcaption>
+<p><span class="caption-text"><em>The microphone used in the sonar system</em></span><a class="headerlink" href="#id5" title="Link to this image"></a></p>
+</figcaption>
 </figure>
 </section>
 <section id="transducer">
 <h3>Transducer<a class="headerlink" href="#transducer" title="Link to this heading"></a></h3>
 <p>The transducer takes in a voltage and outputs the signal (chirp). It is connected to the rest of the system by a power and ground wire, connected to the connection points on the transducer itself.
 The transducer should always be oriented towards the target.</p>
-<figure class="align-default">
+<figure class="align-default" id="id6">
 <img alt="../_images/transducer.PNG" src="../_images/transducer.PNG" />
+<figcaption>
+<p><span class="caption-text"><em>The transducer used in the sonar system</em></span><a class="headerlink" href="#id6" title="Link to this image"></a></p>
+</figcaption>
 </figure>
 </section>
 <section id="amplifier">
 <h3>Amplifier<a class="headerlink" href="#amplifier" title="Link to this heading"></a></h3>
-<p>The amplifier takes in a voltage output from the ItsyBitsy and amplified through the PCB board. It then amplifies the signal further and outputs it through the transducer.
-The green LED on the amplifier’s board indicates that it is on and receiving power. Diagrams and schematics regarding the amplifier and the PCB it sits on can be found in the Fusion drive, in the Electronics folder.</p>
-<p>TODO: Add image of amplifier</p>
+<p>The amplifier takes in a voltage which is output from the ItsyBitsy and then amplified through the PCB board. It then amplifies the signal further and outputs it through the transducer.
+The green LED on the amplifier’s board indicates that it is on and receiving power. The amplifier datasheet can be found <a class="reference external" href="https://www.ti.com/lit/gpn/opa552" rel="noreferrer" target="_blank">here</a>, and
+the datasheet for the piezo driver upon which the op-amp is soldered can be found <a class="reference external" href="https://github.com/BIST-Research/fieldbot/blob/vehicle/docs/PDm200-V9-Datasheet-R5.pdf" rel="noreferrer" target="_blank">here</a>.</p>
+<figure class="align-default" id="id7">
+<img alt="img/amp_and_driver.PNG" src="img/amp_and_driver.PNG" />
+<figcaption>
+<p><span class="caption-text"><em>The amplifier and driver used in the sonar system</em></span><a class="headerlink" href="#id7" title="Link to this image"></a></p>
+</figcaption>
+</figure>
 </section>
 <section id="itsybitsym4">
 <h3>ItsyBitsyM4<a class="headerlink" href="#itsybitsym4" title="Link to this heading"></a></h3>
 <p>The ItsyBitsy M4 board is the brains of the sonar system. It controls the sending and receiving of the chirp, the conversion of the received signal into a spectrogram,
 and any other operations. If the LED on the itsybitsy is purple, it likely means that the embedded code has already been uploaded. If it is blue, upload the embedded code through Platformio.
-The pinout for the itsybitsy can be found <a class="reference external" href="http://learn.adafruit.com/introducing-adafruit-itsybitsy-m4/pinouts" rel="noreferrer" target="_blank">here</a>, and the datasheet for the microchip embedded in the itsybitsy can be found <a class="reference external" href="https://ww1.microchip.com/downloads/aemDocuments/documents/MCU32/ProductDocuments/DataSheets/SAM-D5x-E5x-Family-Data-Sheet-DS60001507.pdf" rel="noreferrer" target="_blank">here</a>.</p>
-<figure class="align-default">
+The pinout for the itsybitsy can be found <a class="reference external" href="http://learn.adafruit.com/introducing-adafruit-itsybitsy-m4/pinouts" rel="noreferrer" target="_blank">here</a>, and the datasheet for the microchip embedded in the itsybitsy can be found <a class="reference external" href="https://github.com/BIST-Research/fieldbot/blob/vehicle/docs/ATDAMD51_Datasheet.pdf" rel="noreferrer" target="_blank">here</a>.</p>
+<figure class="align-default" id="id8">
 <img alt="../_images/itsybitsy.PNG" src="../_images/itsybitsy.PNG" />
+<figcaption>
+<p><span class="caption-text"><em>The ItsyBitsy M4 used in the sonar system</em></span><a class="headerlink" href="#id8" title="Link to this image"></a></p>
+</figcaption>
 </figure>
 </section>
 <section id="pcb-board">
@@ -143,7 +160,12 @@ The pinout for the itsybitsy can be found <a class="reference external" href="ht
 <p>The PCB board is the board on which the sonar setup sits. The board powers all other components, and ensures that the chirp makes it from the itsybitsy through an amplification circuit on the board,
 then to the amplifier, out through the transducer and back in through the microphone. The red LED on the board being lit means that the board is powered. The current version of the board is revision 6.
 Diagrams and schematics can be found in the Fusion drive in the “rev6” folder within the “Sonar Board” folder.</p>
-<p>TODO: Add image of PCB board</p>
+<figure class="align-default" id="id9">
+<img alt="img/sonar_board.PNG" src="img/sonar_board.PNG" />
+<figcaption>
+<p><span class="caption-text"><em>The PCB board used in the sonar system</em></span><a class="headerlink" href="#id9" title="Link to this image"></a></p>
+</figcaption>
+</figure>
 </section>
 </section>
 <section id="assembly">
@@ -168,7 +190,12 @@ Additionally, the fan on the top of the amplifier should be spinning when powere
 If you are only using one microphone, it may be beneficial to comment out the code for graphing whichever microphone is unused, as its graph will be nonsense.
 If you are using the microphone(s) with an ear mount, ensure that the metal tip of the microphone is fully inside the ear, and pointing outwards. Shielding the microphone
 wires with grounded copper mesh can help to reduce noise in the spectrogram.</p>
-<p>TODO: Add image of microphone connection</p>
+<figure class="align-default" id="id10">
+<img alt="../_images/microphone_connector.PNG" src="../_images/microphone_connector.PNG" />
+<figcaption>
+<p><span class="caption-text"><em>The microphone connected to the PCB board through a JST connector.</em></span><a class="headerlink" href="#id10" title="Link to this image"></a></p>
+</figcaption>
+</figure>
 </section>
 <section id="id4">
 <h3>Transducer<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
@@ -187,18 +214,55 @@ Once connection is established, the embedded code can be uploaded to the ItsyBit
 The embedded code does not need to be re-uploaded unless changes are made to the code itself, so do not be alarmed if the LED is blue during use.</p>
 <p>TODO: Add image of itsybitsy connection</p>
 </section>
+<section id="jp4-testing-pins">
+<h3>JP4 Testing Pins<a class="headerlink" href="#jp4-testing-pins" title="Link to this heading"></a></h3>
+<p>The JP4 pins are located next to the power connection on the PCB board. These pins can be used to test the microphone and transducer by connecting a function generator to them.
+When these pins are not being used for testing, a jumper must be placed on them to connect the two pins as detailed in the image below. Failure to do so will result in the system not functioning properly.</p>
+<figure class="align-default" id="id11">
+<img alt="../_images/JP4_connection.PNG" src="../_images/JP4_connection.PNG" />
+<figcaption>
+<p><span class="caption-text"><em>The JP4 pins connected together with a jumper pin.</em></span><a class="headerlink" href="#id11" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="id12">
+<img alt="../_images/jumper_pin.PNG" src="../_images/jumper_pin.PNG" />
+<figcaption>
+<p><span class="caption-text"><em>A close-up of a jumper pin.</em></span><a class="headerlink" href="#id12" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
 <section id="power-supply">
 <h3>Power Supply<a class="headerlink" href="#power-supply" title="Link to this heading"></a></h3>
 <p>The lab has a multitude of DC power supplies which can be used to power the sonar system. The power supply should be set to output 24V at 1A.
 The power supply is connected directly to the PCB board through the JST pins located near the ItsyBitsy, through a twisted pair of wires connected to a JST connector.
 The red wire is the power wire and should be on the left side of the connector, if you are looking at the connection straight on.
 The black wire is the ground wire and should be on the right side of the connector. The PCB board has a diode which will light up when the board is powered.</p>
-<p>TODO: Add image of power supply connection</p>
+<figure class="align-default" id="id13">
+<img alt="img/power_connection.PNG" src="img/power_connection.PNG" />
+<figcaption>
+<p><span class="caption-text"><em>The power connection on the PCB board.</em></span><a class="headerlink" href="#id13" title="Link to this image"></a></p>
+</figcaption>
+</figure>
 </section>
 <section id="target-selection-and-positioning">
 <h3>Target Selection and Positioning<a class="headerlink" href="#target-selection-and-positioning" title="Link to this heading"></a></h3>
-<p>TODO: Describe how to select a target and position the system relative to it.</p>
+<p>The selection of a target is integral to the outcome of the sonar experiments. As a general rule, the optimal target for our sonar system is a flat,
+rectangular surface (preferably metal) which is placed in front of the system, in the direction that the microphone and transducer are facing.
+The target should be standing upright, as angling the target can cause the chirp to reflect away from the microphone. Non-square targets can be
+very useful for testing the sonar system’s ability to detect shapes and angles, but may not reflect as much sound back to the microphone. Therefore,
+they are useful for testing the system’s capabilities, but not for initial setup and calibration. Targets should be placed at a distance of 0-2 meters away
+from the sonar system, although the effectivr range of the system is most likely much greater. If you are positioning a target at a greater distance,
+make sure you have adjusted your spectrogram to have a wider time range to give the chirp time to travel to the target and back.</p>
 <p>TODO: Add image of potential targets in the lab</p>
+</section>
+<section id="potential-hardware-improvements">
+<h3>Potential Hardware Improvements<a class="headerlink" href="#potential-hardware-improvements" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Modify the PCB board to physically see when the chirp is being sent, such as a diode which lights up when the chirp enters the amplifier.</p></li>
+<li><p>Modify the pre-amplifier circuit on the PCB board to increase amplification of higher frequencies (70-100kHz).</p></li>
+<li><p>Improve the amplifier contact points on the PCB board to ensure that the amplifier always makes good contact without angling.</p></li>
+<li><p>Identify and eliminate the sources of electrical passthrough which appear in the spectrogram.</p></li>
+</ul>
 </section>
 </section>
 </section>
