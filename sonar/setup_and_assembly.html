@@ -93,53 +93,46 @@ without too much difficulty.</p>
 <section id="components">
 <h2>Components<a class="headerlink" href="#components" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p><strong>Microphone</strong>: The microphone is what receives the signal (chirp) which is outputted by the transducer and reflected off of a target.</p></li>
+<li><p><strong>Microphone</strong>: The microphone is what receives the signal (chirp) which is outputted by the transducer and reflected off of a target. The microphone is connected to a Weipu connector, which is connected to the hand-twisted wires that connect it to the rest of the system. The microphone should always be oriented towards the target.</p></li>
 </ul>
-<p>The microphone is connected to a Weipu connector, which is connected to the hand-twisted wires that connect it to the rest of the system.
-The microphone should always be oriented towards the target.</p>
 <figure class="align-default">
 <img alt="../_images/microphone.PNG" src="../_images/microphone.PNG" />
 </figure>
 <ul class="simple">
-<li><p><strong>Transducer</strong>: The transducer takes in a voltage and outputs the signal (chirp). It is connected to the rest of the system by a power and ground wire,</p></li>
+<li><p><strong>Transducer</strong>: The transducer takes in a voltage and outputs the signal (chirp). It is connected to the rest of the system by a power and ground wire, connected to the connection points on the transducer itself. The transducer should always be oriented towards the target.</p></li>
 </ul>
-<p>connected to the connection points on the transducer itself. The transducer should always be oriented towards the target.</p>
 <figure class="align-default">
 <img alt="../_images/transducer.PNG" src="../_images/transducer.PNG" />
 </figure>
 <ul class="simple">
-<li><p><strong>Amplifier</strong>: The amplifier takes in a voltage output from the ItsyBitsy and amplified through the PCB board. It then amplifies the signal further and outputs it through the transducer.</p></li>
+<li><p><strong>Amplifier</strong>: The amplifier takes in a voltage output from the ItsyBitsy and amplified through the PCB board. It then amplifies the signal further and outputs it through the transducer. The green LED on the amplifier’s board indicates that it is on and receiving power. Diagrams and schematics regarding the amplifier and the PCB it sits on can be found in the Fusion drive, in the “sonar_preamp” folder.</p></li>
+<li><p><strong>ItsyBitsyM4</strong>: The ItsyBitsy M4 board is the brains of the sonar system. It controls the sending and receiving of the chirp, the conversion of the received signal into a spectrogram, and any other operations. If the LED on the itsybitsy is purple, it likely means that the embedded code has already been uploaded. If it is blue, upload the embedded code through Platformio.The pinout for the itsybitsy can be found <a class="reference external" href="http://learn.adafruit.com/introducing-adafruit-itsybitsy-m4/pinouts" rel="noreferrer" target="_blank">here</a>, and the datasheet for the microchip embedded in the itsybitsy can be found <a class="reference external" href="https://ww1.microchip.com/downloads/aemDocuments/documents/MCU32/ProductDocuments/DataSheets/SAM-D5x-E5x-Family-Data-Sheet-DS60001507.pdf" rel="noreferrer" target="_blank">here</a>.</p></li>
 </ul>
-<p>The green LED on the amplifier’s board indicates that it is on and receiving power.
-Diagrams and schematics regarding the amplifier and the PCB it sits on can be found in the Fusion drive, in the “sonar_preamp” folder.</p>
-<ul class="simple">
-<li><p><strong>ItsyBitsyM4</strong>: The ItsyBitsy M4 board is the brains of the sonar system. It controls the sending and receiving of the chirp, the conversion of the received signal into a spectrogram, and any other operations.</p></li>
-</ul>
-<p>If the LED on the itsybitsy is purple, it likely means that the embedded code has already been uploaded. If it is blue, upload the embedded code through Platformio.
-The pinout for the itsybitsy can be found <a class="reference external" href="http://learn.adafruit.com/introducing-adafruit-itsybitsy-m4/pinouts" rel="noreferrer" target="_blank">here</a>, and the datasheet for the microchip embedded in the itsybitsy can be found <a class="reference external" href="https://ww1.microchip.com/downloads/aemDocuments/documents/MCU32/ProductDocuments/DataSheets/SAM-D5x-E5x-Family-Data-Sheet-DS60001507.pdf" rel="noreferrer" target="_blank">here</a>.</p>
 <figure class="align-default">
 <img alt="../_images/itsybitsy.PNG" src="../_images/itsybitsy.PNG" />
 </figure>
 <ul class="simple">
-<li><p><strong>PCB Board</strong>: The PCB board is the board on which the sonar setup sits. The board powers all other components, and ensures that the chirp makes it from the itsybitsy through an amplification circuit on the board,</p></li>
+<li><p><strong>PCB Board</strong>: The PCB board is the board on which the sonar setup sits. The board powers all other components, and ensures that the chirp makes it from the itsybitsy through an amplification circuit on the board, then to the amplifier, out through the transducer and back in through the microphone. The red LED on the board being lit means that the board is powered. The current version of the board is revision 6. Diagrams and schematics can be found in the Fusion drive in the “rev6” folder within the “Sonar Board” folder.</p></li>
 </ul>
-<p>then to the amplifier, out through the transducer and back in through the microphone. The red LED on the board being lit means that the board is powered.
-The current version of the board is revision 6. Diagrams and schematics can be found in the Fusion drive in the “rev6” folder within the “Sonar Board” folder.</p>
 </section>
 <section id="assembly">
 <h2>Assembly<a class="headerlink" href="#assembly" title="Link to this heading"></a></h2>
 <p>Assembly of the sonar system is fairly straightforward, as all components have been designed to be easily connected to the PCB board.</p>
-<p>-Amplfifier</p>
+<ul class="simple">
+<li><p>Amplifier</p></li>
+</ul>
 <p>The first step is to connect the amplifier to the PCB board. The amplifier has 5 pins on the underside of one end, and 4 pins on the underside
 of the other end. Align the pins with their corresponding holes on the PCB board and insert the amplifier into the board. This may take some wiggling,
 but should not require excessive force. Some of our PCBs have contact point issues with the amplifier, which can be solved by angling the amplifier
 towards the side of the PCB with the microphone connection. The amplifier should draw roughly 0.15-0.20 A when powered on. If it is drawing less than
 0.05 A, proceed with the aforementioned angling procedure to ensure proper contact, making sure to not move the amplifier while voltage is being applied.
 Additionally, the fan on the top of the amplifier should be spinning when powered on. If it is not, this is another sign that the amplifier is not receiving enough power.</p>
-<p>-Microphone</p>
-<p>-Transducer</p>
-<p>-ItsyBitsy</p>
-<p>-Power Supply</p>
+<ul class="simple">
+<li><p>Microphone</p></li>
+<li><p>Transducer</p></li>
+<li><p>ItsyBitsy</p></li>
+<li><p>Power Supply</p></li>
+</ul>
 <p>The lab has a multitude of DC power supplies which can be used to power the sonar system. The power supply should be set to output 24V at 1A.
 The power supply is connected directly to the PCB board through the JST pins located near the ItsyBitsy, through a twisted pair of wires connected to a JST connector.
 The red wire is the power wire and should be on the left side of the connector, if you are looking at the connection straight on.
