@@ -95,9 +95,25 @@
 <span id="id1"></span><h1>Chirp Operation<a class="headerlink" href="#chirp-operation" title="Link to this heading"></a></h1>
 <section id="single-chirp-operation">
 <h2>Single Chirp Operation<a class="headerlink" href="#single-chirp-operation" title="Link to this heading"></a></h2>
+<p>Single chirp operation is the most basic method of operation for the sonar system, and therefore also the simplest to use. It should be used in situations where a large quantity of chirps are not needed, such as when testing the system.
+Note that because of the nature of sonar systems to pcik up environment noise and other distractions, the data is inherently variable. It may be necessary to run multiple chirps and analyze multiple data sets if precise data is required.
+Single chirp operation is peformed through the use of the run_chirp.py script, which can be found in the fieldbot repository. More information on this script can be found in the <a class="reference internal" href="sonar_software.html#sonar-software"><span class="std std-ref">Sonar Software Guide</span></a> section.</p>
+<p>To run a single chirp, follow these steps:
+1. Ensure that the ItsyBitsy M4 is connected to your computer and that the run_chirp.py script is running in VSCode.
+2. Ensure that the amplifier is powered on and that the system is properly set up, as detailed in the <a class="reference internal" href="setup_and_assembly.html#setup-and-assembly"><span class="std std-ref">Setup and Assembly</span></a> section.
+3. Open the terminal in VSCode and run the command <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">run_chirp.py</span> <span class="pre">[output_name]</span> <span class="pre">[time_offset]</span> <span class="pre">[frequency_low]</span> <span class="pre">[frequency_high]</span></code>, where:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">output_name</span></code> is the name of the output file to save the data to.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">time_offset</span></code> is the time offset in seconds to apply to the data (optional, default is 0).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">frequency_low</span></code> is the low frequency of the chirp in Hz (default is 30000).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">frequency_high</span></code> is the high frequency of the chirp in Hz (default is 100000).</p></li>
+</ul>
+</div></blockquote>
 </section>
 <section id="continuous-chirp-operation">
 <h2>Continuous Chirp Operation<a class="headerlink" href="#continuous-chirp-operation" title="Link to this heading"></a></h2>
+<p>TODO: Explain the process of continuous chirp operation once Elias has finished the GUI and continuous chirp files.</p>
 </section>
 <section id="component-testing">
 <h2>Component Testing<a class="headerlink" href="#component-testing" title="Link to this heading"></a></h2>

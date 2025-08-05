@@ -8,9 +8,24 @@ Chirp Operation
 Single Chirp Operation
 **********************
 
+Single chirp operation is the most basic method of operation for the sonar system, and therefore also the simplest to use. It should be used in situations where a large quantity of chirps are not needed, such as when testing the system.
+Note that because of the nature of sonar systems to pcik up environment noise and other distractions, the data is inherently variable. It may be necessary to run multiple chirps and analyze multiple data sets if precise data is required.
+Single chirp operation is peformed through the use of the run_chirp.py script, which can be found in the fieldbot repository. More information on this script can be found in the :ref:`sonar-software` section.
+
+To run a single chirp, follow these steps:
+1. Ensure that the ItsyBitsy M4 is connected to your computer and that the run_chirp.py script is running in VSCode.
+2. Ensure that the amplifier is powered on and that the system is properly set up, as detailed in the :ref:`setup-and-assembly` section.
+3. Open the terminal in VSCode and run the command ``python run_chirp.py [output_name] [time_offset] [frequency_low] [frequency_high]``, where:
+   - ``output_name`` is the name of the output file to save the data to.
+   - ``time_offset`` is the time offset in seconds to apply to the data (optional, default is 0).
+   - ``frequency_low`` is the low frequency of the chirp in Hz (default is 30000).
+   - ``frequency_high`` is the high frequency of the chirp in Hz (default is 100000).
+
 **************************
 Continuous Chirp Operation
 **************************
+
+TODO: Explain the process of continuous chirp operation once Elias has finished the GUI and continuous chirp files.
 
 *****************
 Component Testing

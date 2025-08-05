@@ -27,14 +27,17 @@ Sonar System Overview
 Sending A Chirp
 ===============
 
-TODO: Explain the process of sending a chirp, including how the signal travels through the board, amp, etc.
+Sending a chirp starts with a software command to the ItsyBitsy. Voltage is sent from the ItsyBitsy's DAC pin through the PCB to the amplifier, which amplifies the signal and sends it to the
+transducer. The transducer then emits the chirp, which travels through the air until it hits an object and reflects back to the microphone, which transmits the signal through the ItsyBitsy's ADC pin.
+Once the ItsyBitsy recieves the signal, it processes the data and displays it in a spectrogram and waveform view. The data is also saved to a file for later analysis.
+
 
 Recieiving A Chirp
 ==================
 
 TODO: Explain the process of recieving a chirp
 
-Processing Chirp Datas
+Processing Chirp Data
 =====================
 
 TODO: Explain how the data is processed, including filtering, FFT, etc.
@@ -56,4 +59,10 @@ ml_main.cpp
 
 TODO: Explain the purpose of this file, and a brief overview of how it works.
 
-TODO: Add explanations for Elias' continuous chirp files
+run_chirps.py
+------------
+
+TODO: Explain the purpose of this file, and a brief overview of how it works.
+
+
+TODO: Add explanations for Elias' continuous chirp files and GUI

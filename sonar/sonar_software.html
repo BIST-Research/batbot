@@ -53,7 +53,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#sonar-system-overview">Sonar System Overview</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#sending-a-chirp">Sending A Chirp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#recieiving-a-chirp">Recieiving A Chirp</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#processing-chirp-datas">Processing Chirp Datas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#processing-chirp-data">Processing Chirp Data</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#relevant-files">Relevant Files</a></li>
@@ -110,14 +110,16 @@ which in our lab is designed to replicate the echolocation abilities of bats.</p
 <h2>Sonar System Overview<a class="headerlink" href="#sonar-system-overview" title="Link to this heading"></a></h2>
 <section id="sending-a-chirp">
 <h3>Sending A Chirp<a class="headerlink" href="#sending-a-chirp" title="Link to this heading"></a></h3>
-<p>TODO: Explain the process of sending a chirp, including how the signal travels through the board, amp, etc.</p>
+<p>Sending a chirp starts with a software command to the ItsyBitsy. Voltage is sent from the ItsyBitsy’s DAC pin through the PCB to the amplifier, which amplifies the signal and sends it to the
+transducer. The transducer then emits the chirp, which travels through the air until it hits an object and reflects back to the microphone, which transmits the signal through the ItsyBitsy’s ADC pin.
+Once the ItsyBitsy recieves the signal, it processes the data and displays it in a spectrogram and waveform view. The data is also saved to a file for later analysis.</p>
 </section>
 <section id="recieiving-a-chirp">
 <h3>Recieiving A Chirp<a class="headerlink" href="#recieiving-a-chirp" title="Link to this heading"></a></h3>
 <p>TODO: Explain the process of recieving a chirp</p>
 </section>
-<section id="processing-chirp-datas">
-<h3>Processing Chirp Datas<a class="headerlink" href="#processing-chirp-datas" title="Link to this heading"></a></h3>
+<section id="processing-chirp-data">
+<h3>Processing Chirp Data<a class="headerlink" href="#processing-chirp-data" title="Link to this heading"></a></h3>
 <p>TODO: Explain how the data is processed, including filtering, FFT, etc.</p>
 </section>
 </section>
@@ -126,7 +128,8 @@ which in our lab is designed to replicate the echolocation abilities of bats.</p
 <p>TODO: Include a brief documentation for the most important files.</p>
 <p>TODO: Explain the purpose of this file, and a brief overview of how it works.</p>
 <p>TODO: Explain the purpose of this file, and a brief overview of how it works.</p>
-<p>TODO: Add explanations for Elias’ continuous chirp files</p>
+<p>TODO: Explain the purpose of this file, and a brief overview of how it works.</p>
+<p>TODO: Add explanations for Elias’ continuous chirp files and GUI</p>
 </section>
 </section>
 
