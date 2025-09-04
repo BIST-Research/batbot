@@ -14,3 +14,4 @@ TODO: Include a brief documentation for each file within the fieldbot repository
    sonar_software
    setup_and_assembly
    chirp_operation
+   spectrograms_guide
