@@ -9,6 +9,16 @@
 import sys
 from pathlib import Path
 
+
+
+# ------------------
+# Delete these three lines if your thing stops working im not sure why mine doesn't work without them
+import os
+import sys
+sys.path.insert(0, os.path.abspath('../../'))
+# ------------------
+
+
 project = 'batbot'
 copyright = '2024, Ben Westcott, Kofi Ofosu-Tuffour, Mason Lopez, Jayson De La Vega, Alex White'
 author = 'Ben Westcott, Kofi Ofosu-Tuffour, Mason Lopez, Jayson De La Vega, Alex White'

@@ -4,7 +4,7 @@ Testing Guide
 ==================
 
 Embedded Testing Procedure
-###################
+##############################
 
 The embedded software applications utilize unit testing through PlatformIO to ensure that all the code is working.
 The embedded software has two types of tests: hardware tests and native tests.
